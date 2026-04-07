@@ -42,7 +42,7 @@ export default function CameraPopup({ camera }: Props) {
                     objectFit: 'cover',
                     borderRadius: '4px',
                     border: '1px solid #d1d5db',
-                    cursor: 'pointer',
+                    cursor: 'auto',                    
                   }}
                 />
               </a>
