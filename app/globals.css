@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+/* Leaflet CSS is imported directly in GeovisorMap.tsx to avoid SSR issues */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Thin scrollbar for the families panel */
+.geo-panel-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.geo-panel-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.geo-panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+.geo-panel-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Thin horizontal scrollbar for photo thumbnail strip */
+.geo-photo-scroll::-webkit-scrollbar {
+  height: 3px;
+}
+.geo-photo-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.geo-photo-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+}
+.geo-photo-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}

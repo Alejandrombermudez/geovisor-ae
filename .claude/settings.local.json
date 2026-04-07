@@ -1,0 +1,38 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --eslint --no-src-dir --import-alias \"@/*\" --yes)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --eslint --no-src-dir --import-alias \"@/*\" --yes --name geoae)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --eslint --no-src-dir --import-alias \"@/*\" 2)",
+      "Bash(1:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s http://localhost:51700/geovisor)",
+      "Bash(curl -s http://localhost:51700/api/geovisor-data)",
+      "Bash(node -e \":*)",
+      "Bash(node --env-file=.env.local -e \":*)",
+      "Bash(tasklist //FI \"IMAGENAME eq node.exe\" //FO CSV)",
+      "Bash(taskkill //PID 6664 //F)",
+      "Bash(taskkill //PID 8916 //F)",
+      "Bash(taskkill //PID 22876 //F)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:51700/geovisor)",
+      "Bash(npm run:*)",
+      "Bash(taskkill /PID 32680 /F)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(cmd /c \"taskkill /PID 32680 /F\")",
+      "Bash(cmd /c \"taskkill /F /IM node.exe\")",
+      "Bash(cmd /c \"type D:\\\\GeoAE\\\\.next\\\\dev\\\\logs\\\\next-development.log\")",
+      "Bash(powershell -Command \"$input | Select-Object -Last 15\")",
+      "Bash(powershell -Command \"Get-Content ''D:\\\\GeoAE\\\\.next\\\\dev\\\\logs\\\\next-development.log'' | Select-Object -Last 12\")",
+      "Bash(curl -s http://localhost:3000/api/geovisor-data)",
+      "Bash(curl -s \"http://localhost:3000/api/familia-fotos?id=87178607-f7ba-4f7d-bc60-f17cdd4b5e8c&schema=siembra\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/geovisor)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/geovisor)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3002/geovisor)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(''''errors:'''', d.get\\(''''errors''''\\)\\); print\\(''''siembra count:'''', len\\(d.get\\(''''siembraFamilias'''',[]\\)\\)\\);print\\(''''ras count:'''', len\\(d.get\\(''''rasFamilias'''',[]\\)\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/)"
+    ]
+  }
+}
