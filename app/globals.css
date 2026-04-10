@@ -38,3 +38,11 @@ body {
 .geo-photo-scroll::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.22);
 }
+
+/* Smooth momentum scroll on iOS */
+@media (max-width: 639px) {
+  .geo-panel-scroll,
+  .geo-photo-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+}

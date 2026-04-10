@@ -1,23 +1,25 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useMap } from 'react-leaflet'
-import type { FeatureCollection } from 'geojson'
 import type { PolygonLayerData } from '@/types/geovisor'
 
 interface Props {
   layers: PolygonLayerData[][]
 }
 
-/** Auto-fits the map to the bounds of all loaded polygon layers. Runs once when the first non-empty layer arrives. */
+/** Auto-fits the map to the bounds of all loaded polygon layers. Runs ONCE when the first non-empty layer arrives, then never again — so subsequent flyTo calls are not cancelled. */
 export default function FitBounds({ layers }: Props) {
   const map = useMap()
+  const didFit = useRef(false)
 
   useEffect(() => {
+    if (didFit.current) return   // ya se ajustó — no interferir con flyToBounds posteriores
+
     const allFeatures = layers.flatMap((layer) =>
       layer.flatMap((item) => item.fc.features)
     )
-    if (allFeatures.length === 0) return
+    if (allFeatures.length === 0) return   // sin datos aún, esperar siguiente render
 
     // Collect all coordinates
     const coords: [number, number][] = []
@@ -46,6 +48,7 @@ export default function FitBounds({ layers }: Props) {
     ]
 
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 })
+    didFit.current = true   // marcar permanentemente — nunca volver a ajustar
   }, [layers, map])
 
   return null

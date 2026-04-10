@@ -15,6 +15,14 @@ interface Props {
   layerData: GeovisorLayerData
   visibleLayers: VisibleLayers
   selectedFamiliaId: string | null
+  onMapInit: (map: L.Map) => void
+}
+
+/** Registra la instancia del mapa para usarla desde fuera del MapContainer */
+function MapInitializer({ onMapInit }: { onMapInit: (map: L.Map) => void }) {
+  const map = useMap()
+  useEffect(() => { onMapInit(map) }, [map, onMapInit])
+  return null
 }
 
 function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; layerData: GeovisorLayerData }) {
@@ -34,11 +42,12 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
   return null
 }
 
-export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId }: Props) {
+export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit }: Props) {
   return (
     <MapContainer
       center={MAP_CENTER}
       zoom={MAP_ZOOM}
+      zoomControl={false}
       style={{ height: '100%', width: '100%' }}
       className="z-0"
     >
@@ -47,6 +56,9 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         attribution={ESRI_SATELLITE_ATTRIBUTION}
         maxZoom={19}
       />
+
+      {/* ── Registro del map ref ──────────────────────────────────── */}
+      <MapInitializer onMapInit={onMapInit} />
 
       {/* ── Capas de polígonos ─────────────────────────────────────── */}
       {visibleLayers.siembraFincas &&
@@ -108,7 +120,7 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         />
       )}
 
-      {/* ── Auto-zoom a todos los límites al cargar ────────────────── */}
+      {/* ── Auto-zoom inicial a todos los datos ───────────────────── */}
       <FitBounds layers={[
         layerData.siembraFincas,
         layerData.restauracion,

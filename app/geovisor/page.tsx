@@ -1,7 +1,8 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
+import type L from 'leaflet'
 import { useGeovisorData } from '@/hooks/useGeovisorData'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
@@ -27,7 +28,6 @@ const ALL_VISIBLE: VisibleLayers = {
   camarasConservacion: true,
 }
 
-// Ratios de pantalla — se mantienen al redimensionar
 const LEFT_RATIO  = 0.07
 const RIGHT_RATIO = 0.35
 
@@ -40,6 +40,9 @@ export default function GeovisorPage() {
   const [rightRatio, setRightRatio] = useState(RIGHT_RATIO)
   const [screenW,    setScreenW]    = useState(0)
 
+  const leafletMapRef = useRef<L.Map | null>(null)
+  const onMapInit = useCallback((map: L.Map) => { leafletMapRef.current = map }, [])
+
   useEffect(() => {
     setScreenW(window.innerWidth)
     function onResize() { setScreenW(window.innerWidth) }
@@ -47,8 +50,10 @@ export default function GeovisorPage() {
     return () => window.removeEventListener('resize', onResize)
   }, [])
 
-  const leftWidth  = screenW > 0 ? Math.round(screenW * leftRatio)  : 0
-  const rightWidth = screenW > 0 ? Math.round(screenW * rightRatio) : 0
+  const isMobile = screenW > 0 && screenW < 640
+
+  const leftWidth  = isMobile ? 0 : (screenW > 0 ? Math.round(screenW * leftRatio)  : 0)
+  const rightWidth = isMobile ? screenW : (screenW > 0 ? Math.round(screenW * rightRatio) : 0)
 
   const visibleLayers = useMemo<VisibleLayers>(() => {
     if (activeCategory === 'siembra') {
@@ -68,15 +73,47 @@ export default function GeovisorPage() {
     return ALL_VISIBLE
   }, [activeCategory])
 
+  // Posición de los botones de zoom
+  const zoomBtnRight  = isMobile ? 16 : (activeCategory !== null ? rightWidth + 16 : 16)
+  const zoomBtnBottom = isMobile ? 56 + 16 : 80
+  const zoomBtnSize   = isMobile ? 44 : 32
+
+  const zoomBtnStyle: React.CSSProperties = {
+    width: zoomBtnSize,
+    height: zoomBtnSize,
+    background: 'rgba(20,20,20,0.82)',
+    border: '1px solid rgba(255,255,255,0.15)',
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 400,
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 8,
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+    lineHeight: 1,
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)',
+    transition: 'background 0.15s ease',
+    userSelect: 'none',
+  }
+
   return (
     <div style={{ height: '100dvh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
-      <GeovisorMap layerData={data} visibleLayers={visibleLayers} selectedFamiliaId={selectedFamiliaId} />
+      <GeovisorMap
+        layerData={data}
+        visibleLayers={visibleLayers}
+        selectedFamiliaId={selectedFamiliaId}
+        onMapInit={onMapInit}
+      />
 
       <LeftSidebar
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
         width={leftWidth}
         onWidthChange={(px) => setLeftRatio(px / screenW)}
+        isMobile={isMobile}
       />
 
       <RightPanel
@@ -87,7 +124,41 @@ export default function GeovisorPage() {
         width={rightWidth}
         onWidthChange={(px) => setRightRatio(px / screenW)}
         onSelectFamilia={setSelectedFamiliaId}
+        isMobile={isMobile}
       />
+
+      {/* ── Botones de zoom del mapa ───────────────────────────────── */}
+      <div
+        style={{
+          position: 'fixed',
+          bottom: zoomBtnBottom,
+          right: zoomBtnRight,
+          zIndex: 900,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 3,
+          transition: 'right 0.3s cubic-bezier(0.4,0,0.2,1)',
+        }}
+      >
+        <button
+          style={zoomBtnStyle}
+          onClick={() => leafletMapRef.current?.zoomIn()}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(60,60,60,0.92)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(20,20,20,0.82)' }}
+          title="Acercar mapa"
+        >
+          +
+        </button>
+        <button
+          style={zoomBtnStyle}
+          onClick={() => leafletMapRef.current?.zoomOut()}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(60,60,60,0.92)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(20,20,20,0.82)' }}
+          title="Alejar mapa"
+        >
+          −
+        </button>
+      </div>
 
       {dataLoading && loadingLayers.size === 8 && (
         <LoadingOverlay message="Cargando datos del geovisor..." />

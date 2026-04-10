@@ -8,6 +8,7 @@ interface Props {
   onSelectCategory: (cat: ActiveCategory) => void
   width: number
   onWidthChange: (w: number) => void
+  isMobile: boolean
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -15,11 +16,10 @@ const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: strin
   { key: 'ras', label: 'Conservación', icon: '🌿', color: '#6898B8' },
 ]
 
-// Límites en % del viewport (se evalúan al arrastrar)
-const MIN_W_RATIO = 0.04   // 4 vw
-const MAX_W_RATIO = 0.18   // 18 vw
+const MIN_W_RATIO = 0.04
+const MAX_W_RATIO = 0.18
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, width, onWidthChange }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, width, onWidthChange, isMobile }: Props) {
   const [hovered, setHovered] = useState<string | null>(null)
 
   const startDrag = useCallback(
@@ -47,6 +47,65 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, width, o
     [width, onWidthChange],
   )
 
+  // ── Móvil: barra de navegación inferior ──────────────────────────
+  if (isMobile) {
+    return (
+      <nav
+        style={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 56,
+          zIndex: 1001,
+          background: 'rgba(8,8,10,0.94)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          borderTop: '1px solid rgba(255,255,255,0.09)',
+          display: 'flex',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+        }}
+      >
+        {ITEMS.map(({ key, label, icon, color }) => {
+          const isActive = activeCategory === key
+          return (
+            <button
+              key={key}
+              onClick={() => onSelectCategory(isActive ? null : key)}
+              style={{
+                flex: 1,
+                height: '100%',
+                minHeight: 56,
+                background: isActive ? `${color}10` : 'transparent',
+                border: 'none',
+                borderTop: isActive ? `2px solid ${color}` : '2px solid transparent',
+                color: isActive ? color : 'rgba(255,255,255,0.38)',
+                cursor: 'pointer',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 3,
+                padding: '6px 0',
+                transition: 'all 0.18s ease',
+                WebkitTapHighlightColor: 'transparent',
+              }}
+            >
+              <span style={{ fontSize: 22, lineHeight: 1, filter: isActive ? `drop-shadow(0 0 5px ${color})` : 'none' }}>
+                {icon}
+              </span>
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1 }}>
+                {label}
+              </span>
+            </button>
+          )
+        })}
+      </nav>
+    )
+  }
+
+  // ── Escritorio: sidebar lateral izquierdo ─────────────────────────
   return (
     <div
       style={{
@@ -86,7 +145,6 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, width, o
         GEO
       </div>
 
-      {/* Divider */}
       <div style={{ width: 32, height: 1, background: 'rgba(255,255,255,0.08)', marginBottom: 10 }} />
 
       {ITEMS.map(({ key, label, icon, color }) => {
@@ -119,45 +177,20 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, width, o
               transition: 'all 0.18s ease',
             }}
           >
-            <span
-              style={{
-                fontSize: 22,
-                filter: isActive ? `drop-shadow(0 0 6px ${color})` : 'none',
-                transition: 'filter 0.18s ease',
-              }}
-            >
+            <span style={{ fontSize: 22, filter: isActive ? `drop-shadow(0 0 6px ${color})` : 'none', transition: 'filter 0.18s ease' }}>
               {icon}
             </span>
-            <span
-              style={{
-                fontSize: 9,
-                fontWeight: 700,
-                textAlign: 'center',
-                lineHeight: 1.2,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-              }}
-            >
+            <span style={{ fontSize: 9, fontWeight: 700, textAlign: 'center', lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
               {label}
             </span>
           </button>
         )
       })}
 
-      {/* Drag handle — borde derecho */}
+      {/* Drag handle */}
       <div
         onMouseDown={startDrag}
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: 4,
-          height: '100%',
-          cursor: 'col-resize',
-          background: 'transparent',
-          zIndex: 2,
-          transition: 'background 0.15s ease',
-        }}
+        style={{ position: 'absolute', top: 0, right: 0, width: 4, height: '100%', cursor: 'col-resize', background: 'transparent', zIndex: 2, transition: 'background 0.15s ease' }}
         onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.09)')}
         onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
       />
