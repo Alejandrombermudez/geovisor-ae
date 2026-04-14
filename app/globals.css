@@ -39,6 +39,15 @@ body {
   background: rgba(255, 255, 255, 0.22);
 }
 
+/* Loading spinner animation */
+@keyframes geo-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes geo-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; pointer-events: none; }
+}
+
 /* Smooth momentum scroll on iOS */
 @media (max-width: 639px) {
   .geo-panel-scroll,

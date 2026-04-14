@@ -48,6 +48,7 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
       center={MAP_CENTER}
       zoom={MAP_ZOOM}
       zoomControl={false}
+      maxZoom={19}
       style={{ height: '100%', width: '100%' }}
       className="z-0"
     >

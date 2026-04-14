@@ -7,6 +7,7 @@ import { useGeovisorData } from '@/hooks/useGeovisorData'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
+import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import type { ActiveCategory, VisibleLayers } from '@/types/geovisor'
 
 const GeovisorMap = dynamic(
@@ -32,7 +33,7 @@ const LEFT_RATIO  = 0.07
 const RIGHT_RATIO = 0.35
 
 export default function GeovisorPage() {
-  const { data, siembraFamilias, rasFamilias, loading: dataLoading, loadingLayers, error } = useGeovisorData()
+  const { data, siembraFamilias, rasFamilias, loadingLayers, error } = useGeovisorData()
   const [activeCategory, setActiveCategory] = useState<ActiveCategory>(null)
   const [selectedFamiliaId, setSelectedFamiliaId] = useState<string | null>(null)
 
@@ -160,9 +161,12 @@ export default function GeovisorPage() {
         </button>
       </div>
 
-      {dataLoading && loadingLayers.size === 8 && (
-        <LoadingOverlay message="Cargando datos del geovisor..." />
-      )}
+      <LayerLoadingIndicator
+        loadingCount={loadingLayers.size}
+        totalCount={8}
+        isMobile={isMobile}
+        leftOffset={leftWidth}
+      />
 
       {error && (
         <div

@@ -41,15 +41,37 @@ export default function RightPanel({
   const [viewerState, setViewerState] = useState<{ photos: FotoPredio[]; index: number } | null>(null)
   useEffect(() => { setViewerState(null) }, [activeCategory])
 
-  // Swipe-to-close (móvil)
-  const touchStartY = useRef(0)
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartY.current = e.touches[0].clientY
+  // Drag-to-resize + swipe-to-close (móvil)
+  const [panelHeight, setPanelHeight] = useState<number | null>(null)
+  const dragStartY = useRef(0)
+  const dragStartH = useRef(0)
+  const isDragging = useRef(false)
+
+  // Reset height when panel opens a new category
+  useEffect(() => {
+    if (isMobile && isOpen) {
+      setPanelHeight(Math.round(window.innerHeight * 0.55))
+    }
+  }, [activeCategory, isMobile, isOpen])
+
+  const handlePillTouchStart = useCallback((e: React.TouchEvent) => {
+    dragStartY.current = e.touches[0].clientY
+    dragStartH.current = panelHeight ?? Math.round(window.innerHeight * 0.55)
+    isDragging.current = true
+  }, [panelHeight])
+
+  const handlePillTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isDragging.current) return
+    const dy = dragStartY.current - e.touches[0].clientY
+    const minH = 120
+    const maxH = window.innerHeight - 72
+    setPanelHeight(Math.min(maxH, Math.max(minH, dragStartH.current + dy)))
   }, [])
-  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
-    const delta = e.changedTouches[0].clientY - touchStartY.current
-    if (delta > 80) onClose()
-  }, [onClose])
+
+  const handlePillTouchEnd = useCallback(() => {
+    isDragging.current = false
+    if ((panelHeight ?? 999) < 140) onClose()
+  }, [panelHeight, onClose])
 
   // Drag resize (solo escritorio)
   const startDrag = useCallback(
@@ -80,6 +102,8 @@ export default function RightPanel({
   )
 
   // ── Estilos del contenedor según modo ────────────────────────────
+  const mobileH = panelHeight ? `${panelHeight}px` : '55dvh'
+
   const containerStyle: React.CSSProperties = isMobile
     ? {
         position: 'fixed',
@@ -88,7 +112,7 @@ export default function RightPanel({
         right: 0,
         top: 'auto',
         width: '100%',
-        height: '65dvh',
+        height: mobileH,
         maxHeight: 'calc(100dvh - 72px)',
         zIndex: 1000,
         background: 'rgba(0,0,0,0.88)',
@@ -99,7 +123,9 @@ export default function RightPanel({
         borderRadius: '20px 20px 0 0',
         boxShadow: '0 -8px 40px rgba(0,0,0,0.6)',
         transform: isOpen ? 'translateY(0)' : 'translateY(110%)',
-        transition: 'transform 0.35s cubic-bezier(0.4,0,0.2,1)',
+        transition: isDragging.current
+          ? 'none'
+          : 'transform 0.35s cubic-bezier(0.4,0,0.2,1)',
         display: 'flex',
         flexDirection: 'column',
         fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -169,14 +195,15 @@ export default function RightPanel({
       {/* ── Modo lista de familias ──────────────────────────────── */}
       {!viewerState && config && (
         <>
-          {/* Pill handle (solo móvil) — swipe para cerrar */}
+          {/* Pill handle (solo móvil) — arrastra para ajustar altura */}
           {isMobile && (
             <div
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-              style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 4px', flexShrink: 0, cursor: 'grab' }}
+              onTouchStart={handlePillTouchStart}
+              onTouchMove={handlePillTouchMove}
+              onTouchEnd={handlePillTouchEnd}
+              style={{ display: 'flex', justifyContent: 'center', padding: '12px 0 6px', flexShrink: 0, cursor: 'grab', touchAction: 'none' }}
             >
-              <div style={{ width: 36, height: 4, background: 'rgba(255,255,255,0.22)', borderRadius: 2 }} />
+              <div style={{ width: 40, height: 4, background: 'rgba(255,255,255,0.28)', borderRadius: 2 }} />
             </div>
           )}
 
