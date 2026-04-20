@@ -3,12 +3,12 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import type L from 'leaflet'
+import type { SiembraFamilia, RasFamilia, ActiveCategory, VisibleLayers } from '@/types/geovisor'
 import { useGeovisorData } from '@/hooks/useGeovisorData'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
-import type { ActiveCategory, VisibleLayers } from '@/types/geovisor'
 
 const GeovisorMap = dynamic(
   () => import('@/components/map/GeovisorMap'),
@@ -43,6 +43,11 @@ export default function GeovisorPage() {
 
   const leafletMapRef = useRef<L.Map | null>(null)
   const onMapInit = useCallback((map: L.Map) => { leafletMapRef.current = map }, [])
+
+  const handleFamiliaClick = useCallback((familia: SiembraFamilia | RasFamilia, category: ActiveCategory) => {
+    setActiveCategory(category)
+    setSelectedFamiliaId(familia.id)
+  }, [])
 
   useEffect(() => {
     setScreenW(window.innerWidth)
@@ -107,6 +112,7 @@ export default function GeovisorPage() {
         visibleLayers={visibleLayers}
         selectedFamiliaId={selectedFamiliaId}
         onMapInit={onMapInit}
+        onFamiliaClick={handleFamiliaClick}
       />
 
       <LeftSidebar
@@ -126,6 +132,7 @@ export default function GeovisorPage() {
         onWidthChange={(px) => setRightRatio(px / screenW)}
         onSelectFamilia={setSelectedFamiliaId}
         isMobile={isMobile}
+        selectedFamiliaId={selectedFamiliaId}
       />
 
       {/* ── Botones de zoom del mapa ───────────────────────────────── */}

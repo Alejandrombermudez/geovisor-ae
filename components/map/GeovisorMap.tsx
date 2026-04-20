@@ -9,13 +9,14 @@ import PolygonLayer from './PolygonLayer'
 import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
 import FitBounds from './FitBounds'
-import type { GeovisorLayerData, VisibleLayers } from '@/types/geovisor'
+import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory } from '@/types/geovisor'
 
 interface Props {
   layerData: GeovisorLayerData
   visibleLayers: VisibleLayers
   selectedFamiliaId: string | null
   onMapInit: (map: L.Map) => void
+  onFamiliaClick?: (familia: SiembraFamilia | RasFamilia, category: ActiveCategory) => void
 }
 
 /** Registra la instancia del mapa para usarla desde fuera del MapContainer */
@@ -42,7 +43,7 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
   return null
 }
 
-export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit }: Props) {
+export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick }: Props) {
   return (
     <MapContainer
       center={MAP_CENTER}
@@ -70,6 +71,7 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
             color={LAYER_COLORS.siembraFincas}
             familia={item.familia}
             haField="ha_restauracion"
+            onFamiliaClick={(f) => onFamiliaClick?.(f, 'siembra')}
           />
         ))}
 
@@ -92,6 +94,7 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
             color={LAYER_COLORS.rasFincas}
             familia={item.familia}
             haField="ha_bosque"
+            onFamiliaClick={(f) => onFamiliaClick?.(f, 'ras')}
           />
         ))}
 

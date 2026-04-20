@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import type { ActiveCategory, SiembraFamilia, RasFamilia, FotoPredio } from '@/types/geovisor'
 import FamilyCard from './FamilyCard'
 import PhotoViewer from './PhotoViewer'
@@ -14,6 +14,7 @@ interface Props {
   onWidthChange: (w: number) => void
   onSelectFamilia: (id: string) => void
   isMobile: boolean
+  selectedFamiliaId: string | null
 }
 
 const CATEGORY_CONFIG = {
@@ -33,6 +34,7 @@ export default function RightPanel({
   onWidthChange,
   onSelectFamilia,
   isMobile,
+  selectedFamiliaId,
 }: Props) {
   const isOpen = activeCategory !== null
   const config = activeCategory ? CATEGORY_CONFIG[activeCategory] : null
@@ -40,6 +42,35 @@ export default function RightPanel({
 
   const [viewerState, setViewerState] = useState<{ photos: FotoPredio[]; index: number } | null>(null)
   useEffect(() => { setViewerState(null) }, [activeCategory])
+
+  // ── Filtro por municipio ──────────────────────────────────────────────────
+  const [municipioFilter, setMunicipioFilter] = useState<string | null>(null)
+  useEffect(() => { setMunicipioFilter(null) }, [activeCategory])
+
+  const municipios = useMemo(
+    () =>
+      [...new Set((familias as (SiembraFamilia | RasFamilia)[]).map((f) => f.municipio).filter((m): m is string => !!m))]
+        .sort((a, b) => a.localeCompare(b, 'es')),
+    [familias],
+  )
+
+  const displayFamilias = useMemo(
+    () =>
+      ([...(familias as (SiembraFamilia | RasFamilia)[])]
+        .filter((f) => !municipioFilter || f.municipio === municipioFilter)
+        .sort((a, b) => (a.nombre_propietario || '').localeCompare(b.nombre_propietario || '', 'es'))),
+    [familias, municipioFilter],
+  )
+
+  // ── Scroll automático al card seleccionado ────────────────────────────────
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
+  useEffect(() => {
+    if (!selectedFamiliaId) return
+    const el = cardRefs.current.get(selectedFamiliaId)
+    if (el) {
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 120)
+    }
+  }, [selectedFamiliaId])
 
   // Drag-to-resize + swipe-to-close (móvil)
   const [panelHeight, setPanelHeight] = useState<number | null>(null)
@@ -249,23 +280,63 @@ export default function RightPanel({
             </div>
           </div>
 
+          {/* Filtros de municipio */}
+          {municipios.length > 1 && (
+            <div style={{
+              display: 'flex', gap: 6, flexWrap: 'wrap',
+              padding: isMobile ? '6px 12px 4px' : '6px 14px 4px',
+              flexShrink: 0,
+              borderBottom: '1px solid rgba(255,255,255,0.05)',
+            }}>
+              {['Todos', ...municipios].map((m) => {
+                const active = m === 'Todos' ? !municipioFilter : municipioFilter === m
+                return (
+                  <button
+                    key={m}
+                    onClick={() => setMunicipioFilter(m === 'Todos' ? null : m)}
+                    style={{
+                      padding: '3px 10px', borderRadius: 20,
+                      fontSize: 10, fontWeight: 600,
+                      border: `1px solid ${active ? config!.color : 'rgba(255,255,255,0.12)'}`,
+                      background: active ? `${config!.color}22` : 'transparent',
+                      color: active ? config!.color : 'rgba(255,255,255,0.45)',
+                      cursor: 'pointer',
+                      transition: 'all 0.15s ease',
+                      WebkitTapHighlightColor: 'transparent',
+                    }}
+                  >
+                    {m}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
           {/* Scrollable list */}
           <div className="geo-panel-scroll" style={{ flex: 1, overflowY: 'auto', padding: isMobile ? 12 : 14 }}>
-            {familias.length === 0 ? (
+            {displayFamilias.length === 0 ? (
               <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, textAlign: 'center', marginTop: 48, lineHeight: 1.6 }}>
                 <div style={{ fontSize: 28, marginBottom: 10 }}>🌿</div>
-                No hay familias registradas
+                {municipioFilter ? `Sin familias en ${municipioFilter}` : 'No hay familias registradas'}
               </div>
             ) : (
-              familias.map((f) => (
-                <FamilyCard
+              displayFamilias.map((f) => (
+                <div
                   key={f.id}
-                  familia={f}
-                  category={activeCategory!}
-                  accentColor={config.color}
-                  onSelect={() => onSelectFamilia(f.id)}
-                  onOpenPhotos={(photos, idx) => setViewerState({ photos, index: idx })}
-                />
+                  ref={(el) => {
+                    if (el) cardRefs.current.set(f.id, el)
+                    else cardRefs.current.delete(f.id)
+                  }}
+                >
+                  <FamilyCard
+                    familia={f}
+                    category={activeCategory!}
+                    accentColor={config!.color}
+                    isSelected={f.id === selectedFamiliaId}
+                    onSelect={() => onSelectFamilia(f.id)}
+                    onOpenPhotos={(photos, idx) => setViewerState({ photos, index: idx })}
+                  />
+                </div>
               ))
             )}
           </div>
