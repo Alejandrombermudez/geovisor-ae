@@ -9,7 +9,7 @@ import PolygonLayer from './PolygonLayer'
 import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
 import FitBounds from './FitBounds'
-import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory } from '@/types/geovisor'
+import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory, PolygonLayerData, CamaraTrampa } from '@/types/geovisor'
 
 interface Props {
   layerData: GeovisorLayerData
@@ -44,6 +44,13 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
 }
 
 export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick }: Props) {
+  // When a family is selected, only show its layers; otherwise show everything
+  const polyFilter = (item: PolygonLayerData) =>
+    !selectedFamiliaId || item.familia.id === selectedFamiliaId
+
+  const camFilter = (cam: CamaraTrampa) =>
+    !selectedFamiliaId || cam.familia_id === selectedFamiliaId
+
   return (
     <MapContainer
       center={MAP_CENTER}
@@ -64,9 +71,9 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
 
       {/* ── Capas de polígonos ─────────────────────────────────────── */}
       {visibleLayers.siembraFincas &&
-        layerData.siembraFincas.map((item, i) => (
+        layerData.siembraFincas.filter(polyFilter).map((item) => (
           <PolygonLayer
-            key={`sf-${i}`}
+            key={`sf-${item.familia.id}`}
             data={item.fc}
             color={LAYER_COLORS.siembraFincas}
             familia={item.familia}
@@ -76,9 +83,9 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         ))}
 
       {visibleLayers.restauracion &&
-        layerData.restauracion.map((item, i) => (
+        layerData.restauracion.filter(polyFilter).map((item) => (
           <PolygonLayer
-            key={`re-${i}`}
+            key={`re-${item.familia.id}`}
             data={item.fc}
             color={LAYER_COLORS.restauracion}
             familia={item.familia}
@@ -87,9 +94,9 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         ))}
 
       {visibleLayers.rasFincas &&
-        layerData.rasFincas.map((item, i) => (
+        layerData.rasFincas.filter(polyFilter).map((item) => (
           <PolygonLayer
-            key={`rf-${i}`}
+            key={`rf-${item.familia.id}`}
             data={item.fc}
             color={LAYER_COLORS.rasFincas}
             familia={item.familia}
@@ -99,9 +106,9 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         ))}
 
       {visibleLayers.conservacion &&
-        layerData.conservacion.map((item, i) => (
+        layerData.conservacion.filter(polyFilter).map((item) => (
           <PolygonLayer
-            key={`co-${i}`}
+            key={`co-${item.familia.id}`}
             data={item.fc}
             color={LAYER_COLORS.conservacion}
             familia={item.familia}
@@ -112,14 +119,14 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
       {/* ── Capas de puntos (árboles) ──────────────────────────────── */}
       {visibleLayers.siembraArboles && (
         <ArbolesLayer
-          layers={layerData.siembraArboles}
+          layers={layerData.siembraArboles.filter(polyFilter)}
           color={LAYER_COLORS.siembraArboles}
         />
       )}
 
       {visibleLayers.rasArboles && (
         <ArbolesLayer
-          layers={layerData.rasArboles}
+          layers={layerData.rasArboles.filter(polyFilter)}
           color={LAYER_COLORS.rasArboles}
         />
       )}
@@ -140,14 +147,14 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
       {/* ── Cámaras trampa ────────────────────────────────────────── */}
       {visibleLayers.camarasSiembra && (
         <CameraLayer
-          cameras={layerData.camarasSiembra}
+          cameras={layerData.camarasSiembra.filter(camFilter)}
           color={LAYER_COLORS.camarasSiembra}
         />
       )}
 
       {visibleLayers.camarasConservacion && (
         <CameraLayer
-          cameras={layerData.camarasConservacion}
+          cameras={layerData.camarasConservacion.filter(camFilter)}
           color={LAYER_COLORS.camarasConservacion}
         />
       )}

@@ -9,6 +9,7 @@ import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
+import MapLegend from '@/components/map/MapLegend'
 
 const GeovisorMap = dynamic(
   () => import('@/components/map/GeovisorMap'),
@@ -29,7 +30,6 @@ const ALL_VISIBLE: VisibleLayers = {
   camarasConservacion: true,
 }
 
-const LEFT_RATIO  = 0.07
 const RIGHT_RATIO = 0.35
 
 export default function GeovisorPage() {
@@ -37,7 +37,9 @@ export default function GeovisorPage() {
   const [activeCategory, setActiveCategory] = useState<ActiveCategory>(null)
   const [selectedFamiliaId, setSelectedFamiliaId] = useState<string | null>(null)
 
-  const [leftRatio,  setLeftRatio]  = useState(LEFT_RATIO)
+  // LeftSidebar manages its own size internally and notifies us via onWidthChange.
+  // Initial value 96 matches SIZES[1] (medium) in LeftSidebar.
+  const [leftWidth,  setLeftWidth]  = useState(96)
   const [rightRatio, setRightRatio] = useState(RIGHT_RATIO)
   const [screenW,    setScreenW]    = useState(0)
 
@@ -49,6 +51,11 @@ export default function GeovisorPage() {
     setSelectedFamiliaId(familia.id)
   }, [])
 
+  const handleClose = useCallback(() => {
+    setActiveCategory(null)
+    setSelectedFamiliaId(null)
+  }, [])
+
   useEffect(() => {
     setScreenW(window.innerWidth)
     function onResize() { setScreenW(window.innerWidth) }
@@ -58,7 +65,7 @@ export default function GeovisorPage() {
 
   const isMobile = screenW > 0 && screenW < 640
 
-  const leftWidth  = isMobile ? 0 : (screenW > 0 ? Math.round(screenW * leftRatio)  : 0)
+  const effectiveLeftWidth = isMobile ? 0 : leftWidth
   const rightWidth = isMobile ? screenW : (screenW > 0 ? Math.round(screenW * rightRatio) : 0)
 
   const visibleLayers = useMemo<VisibleLayers>(() => {
@@ -118,8 +125,7 @@ export default function GeovisorPage() {
       <LeftSidebar
         activeCategory={activeCategory}
         onSelectCategory={setActiveCategory}
-        width={leftWidth}
-        onWidthChange={(px) => setLeftRatio(px / screenW)}
+        onWidthChange={setLeftWidth}
         isMobile={isMobile}
       />
 
@@ -127,13 +133,21 @@ export default function GeovisorPage() {
         activeCategory={activeCategory}
         siembraFamilias={siembraFamilias}
         rasFamilias={rasFamilias}
-        onClose={() => setActiveCategory(null)}
+        onClose={handleClose}
         width={rightWidth}
         onWidthChange={(px) => setRightRatio(px / screenW)}
         onSelectFamilia={setSelectedFamiliaId}
         isMobile={isMobile}
         selectedFamiliaId={selectedFamiliaId}
       />
+
+      {/* ── Leyenda del mapa (solo escritorio) ────────────────────── */}
+      {!isMobile && (
+        <MapLegend
+          visibleLayers={visibleLayers}
+          leftOffset={effectiveLeftWidth}
+        />
+      )}
 
       {/* ── Botones de zoom del mapa ───────────────────────────────── */}
       <div
@@ -172,7 +186,7 @@ export default function GeovisorPage() {
         loadingCount={loadingLayers.size}
         totalCount={8}
         isMobile={isMobile}
-        leftOffset={leftWidth}
+        leftOffset={effectiveLeftWidth}
       />
 
       {error && (
