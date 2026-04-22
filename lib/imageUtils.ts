@@ -6,7 +6,7 @@
  * URL original:    /storage/v1/object/public/{bucket}/{path}
  * URL resized:     /storage/v1/render/image/public/{bucket}/{path}?width=W&quality=Q
  */
-export function resizeSupabaseUrl(url: string, width: number, quality = 75): string {
+export function resizeSupabaseUrl(url: string, width: number, quality = 60): string {
   if (!url || !url.includes('/storage/v1/object/public/')) return url
   return (
     url.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/') +

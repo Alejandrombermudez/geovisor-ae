@@ -102,7 +102,7 @@ function Section({ title, color, children }: { title: string; color: string; chi
   )
 }
 
-// ── Galería de miniaturas ─────────────────────────────────────────────────────
+// ── Galería de miniaturas (2 visibles + navegación) ──────────────────────────
 
 function ThumbnailStrip({
   photos,
@@ -117,18 +117,20 @@ function ThumbnailStrip({
   accentColor: string
   onOpenPhotos?: (photos: FotoPredio[], index: number) => void
 }) {
+  const [startIdx, setStartIdx] = useState(0)
+
   const allPhotos = CATEGORY_ORDER.flatMap((cat) => photos?.[cat] ?? [])
 
-  // Mientras carga: mostrar spinner
+  // Mientras carga: mostrar spinner compacto
   if (loading) {
     return (
       <div style={{
-        height: 68,
+        height: 62,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: `linear-gradient(135deg, ${accentColor}08 0%, rgba(0,0,0,0.12) 100%)`,
       }}>
         <div style={{
-          width: 18, height: 18,
+          width: 16, height: 16,
           border: '2px solid rgba(255,255,255,0.08)',
           borderTopColor: accentColor,
           borderRadius: '50%',
@@ -141,63 +143,81 @@ function ThumbnailStrip({
   // Sin fotos o con error: no renderizar nada
   if (error || allPhotos.length === 0) return null
 
-  // Tira de miniaturas
-  return (
-    <div
-      className="geo-photo-scroll"
+  const total     = allPhotos.length
+  const canPrev   = startIdx > 0
+  const canNext   = startIdx + 2 < total
+  const visible   = allPhotos.slice(startIdx, startIdx + 2)
+
+  const navBtn = (enabled: boolean, onClick: () => void, icon: string, title: string) => (
+    <button
+      onClick={onClick} disabled={!enabled} title={title}
       style={{
-        display: 'flex', gap: 4,
-        padding: '6px 8px 8px',
-        overflowX: 'auto',
-        background: 'rgba(0,0,0,0.18)',
-        alignItems: 'flex-end',
+        width: 26, height: 26, borderRadius: 6, flexShrink: 0,
+        background: enabled ? 'rgba(255,255,255,0.08)' : 'transparent',
+        border: `1px solid ${enabled ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.05)'}`,
+        color: enabled ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.12)',
+        cursor: enabled ? 'pointer' : 'default',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: 15, lineHeight: 1, fontWeight: 500,
+        transition: 'all 0.15s ease',
       }}
-    >
-      {CATEGORY_ORDER.flatMap((cat) => {
-        const catPhotos = photos?.[cat]
-        if (!catPhotos || catPhotos.length === 0) return []
-        return catPhotos.map((foto, catIdx) => {
+    >{icon}</button>
+  )
+
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 6,
+      padding: '8px 12px 10px',
+      background: 'rgba(0,0,0,0.2)',
+      borderTop: '1px solid rgba(255,255,255,0.05)',
+    }}>
+      {navBtn(canPrev, () => setStartIdx(i => Math.max(0, i - 1)), '‹', 'Foto anterior')}
+
+      {/* 2 miniaturas — calidad reducida para performance */}
+      <div style={{ display: 'flex', gap: 6, flex: 1 }}>
+        {visible.map((foto) => {
           const globalIdx = allPhotos.findIndex((p) => p.id === foto.id)
           return (
-            <div key={foto.id} style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-              {catIdx === 0 && (
-                <span style={{ color: 'rgba(255,255,255,0.28)', fontSize: 9, letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
-                  {CATEGORY_LABELS[cat]}
-                </span>
-              )}
-              <button
-                onClick={() => onOpenPhotos?.(allPhotos, globalIdx)}
-                title={`Ver foto — ${CATEGORY_LABELS[cat]}`}
-                style={{
-                  width: 52, height: 52,
-                  padding: 0, border: 'none', cursor: onOpenPhotos ? 'pointer' : 'default',
-                  borderRadius: 5, overflow: 'hidden',
-                  outline: `1.5px solid ${accentColor}30`,
-                  transition: 'outline-color 0.15s ease, transform 0.15s ease',
-                  flexShrink: 0,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.outlineColor = accentColor
-                  e.currentTarget.style.transform = 'scale(1.06)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.outlineColor = `${accentColor}30`
-                  e.currentTarget.style.transform = 'scale(1)'
-                }}
-              >
-                <FallbackImg
-                  src={resizeSupabaseUrl(foto.url, 160)}
-                  fallback={foto.url}
-                  alt={CATEGORY_LABELS[cat]}
-                  loading="lazy"
-                  decoding="async"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-              </button>
-            </div>
+            <button
+              key={foto.id}
+              onClick={() => onOpenPhotos?.(allPhotos, globalIdx)}
+              style={{
+                flex: 1, aspectRatio: '1', minWidth: 0,
+                padding: 0, border: 'none',
+                borderRadius: 6, overflow: 'hidden',
+                cursor: 'pointer',
+                outline: `1.5px solid ${accentColor}35`,
+                transition: 'outline-color 0.15s ease, transform 0.15s ease',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.outlineColor = accentColor; e.currentTarget.style.transform = 'scale(1.03)' }}
+              onMouseLeave={e => { e.currentTarget.style.outlineColor = `${accentColor}35`; e.currentTarget.style.transform = 'scale(1)' }}
+            >
+              <FallbackImg
+                src={resizeSupabaseUrl(foto.url, 80, 30)}
+                fallback={foto.url}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+              />
+            </button>
           )
-        })
-      })}
+        })}
+        {/* Celda vacía si solo hay 1 foto visible */}
+        {visible.length < 2 && (
+          <div style={{ flex: 1, borderRadius: 6, background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.07)' }} />
+        )}
+      </div>
+
+      {/* Flecha siguiente + contador */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, flexShrink: 0 }}>
+        {navBtn(canNext, () => setStartIdx(i => Math.min(total - 1, i + 1)), '›', 'Foto siguiente')}
+        {total > 1 && (
+          <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.28)', whiteSpace: 'nowrap', letterSpacing: '0.02em' }}>
+            {startIdx + 1}–{Math.min(startIdx + 2, total)}/{total}
+          </span>
+        )}
+      </div>
     </div>
   )
 }
