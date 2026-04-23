@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import type { ActiveCategory, SiembraFamilia, RasFamilia, FotoPredio } from '@/types/geovisor'
 import FamilyCard from './FamilyCard'
+import SiembraCard from './SiembraCard'
 import PhotoViewer from './PhotoViewer'
 
 interface Props {
@@ -18,8 +19,15 @@ interface Props {
 }
 
 const CATEGORY_CONFIG = {
-  siembra: { title: 'Familias en restauración', color: '#74A884' },
+  siembra: { title: 'Restauración Ecológica · Ley 2173', color: '#74A884' },
   ras: { title: 'Familias en conservación', color: '#6898B8' },
+}
+
+const SOURCE_BADGES = ['Ley 2173', 'SINCHI', 'IDEAM', 'MapBiomas']
+
+function fmt(n: number | null | undefined, decimals = 0): string {
+  if (n == null) return '—'
+  return n.toLocaleString('es-CO', { maximumFractionDigits: decimals })
 }
 
 const MIN_RIGHT_RATIO = 0.20
@@ -58,9 +66,26 @@ export default function RightPanel({
     () =>
       ([...(familias as (SiembraFamilia | RasFamilia)[])]
         .filter((f) => !municipioFilter || f.municipio === municipioFilter)
-        .sort((a, b) => (a.nombre_propietario || '').localeCompare(b.nombre_propietario || '', 'es'))),
-    [familias, municipioFilter],
+        .sort((a, b) => {
+          if (activeCategory === 'siembra') {
+            // Most productive plots first
+            return ((b as SiembraFamilia).plantulas_sembradas ?? 0) - ((a as SiembraFamilia).plantulas_sembradas ?? 0)
+          }
+          return (a.nombre_propietario || '').localeCompare(b.nombre_propietario || '', 'es')
+        })),
+    [familias, municipioFilter, activeCategory],
   )
+
+  // ── Estadísticas agregadas siembra ────────────────────────────────────────
+  const siembraStats = useMemo(() => {
+    const s = siembraFamilias
+    return {
+      totalPlantulas: s.reduce((sum, f) => sum + (f.plantulas_sembradas ?? 0), 0),
+      totalHa:        s.reduce((sum, f) => sum + (f.ha_restauracion   ?? 0), 0),
+      totalEspecies:  s.reduce((sum, f) => sum + (f.especies_sembradas ?? 0), 0),
+      conParcelas:    s.filter(f => (f.parcelas_monitoreo ?? 0) > 0).length,
+    }
+  }, [siembraFamilias])
 
   // ── Scroll automático al card seleccionado ────────────────────────────────
   const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map())
@@ -264,7 +289,9 @@ export default function RightPanel({
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <div style={{ width: 14, height: 1, background: `${config.color}80` }} />
                   <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 11, letterSpacing: '0.03em' }}>
-                    {familias.length}{' '}{familias.length !== 1 ? 'familias registradas' : 'familia registrada'}
+                    {familias.length}{' '}{activeCategory === 'siembra'
+                      ? familias.length !== 1 ? 'predios en programa' : 'predio en programa'
+                      : familias.length !== 1 ? 'familias registradas' : 'familia registrada'}
                   </span>
                 </div>
               </div>
@@ -279,6 +306,54 @@ export default function RightPanel({
               </button>
             </div>
           </div>
+
+          {/* ── Stats agregadas (solo siembra) ─────────────────────────── */}
+          {activeCategory === 'siembra' && (
+            <div style={{
+              padding: isMobile ? '8px 12px 6px' : '9px 14px 7px',
+              flexShrink: 0,
+              borderBottom: '1px solid rgba(255,255,255,0.05)',
+              background: 'rgba(116,168,132,0.04)',
+            }}>
+              {/* 2×2 KPI grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, marginBottom: 7 }}>
+                {[
+                  { icon: '🌱', value: fmt(siembraStats.totalPlantulas), label: 'Plántulas' },
+                  { icon: '🗺️', value: `${fmt(siembraStats.totalHa, 1)} ha`, label: 'Restauración' },
+                  { icon: '🌿', value: fmt(siembraStats.totalEspecies), label: 'Registros sp.' },
+                  { icon: '📍', value: String(siembraStats.conParcelas), label: 'Con monitoreo' },
+                ].map(({ icon, value, label }) => (
+                  <div key={label} style={{
+                    background: 'rgba(116,168,132,0.09)',
+                    border: '1px solid rgba(116,168,132,0.18)',
+                    borderRadius: 8, padding: '6px 9px',
+                    display: 'flex', alignItems: 'center', gap: 7,
+                  }}>
+                    <span style={{ fontSize: 14 }}>{icon}</span>
+                    <div>
+                      <div style={{ color: '#74A884', fontSize: 13, fontWeight: 700, lineHeight: 1.1 }}>{value}</div>
+                      <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Source validation badges */}
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {SOURCE_BADGES.map(badge => (
+                  <span key={badge} style={{
+                    fontSize: 8, fontWeight: 700, padding: '1px 6px', borderRadius: 3,
+                    background: 'rgba(116,168,132,0.1)',
+                    border: '1px solid rgba(116,168,132,0.22)',
+                    color: 'rgba(116,168,132,0.65)',
+                    letterSpacing: '0.04em', textTransform: 'uppercase',
+                  }}>
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Filtros de municipio */}
           {municipios.length > 1 && (
@@ -317,7 +392,9 @@ export default function RightPanel({
             {displayFamilias.length === 0 ? (
               <div style={{ color: 'rgba(255,255,255,0.2)', fontSize: 13, textAlign: 'center', marginTop: 48, lineHeight: 1.6 }}>
                 <div style={{ fontSize: 28, marginBottom: 10 }}>🌿</div>
-                {municipioFilter ? `Sin familias en ${municipioFilter}` : 'No hay familias registradas'}
+                {municipioFilter
+                ? `Sin predios en ${municipioFilter}`
+                : activeCategory === 'siembra' ? 'Sin predios en programa' : 'No hay familias registradas'}
               </div>
             ) : (
               displayFamilias.map((f) => (
@@ -328,14 +405,24 @@ export default function RightPanel({
                     else cardRefs.current.delete(f.id)
                   }}
                 >
-                  <FamilyCard
-                    familia={f}
-                    category={activeCategory!}
-                    accentColor={config!.color}
-                    isSelected={f.id === selectedFamiliaId}
-                    onSelect={() => onSelectFamilia(f.id)}
-                    onOpenPhotos={(photos, idx) => setViewerState({ photos, index: idx })}
-                  />
+                  {activeCategory === 'siembra' ? (
+                    <SiembraCard
+                      familia={f as SiembraFamilia}
+                      accentColor={config!.color}
+                      isSelected={f.id === selectedFamiliaId}
+                      onSelect={() => onSelectFamilia(f.id)}
+                      onOpenPhotos={(photos, idx) => setViewerState({ photos, index: idx })}
+                    />
+                  ) : (
+                    <FamilyCard
+                      familia={f}
+                      category={activeCategory!}
+                      accentColor={config!.color}
+                      isSelected={f.id === selectedFamiliaId}
+                      onSelect={() => onSelectFamilia(f.id)}
+                      onOpenPhotos={(photos, idx) => setViewerState({ photos, index: idx })}
+                    />
+                  )}
                 </div>
               ))
             )}
