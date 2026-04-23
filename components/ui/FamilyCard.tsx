@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, Children } from 'react'
+import { useState, useEffect, Children } from 'react'
 import type { SiembraFamilia, RasFamilia, FotoCategoria, FotosPredioByCategoria, FotoPredio } from '@/types/geovisor'
 import { resizeSupabaseUrl } from '@/lib/imageUtils'
 
@@ -231,7 +231,6 @@ export default function FamilyCard({
   const [photos, setPhotos]     = useState<FotosPredioByCategoria | null>(null)
   const [photosLoading, setPhotosLoading] = useState(false)
   const [photosError,   setPhotosError]   = useState(false)
-  const fetchedRef = useRef(false)
 
   const ras = category === 'ras' ? (familia as RasFamilia) : null
 
@@ -239,10 +238,9 @@ export default function FamilyCard({
   const title    = familia.nombre_finca || familia.nombre_propietario || 'Sin nombre'
   const subtitle = familia.nombre_finca ? familia.nombre_propietario : null
 
-  // Lazy fetch de fotos al expandir por primera vez
+  // Fetch de fotos cada vez que se expande (datos siempre frescos)
   useEffect(() => {
-    if (!expanded || fetchedRef.current) return
-    fetchedRef.current = true
+    if (!expanded) return
     setPhotosLoading(true)
     setPhotosError(false)
     fetch(`/api/familia-fotos?id=${familia.id}&schema=${category}`)

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase'
 import type { FotoCategoria, FotosPredioByCategoria } from '@/types/geovisor'
 
+// Siempre datos frescos — sin cache en CDN ni en Next.js
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const id     = searchParams.get('id')
@@ -36,7 +39,9 @@ export async function GET(request: Request) {
       return acc
     }, {})
 
-    return NextResponse.json(grouped)
+    return NextResponse.json(grouped, {
+      headers: { 'Cache-Control': 'no-store' },
+    })
   } catch (err) {
     console.error('[familia-fotos] Error inesperado:', err)
     return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 })

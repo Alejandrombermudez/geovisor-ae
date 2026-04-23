@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import type { SiembraFamilia, FotosPredioByCategoria, FotoPredio } from '@/types/geovisor'
 import { resizeSupabaseUrl } from '@/lib/imageUtils'
 
@@ -139,8 +139,6 @@ export default function SiembraCard({ familia, accentColor, isSelected = false, 
   const [photos, setPhotos] = useState<FotosPredioByCategoria | null>(null)
   const [photosLoading, setPhotosLoading] = useState(false)
   const [photosError, setPhotosError] = useState(false)
-  const fetchedRef = useRef(false)
-
   const title = familia.nombre_finca || familia.nombre_propietario || 'Predio sin nombre'
   const location = [familia.municipio, familia.vereda].filter(Boolean).join(' · ')
 
@@ -155,9 +153,9 @@ export default function SiembraCard({ familia, accentColor, isSelected = false, 
   const monColor  = hasMon ? accentColor : hasPlan ? '#F59E0B' : 'rgba(255,255,255,0.35)'
 
   useEffect(() => {
-    if (!expanded || fetchedRef.current) return
-    fetchedRef.current = true
+    if (!expanded) return
     setPhotosLoading(true)
+    setPhotosError(false)
     fetch(`/api/familia-fotos?id=${familia.id}&schema=siembra`)
       .then(r => r.ok ? r.json() : Promise.reject())
       .then((d: FotosPredioByCategoria) => setPhotos(d))
