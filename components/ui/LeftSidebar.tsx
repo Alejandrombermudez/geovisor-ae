@@ -18,7 +18,7 @@ const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: strin
 const METRICS = [
   { value: '12.480', label: 'Árboles nativos',       icon: '🌳' },
   { value: '68',     label: 'Polígonos monitoreados', icon: '📍' },
-  { value: '87',     label: 'Familias vinculadas',    icon: '🤝' },
+  { value: '87',     label: 'Familias vinculadas',    icon: '🌾' },
   { value: '1.320',  label: 't CO₂e compensadas',    icon: '📉' },
 ]
 
@@ -118,9 +118,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
   const openAbout = useCallback(() => {
     setView('about')
-    // Auto-expand a mínimo medium para que el contenido sea legible
-    if (sidebarW < presets[1]) setSidebarW(presets[1])
-  }, [sidebarW, presets])
+    // Siempre expandir al estado máximo para presentar el contenido correctamente
+    setSidebarW(presets[2])
+  }, [presets])
 
   const startDrag = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
@@ -260,7 +260,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         <div style={{ width: '80%', height: 1, background: 'rgba(255,255,255,0.08)', margin: '2px 0 10px', flexShrink: 0 }} />
 
         {/* Contenido scrollable */}
-        <div style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
+        <div className="geo-about-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
 
           {/* Logo / marca */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: compact ? '0 6px 12px' : '0 14px 14px', gap: 8 }}>
@@ -362,7 +362,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           {/* CTA */}
           <div style={{ padding: compact ? '0 6px 14px' : '0 12px 14px' }}>
             <a
-              href="mailto:info@amazoniaemprende.com?subject=Cotización%20proyecto%20de%20compensación"
+              href="mailto:escuelabosque@amazoniaemprende.com?subject=Cotización%20proyecto%20de%20compensación%20ambiental"
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 background: 'linear-gradient(135deg, #74A884 0%, #6898B8 100%)',
@@ -373,10 +373,10 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 textAlign: 'center',
                 transition: 'opacity 0.15s ease',
               }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '0.88')}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
               onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
-              {compact ? '👉' : '👉 Cotice su proyecto aquí'}
+              {compact ? '→' : 'Cotice su proyecto →'}
             </a>
           </div>
 
