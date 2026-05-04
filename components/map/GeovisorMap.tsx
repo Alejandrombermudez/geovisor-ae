@@ -9,7 +9,8 @@ import PolygonLayer from './PolygonLayer'
 import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
 import FitBounds from './FitBounds'
-import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory, PolygonLayerData, CamaraTrampa } from '@/types/geovisor'
+import ProyeccionLayer from './ProyeccionLayer'
+import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory, PolygonLayerData, CamaraTrampa, Proyeccion } from '@/types/geovisor'
 
 interface Props {
   layerData: GeovisorLayerData
@@ -17,6 +18,8 @@ interface Props {
   selectedFamiliaId: string | null
   onMapInit: (map: L.Map) => void
   onFamiliaClick?: (familia: SiembraFamilia | RasFamilia, category: ActiveCategory) => void
+  proyecciones?: Proyeccion[]
+  activeProyeccionId?: string | null
 }
 
 /** Registra la instancia del mapa para usarla desde fuera del MapContainer */
@@ -43,7 +46,7 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
   return null
 }
 
-export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick }: Props) {
+export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null }: Props) {
   // When a family is selected, only show its layers; otherwise show everything
   const polyFilter = (item: PolygonLayerData) =>
     !selectedFamiliaId || item.familia.id === selectedFamiliaId
@@ -143,6 +146,15 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
 
       {/* ── Zoom animado a predio seleccionado ────────────────────── */}
       <FlyToFamilia familiaId={selectedFamiliaId} layerData={layerData} />
+
+      {/* ── Proyecciones / fases geográficas ─────────────────────── */}
+      {proyecciones.map((proy) => (
+        <ProyeccionLayer
+          key={proy.id}
+          proyeccion={proy}
+          isActive={proy.id === activeProyeccionId}
+        />
+      ))}
 
       {/* ── Cámaras trampa ────────────────────────────────────────── */}
       {visibleLayers.camarasSiembra && (

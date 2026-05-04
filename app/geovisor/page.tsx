@@ -3,7 +3,7 @@
 import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import type L from 'leaflet'
-import type { SiembraFamilia, RasFamilia, ActiveCategory, VisibleLayers } from '@/types/geovisor'
+import type { SiembraFamilia, RasFamilia, ActiveCategory, VisibleLayers, Proyeccion } from '@/types/geovisor'
 import { useGeovisorData } from '@/hooks/useGeovisorData'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
@@ -34,8 +34,17 @@ const RIGHT_RATIO = 0.35
 
 export default function GeovisorPage() {
   const { data, siembraFamilias, rasFamilias, loadingLayers, error } = useGeovisorData()
-  const [activeCategory, setActiveCategory] = useState<ActiveCategory>(null)
-  const [selectedFamiliaId, setSelectedFamiliaId] = useState<string | null>(null)
+  const [activeCategory,     setActiveCategory]     = useState<ActiveCategory>(null)
+  const [selectedFamiliaId,  setSelectedFamiliaId]  = useState<string | null>(null)
+  const [proyecciones,       setProyecciones]       = useState<Proyeccion[]>([])
+  const [activeProyeccionId, setActiveProyeccionId] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetch('/api/proyecciones')
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then((d: Proyeccion[]) => setProyecciones(d))
+      .catch(err => console.warn('[proyecciones] Error al cargar:', err))
+  }, [])
 
   // LeftSidebar manages its own size internally and notifies us via onWidthChange.
   // Initial value 96 matches SIZES[1] (medium) in LeftSidebar.
@@ -120,6 +129,8 @@ export default function GeovisorPage() {
         selectedFamiliaId={selectedFamiliaId}
         onMapInit={onMapInit}
         onFamiliaClick={handleFamiliaClick}
+        proyecciones={proyecciones}
+        activeProyeccionId={activeProyeccionId}
       />
 
       <LeftSidebar
@@ -127,6 +138,9 @@ export default function GeovisorPage() {
         onSelectCategory={setActiveCategory}
         onWidthChange={setLeftWidth}
         isMobile={isMobile}
+        proyecciones={proyecciones}
+        activeProyeccionId={activeProyeccionId}
+        onSelectProyeccion={setActiveProyeccionId}
       />
 
       <RightPanel

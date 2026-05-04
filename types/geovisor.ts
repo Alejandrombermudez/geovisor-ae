@@ -103,6 +103,26 @@ export interface GeovisorLayerData {
   camarasConservacion: CamaraTrampa[]
 }
 
+// ── Proyecciones / fases ─────────────────────────────────────────────────────
+
+export interface Proyeccion {
+  id: string
+  nombre: string
+  subtitulo: string | null
+  descripcion: string | null
+  year_inicio: number | null
+  year_fin: number | null
+  ha_objetivo: number | null
+  ha_ejecutado: number | null
+  plantulas_objetivo: number | null
+  plantulas_ejecutadas: number | null
+  familias_vinculadas: number | null
+  municipios_clave: string[] | null
+  color: string
+  shapefile_url: string | null
+  orden: number
+}
+
 // ── Fotos del predio ─────────────────────────────────────────────────────────
 
 export type FotoCategoria = 'predio' | 'familia' | 'copa_arboles' | 'tronco' | 'otras'

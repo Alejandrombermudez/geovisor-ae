@@ -1,13 +1,16 @@
 'use client'
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
-import type { ActiveCategory } from '@/types/geovisor'
+import type { ActiveCategory, Proyeccion } from '@/types/geovisor'
 
 interface Props {
   activeCategory: ActiveCategory
   onSelectCategory: (cat: ActiveCategory) => void
   onWidthChange: (w: number) => void
   isMobile: boolean
+  proyecciones?: Proyeccion[]
+  activeProyeccionId?: string | null
+  onSelectProyeccion?: (id: string | null) => void
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -78,12 +81,38 @@ function AEImage({ src, style }: { src: string; style: React.CSSProperties }) {
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile }: Props) {
+// ── Helpers Proyecciones ──────────────────────────────────────────────────────
+
+function pct(ejecutado: number | null, objetivo: number | null): number {
+  if (!objetivo || objetivo === 0) return 0
+  return Math.min(100, Math.round(((ejecutado ?? 0) / objetivo) * 100))
+}
+
+function fmtNum(n: number | null | undefined, decimals = 0): string {
+  if (n == null) return '—'
+  return n.toLocaleString('es-CO', { maximumFractionDigits: decimals })
+}
+
+function getPhaseStatus(yi: number | null, yf: number | null): { label: string; color: string } | null {
+  if (!yi || !yf) return null
+  const year = new Date().getFullYear()
+  if (year > yf)  return { label: 'Completada',  color: '#22C55E' }
+  if (year >= yi) return { label: 'En progreso', color: '#F59E0B' }
+  return               { label: 'Planificada',  color: '#6898B8' }
+}
+
+// ── Componente principal ──────────────────────────────────────────────────────
+
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(96)
-  const [view,      setView]      = useState<'main' | 'about'>('main')
+  const [view,      setView]      = useState<'main' | 'about' | 'proyecciones'>('main')
   const [hovered,   setHovered]   = useState<string | null>(null)
   const [logoError, setLogoError] = useState(false)
+
+  // Fase actualmente visible en la vista proyecciones
+  const [activePhaseFallback, setActivePhaseFallback] = useState<string | null>(null)
+  const visiblePhaseId = activeProyeccionId ?? activePhaseFallback
 
   useEffect(() => {
     const w = window.innerWidth
@@ -118,9 +147,30 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
   const openAbout = useCallback(() => {
     setView('about')
-    // Siempre expandir al estado máximo para presentar el contenido correctamente
     setSidebarW(presets[2])
   }, [presets])
+
+  const openProyecciones = useCallback(() => {
+    setView('proyecciones')
+    setSidebarW(presets[2])
+    // Seleccionar la primera fase por defecto si ninguna está activa
+    if (!activeProyeccionId && proyecciones.length > 0) {
+      const first = proyecciones[0].id
+      setActivePhaseFallback(first)
+      onSelectProyeccion?.(first)
+    }
+  }, [presets, activeProyeccionId, proyecciones, onSelectProyeccion])
+
+  const selectPhase = useCallback((id: string) => {
+    setActivePhaseFallback(id)
+    onSelectProyeccion?.(id)
+  }, [onSelectProyeccion])
+
+  const backToMain = useCallback(() => {
+    setView('main')
+    setActivePhaseFallback(null)
+    onSelectProyeccion?.(null)
+  }, [onSelectProyeccion])
 
   const startDrag = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
@@ -240,7 +290,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
     return (
       <div style={sidebarBase}>
         {/* Botón volver */}
-        <button onClick={() => setView('main')} onMouseEnter={() => setHovered('back')} onMouseLeave={() => setHovered(null)}
+        <button onClick={backToMain} onMouseEnter={() => setHovered('back')} onMouseLeave={() => setHovered(null)}
           style={{
             width: '100%', background: hovered === 'back' ? 'rgba(255,255,255,0.07)' : 'transparent',
             border: 'none', borderLeft: '4px solid transparent',
@@ -408,6 +458,198 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
     )
   }
 
+  // ── Vista "Proyecciones" ──────────────────────────────────────────────────
+  if (view === 'proyecciones') {
+    const compact     = !showLabels
+    const activePhase = proyecciones.find(p => p.id === visiblePhaseId) ?? proyecciones[0] ?? null
+
+    return (
+      <div style={sidebarBase}>
+        {/* Botón volver */}
+        <button onClick={backToMain} onMouseEnter={() => setHovered('back')} onMouseLeave={() => setHovered(null)}
+          style={{
+            width: '100%', background: hovered === 'back' ? 'rgba(255,255,255,0.07)' : 'transparent',
+            border: 'none', borderLeft: '4px solid transparent',
+            color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center',
+            justifyContent: compact ? 'center' : 'flex-start',
+            gap: 8, padding: compact ? '12px 4px' : '11px 14px',
+            fontSize: 12, fontWeight: 600, flexShrink: 0, transition: 'all 0.15s ease',
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+            <path d="M9 2.5L4.5 7 9 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {!compact && <span>Volver</span>}
+        </button>
+
+        <div style={{ width: '80%', height: 1, background: 'rgba(255,255,255,0.08)', margin: '2px 0 8px', flexShrink: 0 }} />
+
+        {/* Título */}
+        {!compact && (
+          <div style={{ padding: '0 14px 10px', flexShrink: 0 }}>
+            <div style={{ color: '#A78BFA', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
+              📐 Proyecciones
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, letterSpacing: '0.04em' }}>
+              Avance por fases · Amazonia Emprende
+            </div>
+          </div>
+        )}
+
+        {/* Selector de fases (tabs) */}
+        <div style={{ width: '100%', padding: compact ? '0 4px 8px' : '0 10px 10px', flexShrink: 0 }}>
+          {proyecciones.map(proy => {
+            const isTab = proy.id === visiblePhaseId
+            return (
+              <button key={proy.id} onClick={() => selectPhase(proy.id)}
+                style={{
+                  display: 'flex', alignItems: 'center', width: '100%',
+                  background: isTab ? `${proy.color}18` : 'transparent',
+                  border: 'none',
+                  borderLeft: `3px solid ${isTab ? proy.color : 'transparent'}`,
+                  color: isTab ? proy.color : 'rgba(255,255,255,0.45)',
+                  cursor: 'pointer',
+                  padding: compact ? '8px 6px' : '8px 10px',
+                  gap: 8, marginBottom: 3, borderRadius: '0 6px 6px 0',
+                  transition: 'all 0.15s ease',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: proy.color, flexShrink: 0, boxShadow: isTab ? `0 0 6px ${proy.color}` : 'none' }} />
+                {!compact && (
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{proy.nombre}</div>
+                    {proy.subtitulo && <div style={{ fontSize: 9, opacity: 0.7, letterSpacing: '0.02em' }}>{proy.subtitulo}</div>}
+                  </div>
+                )}
+              </button>
+            )
+          })}
+        </div>
+
+        <div style={{ width: '80%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '0 auto 8px', flexShrink: 0 }} />
+
+        {/* Contenido de la fase activa */}
+        <div className="geo-about-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
+          {activePhase ? (() => {
+            const status = getPhaseStatus(activePhase.year_inicio, activePhase.year_fin)
+            const pHa    = pct(activePhase.ha_ejecutado, activePhase.ha_objetivo)
+            const pPl    = pct(activePhase.plantulas_ejecutadas, activePhase.plantulas_objetivo)
+            const c      = activePhase.color
+
+            return (
+              <div style={{ padding: compact ? '0 4px 16px' : '0 12px 16px' }}>
+
+                {/* Encabezado de fase */}
+                {!compact && (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 6 }}>
+                      <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>{activePhase.nombre}</div>
+                      {status && (
+                        <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 4,
+                          background: `${status.color}18`, border: `1px solid ${status.color}35`,
+                          color: status.color, letterSpacing: '0.03em', textTransform: 'uppercase', flexShrink: 0 }}>
+                          {status.label}
+                        </span>
+                      )}
+                    </div>
+                    {activePhase.year_inicio && activePhase.year_fin && (
+                      <div style={{ color: `${c}BB`, fontSize: 10, fontWeight: 600 }}>
+                        {activePhase.year_inicio} – {activePhase.year_fin}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* KPIs con barra de progreso */}
+                {[
+                  { label: 'Hectáreas',  ejecutado: activePhase.ha_ejecutado,           objetivo: activePhase.ha_objetivo,         unit: ' ha', p: pHa },
+                  { label: 'Plántulas',  ejecutado: activePhase.plantulas_ejecutadas,   objetivo: activePhase.plantulas_objetivo,   unit: '',    p: pPl },
+                ].map(({ label, ejecutado, objetivo, unit, p }) => (
+                  <div key={label} style={{ marginBottom: 10 }}>
+                    {!compact && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, alignItems: 'baseline' }}>
+                        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</span>
+                        <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: 10, fontWeight: 700 }}>
+                          {fmtNum(ejecutado)}{unit} <span style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>/ {fmtNum(objetivo)}{unit}</span>
+                        </span>
+                      </div>
+                    )}
+                    {/* Barra de progreso */}
+                    <div style={{ height: 5, borderRadius: 3, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${p}%`, background: `linear-gradient(90deg, ${c} 0%, ${c}CC 100%)`, borderRadius: 3, transition: 'width 0.6s ease' }} />
+                    </div>
+                    {!compact && (
+                      <div style={{ color: `${c}BB`, fontSize: 9, marginTop: 3, textAlign: 'right' }}>{p}% completado</div>
+                    )}
+                  </div>
+                ))}
+
+                {/* Familias y municipios */}
+                {!compact && (
+                  <>
+                    {activePhase.familias_vinculadas != null && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderTop: `1px solid ${c}18` }}>
+                        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em' }}>🌾 Familias</span>
+                        <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{activePhase.familias_vinculadas}</span>
+                      </div>
+                    )}
+
+                    {activePhase.municipios_clave && activePhase.municipios_clave.length > 0 && (
+                      <div style={{ marginTop: 8 }}>
+                        <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 5 }}>
+                          📍 Municipios
+                        </div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                          {activePhase.municipios_clave.map(m => (
+                            <span key={m} style={{ fontSize: 9, padding: '2px 6px', borderRadius: 4, background: `${c}14`, border: `1px solid ${c}28`, color: `${c}CC` }}>
+                              {m}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Descripción */}
+                    {activePhase.descripcion && (
+                      <div style={{ marginTop: 12, padding: '10px 11px', background: `${c}0A`, border: `1px solid ${c}1E`, borderRadius: 8 }}>
+                        <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, lineHeight: 1.65 }}>
+                          {activePhase.descripcion}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Botón de zoom */}
+                    <button onClick={() => selectPhase(activePhase.id)} style={{
+                      marginTop: 12, width: '100%', padding: '9px 12px',
+                      background: `linear-gradient(135deg, ${c} 0%, ${c}AA 100%)`,
+                      border: 'none', borderRadius: 8, color: '#fff',
+                      fontSize: 11, fontWeight: 700, cursor: 'pointer',
+                      letterSpacing: '0.02em', transition: 'opacity 0.15s ease',
+                    }}
+                      onMouseEnter={e => (e.currentTarget.style.opacity = '0.82')}
+                      onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                    >
+                      Zoom a esta área →
+                    </button>
+                  </>
+                )}
+              </div>
+            )
+          })() : (
+            <div style={{ color: 'rgba(255,255,255,0.25)', fontSize: 11, textAlign: 'center', padding: '24px 12px' }}>
+              Sin proyecciones configuradas
+            </div>
+          )}
+        </div>
+
+        <SizeControl />
+        <DragHandle />
+      </div>
+    )
+  }
+
   // ── Vista principal ───────────────────────────────────────────────────────
   return (
     <div style={sidebarBase}>
@@ -430,7 +672,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
       <div style={{ width: '60%', height: 1, background: 'rgba(255,255,255,0.08)', marginBottom: 6, flexShrink: 0 }} />
 
-      {/* Categorías — scrollable si la pantalla es muy corta */}
+      {/* Categorías + Proyecciones — scrollable si la pantalla es muy corta */}
       <div style={{ flex: 1, overflowY: 'auto', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, minHeight: 0 }}>
         {ITEMS.map(({ key, label, icon, color }) => {
           const isActive  = activeCategory === key
@@ -459,6 +701,33 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             </button>
           )
         })}
+
+        {/* Separador + botón Proyecciones */}
+        {proyecciones.length > 0 && (
+          <>
+            <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '6px auto 4px' }} />
+            <button
+              onClick={openProyecciones}
+              onMouseEnter={() => setHovered('proyecciones')} onMouseLeave={() => setHovered(null)}
+              title={showLabels ? undefined : 'Proyecciones'}
+              style={{
+                background: hovered === 'proyecciones' ? 'rgba(167,139,250,0.1)' : 'transparent',
+                border: 'none', borderLeft: '4px solid transparent',
+                color: hovered === 'proyecciones' ? '#A78BFA' : 'rgba(255,255,255,0.45)',
+                cursor: 'pointer', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                gap: 5, width: '100%', padding: '12px 4px', transition: 'all 0.2s ease',
+              }}
+            >
+              <span style={{ fontSize: showLabels ? iconSize : iconSize + 2, lineHeight: 1 }}>📐</span>
+              {showLabels && (
+                <span style={{ fontSize: sidebarW > 120 ? 10 : 9, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                  Proyecciones
+                </span>
+              )}
+            </button>
+          </>
+        )}
       </div>
 
       {/* Sección inferior fija */}
