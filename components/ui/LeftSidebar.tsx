@@ -488,11 +488,14 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         {/* Título */}
         {!compact && (
           <div style={{ padding: '0 14px 10px', flexShrink: 0 }}>
-            <div style={{ color: '#A78BFA', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 2 }}>
-              📐 Proyecciones
+            <div style={{ color: '#A78BFA', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 3 }}>
+              🧭 Conectividad
             </div>
-            <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, letterSpacing: '0.04em' }}>
-              Avance por fases · Amazonia Emprende
+            <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, fontWeight: 600, marginBottom: 2 }}>
+              Plan Andino-Amazónico del Caquetá
+            </div>
+            <div style={{ color: 'rgba(255,255,255,0.32)', fontSize: 9, letterSpacing: '0.03em' }}>
+              Conservación y restauración de paisaje · 2026–2050
             </div>
           </div>
         )}
@@ -631,7 +634,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                       onMouseEnter={e => (e.currentTarget.style.opacity = '0.82')}
                       onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
                     >
-                      Zoom a esta área →
+                      Ver en el mapa →
                     </button>
                   </>
                 )}
@@ -709,7 +712,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             <button
               onClick={openProyecciones}
               onMouseEnter={() => setHovered('proyecciones')} onMouseLeave={() => setHovered(null)}
-              title={showLabels ? undefined : 'Proyecciones'}
+              title={showLabels ? undefined : 'Conectividad · Plan Andino-Amazónico'}
               style={{
                 background: hovered === 'proyecciones' ? 'rgba(167,139,250,0.1)' : 'transparent',
                 border: 'none', borderLeft: '4px solid transparent',
@@ -719,10 +722,10 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 gap: 5, width: '100%', padding: '12px 4px', transition: 'all 0.2s ease',
               }}
             >
-              <span style={{ fontSize: showLabels ? iconSize : iconSize + 2, lineHeight: 1 }}>📐</span>
+              <span style={{ fontSize: showLabels ? iconSize : iconSize + 2, lineHeight: 1 }}>🧭</span>
               {showLabels && (
                 <span style={{ fontSize: sidebarW > 120 ? 10 : 9, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
-                  Proyecciones
+                  Conectividad
                 </span>
               )}
             </button>

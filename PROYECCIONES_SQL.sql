@@ -1,104 +1,113 @@
 -- ============================================================
--- SETUP: Tabla "proyecciones" para el Geovisor AE
--- Ejecutar en Supabase → SQL Editor
+-- SETUP: Tabla "proyecciones" — Plan de Conectividad Andino-Amazónica
+-- Geovisor AE · Ejecutar en Supabase → SQL Editor
 -- ============================================================
 
--- 1. Crear tabla en el schema public
+-- 1. Crear tabla
 CREATE TABLE IF NOT EXISTS public.proyecciones (
   id                    UUID          DEFAULT gen_random_uuid() PRIMARY KEY,
-  nombre                TEXT          NOT NULL,           -- "Fase I · 2020–2022"
-  subtitulo             TEXT,                             -- "Establecimiento"
-  descripcion           TEXT,                             -- Texto descriptivo largo
+  nombre                TEXT          NOT NULL,
+  subtitulo             TEXT,
+  descripcion           TEXT,
   year_inicio           INT,
   year_fin              INT,
-  ha_objetivo           NUMERIC(10,2),                    -- Total de hectáreas meta
-  ha_ejecutado          NUMERIC(10,2) DEFAULT 0,          -- Hectáreas logradas
-  plantulas_objetivo    BIGINT,                           -- Meta de plántulas
-  plantulas_ejecutadas  BIGINT        DEFAULT 0,          -- Plántulas sembradas
-  familias_vinculadas   INT,                              -- Número de familias
-  municipios_clave      TEXT[],                           -- Ej: ARRAY['Florencia','Albania']
-  color                 TEXT          DEFAULT '#74A884',  -- Color hex del polígono en el mapa
-  shapefile_url         TEXT,                             -- URL pública del .zip en Storage
-  orden                 INT           DEFAULT 0,          -- Orden de visualización (ascendente)
+  ha_objetivo           NUMERIC(12,2),                    -- Total ha (conservación + restauración)
+  ha_ejecutado          NUMERIC(12,2) DEFAULT 0,
+  plantulas_objetivo    BIGINT,
+  plantulas_ejecutadas  BIGINT        DEFAULT 0,
+  familias_vinculadas   INT,
+  municipios_clave      TEXT[],
+  color                 TEXT          DEFAULT '#74A884',
+  shapefile_url         TEXT,
+  orden                 INT           DEFAULT 0,
   activo                BOOLEAN       DEFAULT true,
   created_at            TIMESTAMPTZ   DEFAULT now()
 );
 
--- 2. Row Level Security — solo lectura pública
+-- 2. RLS — solo lectura pública
 ALTER TABLE public.proyecciones ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "proyecciones_select_all" ON public.proyecciones;
 CREATE POLICY "proyecciones_select_all" ON public.proyecciones
   FOR SELECT TO anon, authenticated USING (activo = true);
 
--- 3. Datos de prueba (3 fases = 3 shapefiles de LFCLAUDE)
---    Después de subir los shapefiles al bucket "proyecciones-shapefiles",
---    actualiza la columna shapefile_url de cada fila con la URL pública del .zip.
+-- 3. Limpiar datos previos de prueba (si ya existían)
+DELETE FROM public.proyecciones;
+
+-- 4. Insertar fases reales del Plan de Conectividad Andino-Amazónica del Caquetá
+--    Fuente: Estrategia por cuencas · Cuencas Caquetá y Caguán (2026–2050)
+--    Shapefiles ya subidos al bucket: proyecciones-shapefiles
 
 INSERT INTO public.proyecciones
-  (nombre, subtitulo, descripcion, year_inicio, year_fin,
+  (nombre, subtitulo, descripcion,
+   year_inicio, year_fin,
    ha_objetivo, ha_ejecutado,
    plantulas_objetivo, plantulas_ejecutadas,
-   familias_vinculadas, municipios_clave, color, orden)
+   familias_vinculadas, municipios_clave, color, shapefile_url, orden)
 VALUES
+
+-- ── Fase I · Piedemonte Andino-Amazónico ─────────────────────────
 (
-  'Fase I · 2020–2022',
-  'Establecimiento',
-  'Primera intervención territorial en el Piedemonte Amazónico. '
-  'Establecimiento de parcelas piloto de restauración ecológica con especies '
-  'nativas de alta prioridad, vinculación de familias rurales y diseño del '
-  'protocolo de monitoreo de campo.',
-  2020, 2022,
-  1200.00, 980.00,
-  18000, 15420,
-  24,
-  ARRAY['Florencia', 'Belén de los Andaquíes'],
-  '#F59E0B',
+  'Fase I · 2026–2030',
+  'Piedemonte Andino-Amazónico',
+  'Establecimiento del corredor de conectividad en el piedemonte del Caquetá, '
+  'articulado a las subcuencas del Río Pescado y Río Orteguaza. '
+  'Incluye 8.000 ha de bosques bajo esquemas de conservación y '
+  '5.000 ha en restauración ecológica activa con especies nativas. '
+  'Primera fase de intervención directa con familias rurales en el marco '
+  'de la Ley 2173 de 2021.',
+  2026, 2030,
+  13000.00, 0,
+  75000, 0,
+  35,
+  ARRAY['Florencia', 'Morelia', 'Albania', 'Belén de los Andaquíes', 'San José del Fragua'],
+  '#A89070',
+  'https://lbxysovesmbgesxooghw.supabase.co/storage/v1/object/public/proyecciones-shapefiles/CordilleraOriental.zip',
   1
 ),
+
+-- ── Fase II · Cuencas del Caguán ─────────────────────────────────
 (
-  'Fase II · 2023–2025',
-  'Consolidación y escala',
-  'Expansión del programa a nuevas veredas y municipios del Caquetá. '
-  'Consolidación de las parcelas de monitoreo activas, implementación del '
-  'sistema de trazabilidad geoespacial y vinculación de empresas en el '
-  'marco de la Ley 2173 de 2021.',
-  2023, 2025,
-  2500.00, 1840.00,
-  42000, 31200,
-  47,
-  ARRAY['Florencia', 'Albania', 'Morelia', 'Valparaíso'],
-  '#74A884',
+  'Fase II · 2030–2035',
+  'Cuencas del Caguán',
+  'Expansión del corredor hacia las cuencas del Río Caguán y Río Guayas. '
+  '120.000 ha de bosques estratégicos bajo acuerdos de conservación y '
+  '20.000 ha en restauración del paisaje degradado. '
+  'Consolidación de la conectividad entre la Cordillera Oriental y la llanura amazónica, '
+  'con vinculación de empresas bajo el esquema de compensación de la Ley 2173.',
+  2030, 2035,
+  140000.00, 0,
+  300000, 0,
+  120,
+  ARRAY['El Doncello', 'El Paujil', 'Puerto Rico', 'La Montañita'],
+  '#D97706',
+  'https://lbxysovesmbgesxooghw.supabase.co/storage/v1/object/public/proyecciones-shapefiles/ProyeccionRestauracion.zip',
   2
 ),
+
+-- ── Fase III · Corredor Chiribiquete ─────────────────────────────
 (
-  'Fase III · 2026–2030',
-  'Visión regional',
-  'Proyección de largo plazo hacia la restauración de 8.000 ha en el '
-  'corredor biológico amazónico. Meta de 120.000 plántulas de especies '
-  'nativas y 90 familias en programa activo de conservación y restauración '
-  'ecológica sostenida.',
-  2026, 2030,
-  8000.00, 0.00,
-  120000, 0,
-  90,
-  ARRAY['Florencia', 'Albania', 'Morelia', 'Valparaíso', 'El Doncello', 'Puerto Rico'],
-  '#6898B8',
+  'Fase III · 2035–2050',
+  'Corredor Chiribiquete',
+  'Visión de largo plazo: conectividad total del corredor biológico entre '
+  'La Serranía de Chiribiquete y la Cordillera Oriental. '
+  '600.000 ha de bosques amazónicos bajo conservación permanente y '
+  '150.000 ha en restauración activa del paisaje. '
+  'Escala de impacto regional para la compensación de carbono, '
+  'biodiversidad y servicios ecosistémicos en el corazón de la Amazonia colombiana.',
+  2035, 2050,
+  750000.00, 0,
+  2250000, 0,
+  300,
+  ARRAY['Cartagena del Chairá', 'Solano', 'San Vicente del Caguán', 'Solita', 'Milán'],
+  '#7C3A1E',
+  'https://lbxysovesmbgesxooghw.supabase.co/storage/v1/object/public/proyecciones-shapefiles/Chiribiquete.zip',
   3
 );
 
 -- ============================================================
--- INSTRUCCIONES PARA LOS SHAPEFILES (carpeta LFCLAUDE)
+-- Si ya tenías la tabla y solo necesitas actualizar los datos:
 -- ============================================================
--- 1. En Supabase → Storage → New bucket: "proyecciones-shapefiles" (público)
--- 2. Sube los 3 archivos .zip de la carpeta LFCLAUDE al bucket
--- 3. Copia la URL pública de cada .zip (botón "Get URL")
--- 4. Actualiza la columna shapefile_url:
-
--- UPDATE public.proyecciones SET shapefile_url = 'https://xxx.supabase.co/storage/v1/object/public/proyecciones-shapefiles/fase1.zip'
---   WHERE orden = 1;
--- UPDATE public.proyecciones SET shapefile_url = 'https://...'
---   WHERE orden = 2;
--- UPDATE public.proyecciones SET shapefile_url = 'https://...'
---   WHERE orden = 3;
+-- DELETE FROM public.proyecciones;
+-- Luego re-ejecuta el bloque INSERT de arriba.
 -- ============================================================
