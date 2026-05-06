@@ -120,6 +120,8 @@ export interface Proyeccion {
   municipios_clave: string[] | null
   color: string
   shapefile_url: string | null
+  ha_conservacion: number | null
+  ha_restauracion: number | null
   orden: number
 }
 

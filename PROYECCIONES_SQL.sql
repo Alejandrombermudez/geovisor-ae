@@ -111,3 +111,17 @@ VALUES
 -- DELETE FROM public.proyecciones;
 -- Luego re-ejecuta el bloque INSERT de arriba.
 -- ============================================================
+
+-- ============================================================
+-- MIGRACIÓN: Añadir columnas ha_conservacion y ha_restauracion
+-- Ejecutar en Supabase → SQL Editor si la tabla ya existe
+-- ============================================================
+
+ALTER TABLE public.proyecciones
+  ADD COLUMN IF NOT EXISTS ha_conservacion NUMERIC(12,2),
+  ADD COLUMN IF NOT EXISTS ha_restauracion NUMERIC(12,2);
+
+-- Actualizar con datos reales del Plan de Conectividad Andino-Amazónica
+UPDATE public.proyecciones SET ha_conservacion =   8000, ha_restauracion =   5000 WHERE orden = 1;
+UPDATE public.proyecciones SET ha_conservacion = 120000, ha_restauracion =  20000 WHERE orden = 2;
+UPDATE public.proyecciones SET ha_conservacion = 600000, ha_restauracion = 150000 WHERE orden = 3;

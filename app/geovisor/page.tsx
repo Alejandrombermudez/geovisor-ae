@@ -77,7 +77,15 @@ export default function GeovisorPage() {
   const effectiveLeftWidth = isMobile ? 0 : leftWidth
   const rightWidth = isMobile ? screenW : (screenW > 0 ? Math.round(screenW * rightRatio) : 0)
 
+  const ALL_HIDDEN: VisibleLayers = useMemo(() => ({
+    siembraFincas: false, restauracion: false, siembraArboles: false,
+    rasFincas: false,     conservacion: false, rasArboles: false,
+    camarasSiembra: false, camarasConservacion: false,
+  }), [])
+
   const visibleLayers = useMemo<VisibleLayers>(() => {
+    // Cuando la vista de Conectividad está activa, ocultamos todas las capas de familias
+    if (activeProyeccionId !== null) return ALL_HIDDEN
     if (activeCategory === 'siembra') {
       return {
         siembraFincas: true,  restauracion: true,  siembraArboles: true,
@@ -93,7 +101,7 @@ export default function GeovisorPage() {
       }
     }
     return ALL_VISIBLE
-  }, [activeCategory])
+  }, [activeCategory, activeProyeccionId, ALL_HIDDEN])
 
   // Posición de los botones de zoom
   const zoomBtnRight  = isMobile ? 16 : (activeCategory !== null ? rightWidth + 16 : 16)
@@ -160,6 +168,8 @@ export default function GeovisorPage() {
         <MapLegend
           visibleLayers={visibleLayers}
           leftOffset={effectiveLeftWidth}
+          proyecciones={proyecciones}
+          activeProyeccionId={activeProyeccionId}
         />
       )}
 

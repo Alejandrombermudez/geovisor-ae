@@ -1,14 +1,16 @@
 'use client'
 
 import { LAYER_COLORS } from '@/lib/constants'
-import type { VisibleLayers } from '@/types/geovisor'
+import type { VisibleLayers, Proyeccion } from '@/types/geovisor'
 
 interface Props {
   visibleLayers: VisibleLayers
   leftOffset: number   // sidebar width in px — legend slides with it
+  proyecciones?: Proyeccion[]
+  activeProyeccionId?: string | null
 }
 
-type Shape = 'square' | 'circle' | 'camera'
+type Shape = 'square' | 'circle' | 'camera' | 'dashed'
 
 interface LegendItem {
   layerKey: keyof VisibleLayers
@@ -45,6 +47,18 @@ function ShapeIcon({ shape, color }: { shape: Shape; color: string }) {
       <span style={{ fontSize: 11, lineHeight: 1, flexShrink: 0 }}>📷</span>
     )
   }
+  if (shape === 'dashed') {
+    // Dashed outline rectangle — matches the ProyeccionLayer style
+    return (
+      <div style={{
+        width: 16, height: 10,
+        background: `${color}22`,
+        border: `1.5px dashed ${color}`,
+        borderRadius: 2,
+        flexShrink: 0,
+      }} />
+    )
+  }
   // 'square' — polygon fill preview
   return (
     <div style={{
@@ -57,7 +71,63 @@ function ShapeIcon({ shape, color }: { shape: Shape; color: string }) {
   )
 }
 
-export default function MapLegend({ visibleLayers, leftOffset }: Props) {
+export default function MapLegend({ visibleLayers, leftOffset, proyecciones = [], activeProyeccionId }: Props) {
+  // ── Modo Conectividad ──────────────────────────────────────────────────────
+  if (activeProyeccionId) {
+    // Show all proyecciones in legend, highlight the active one
+    if (proyecciones.length === 0) return null
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          bottom: 14,
+          left: leftOffset + 14,
+          zIndex: 850,
+          background: 'rgba(0,0,0,0.56)',
+          backdropFilter: 'blur(18px) saturate(160%)',
+          WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          borderRadius: 10,
+          padding: '9px 13px 10px',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          minWidth: 175,
+          transition: 'left 0.25s cubic-bezier(0.4,0,0.2,1)',
+          pointerEvents: 'none',
+        }}
+      >
+        <div style={{
+          color: 'rgba(255,255,255,0.38)',
+          fontSize: 9, fontWeight: 700,
+          letterSpacing: '0.07em', textTransform: 'uppercase',
+          marginBottom: 7,
+        }}>
+          🧭 Conectividad
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {proyecciones.map(proy => {
+            const isActive = proy.id === activeProyeccionId
+            return (
+              <div key={proy.id} style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: isActive ? 1 : 0.45 }}>
+                <ShapeIcon shape="dashed" color={proy.color} />
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ color: isActive ? proy.color : 'rgba(255,255,255,0.72)', fontSize: 11, fontWeight: isActive ? 700 : 400, lineHeight: 1.2, whiteSpace: 'nowrap' }}>
+                    {proy.nombre}
+                  </div>
+                  {proy.subtitulo && (
+                    <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, marginTop: 1 }}>
+                      {proy.subtitulo}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  // ── Modo normal — capas de familias ───────────────────────────────────────
   const visibleItems = ITEMS.filter(item => visibleLayers[item.layerKey])
   if (visibleItems.length === 0) return null
 

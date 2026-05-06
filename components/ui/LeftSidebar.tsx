@@ -63,11 +63,11 @@ const SOCIAL_LINKS: { label: string; url: string; Icon: typeof IgIcon }[] = [
 // ── Cálculo de presets relativos a la pantalla ────────────────────────────────
 
 function calcPresets(sw: number): [number, number, number] {
-  if (sw === 0) return [56, 96, 164]
+  if (sw === 0) return [64, 140, 210]
   return [
-    Math.max(52,  Math.round(sw * 0.05)),
-    Math.max(82,  Math.round(sw * 0.09)),
-    Math.max(148, Math.round(sw * 0.17)),
+    Math.max(60,  Math.round(sw * 0.065)),
+    Math.max(130, Math.round(sw * 0.13)),
+    Math.max(195, Math.round(sw * 0.21)),
   ]
 }
 
@@ -82,11 +82,6 @@ function AEImage({ src, style }: { src: string; style: React.CSSProperties }) {
 // ── Componente principal ──────────────────────────────────────────────────────
 
 // ── Helpers Proyecciones ──────────────────────────────────────────────────────
-
-function pct(ejecutado: number | null, objetivo: number | null): number {
-  if (!objetivo || objetivo === 0) return 0
-  return Math.min(100, Math.round(((ejecutado ?? 0) / objetivo) * 100))
-}
 
 function fmtNum(n: number | null | undefined, decimals = 0): string {
   if (n == null) return '—'
@@ -105,7 +100,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion }: Props) {
   const [screenW,   setScreenW]   = useState(0)
-  const [sidebarW,  setSidebarW]  = useState(96)
+  const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones'>('main')
   const [hovered,   setHovered]   = useState<string | null>(null)
   const [logoError, setLogoError] = useState(false)
@@ -323,10 +318,10 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             )}
             {!compact && (
               <>
-                <div style={{ color: '#fff', fontSize: 14, fontWeight: 800, textAlign: 'center', letterSpacing: '0.01em', lineHeight: 1.2 }}>
+                <div style={{ color: '#fff', fontSize: 16, fontWeight: 800, textAlign: 'center', letterSpacing: '0.01em', lineHeight: 1.2 }}>
                   Amazonia Emprende
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 10, textAlign: 'center', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11, textAlign: 'center', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
                   Escuela Bosque
                 </div>
               </>
@@ -345,11 +340,11 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
           {/* Tagline */}
           <div style={{ padding: compact ? '0 6px 10px' : '0 14px 10px' }}>
-            <div style={{ fontSize: compact ? 11 : 13, fontWeight: 700, color: '#74A884', lineHeight: 1.3, marginBottom: compact ? 0 : 6 }}>
+            <div style={{ fontSize: compact ? 12 : 14, fontWeight: 700, color: '#74A884', lineHeight: 1.3, marginBottom: compact ? 0 : 6 }}>
               {compact ? '🌿' : '🌿 Inversión Ambiental Estratégica'}
             </div>
             {!compact && (
-              <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: 11, lineHeight: 1.6, margin: 0 }}>
+              <p style={{ color: 'rgba(255,255,255,0.62)', fontSize: 12, lineHeight: 1.6, margin: 0 }}>
                 Facilita a empresas el cumplimiento de la <strong style={{ color: 'rgba(255,255,255,0.82)' }}>Ley 2173 de 2021</strong> (Ley del Árbol) con proyectos de restauración ecológica de alto impacto social y rigor técnico en el Piedemonte Amazónico.
               </p>
             )}
@@ -488,13 +483,13 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         {/* Título */}
         {!compact && (
           <div style={{ padding: '0 14px 10px', flexShrink: 0 }}>
-            <div style={{ color: '#A78BFA', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 3 }}>
+            <div style={{ color: '#A78BFA', fontSize: 13, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4 }}>
               🧭 Conectividad
             </div>
-            <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, fontWeight: 600, marginBottom: 2 }}>
+            <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: 12, fontWeight: 600, marginBottom: 3 }}>
               Plan Andino-Amazónico del Caquetá
             </div>
-            <div style={{ color: 'rgba(255,255,255,0.32)', fontSize: 9, letterSpacing: '0.03em' }}>
+            <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, letterSpacing: '0.03em' }}>
               Conservación y restauración de paisaje · 2026–2050
             </div>
           </div>
@@ -522,8 +517,8 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: proy.color, flexShrink: 0, boxShadow: isTab ? `0 0 6px ${proy.color}` : 'none' }} />
                 {!compact && (
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{proy.nombre}</div>
-                    {proy.subtitulo && <div style={{ fontSize: 9, opacity: 0.7, letterSpacing: '0.02em' }}>{proy.subtitulo}</div>}
+                    <div style={{ fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{proy.nombre}</div>
+                    {proy.subtitulo && <div style={{ fontSize: 10, opacity: 0.7, letterSpacing: '0.02em' }}>{proy.subtitulo}</div>}
                   </div>
                 )}
               </button>
@@ -537,8 +532,6 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         <div className="geo-about-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
           {activePhase ? (() => {
             const status = getPhaseStatus(activePhase.year_inicio, activePhase.year_fin)
-            const pHa    = pct(activePhase.ha_ejecutado, activePhase.ha_objetivo)
-            const pPl    = pct(activePhase.plantulas_ejecutadas, activePhase.plantulas_objetivo)
             const c      = activePhase.color
 
             return (
@@ -548,9 +541,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 {!compact && (
                   <div style={{ marginBottom: 12 }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 6 }}>
-                      <div style={{ color: '#fff', fontSize: 13, fontWeight: 700 }}>{activePhase.nombre}</div>
+                      <div style={{ color: '#fff', fontSize: 15, fontWeight: 700 }}>{activePhase.nombre}</div>
                       {status && (
-                        <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 7px', borderRadius: 4,
+                        <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 8px', borderRadius: 4,
                           background: `${status.color}18`, border: `1px solid ${status.color}35`,
                           color: status.color, letterSpacing: '0.03em', textTransform: 'uppercase', flexShrink: 0 }}>
                           {status.label}
@@ -558,55 +551,66 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                       )}
                     </div>
                     {activePhase.year_inicio && activePhase.year_fin && (
-                      <div style={{ color: `${c}BB`, fontSize: 10, fontWeight: 600 }}>
+                      <div style={{ color: `${c}BB`, fontSize: 12, fontWeight: 600 }}>
                         {activePhase.year_inicio} – {activePhase.year_fin}
                       </div>
                     )}
                   </div>
                 )}
 
-                {/* KPIs con barra de progreso */}
-                {[
-                  { label: 'Hectáreas',  ejecutado: activePhase.ha_ejecutado,           objetivo: activePhase.ha_objetivo,         unit: ' ha', p: pHa },
-                  { label: 'Plántulas',  ejecutado: activePhase.plantulas_ejecutadas,   objetivo: activePhase.plantulas_objetivo,   unit: '',    p: pPl },
-                ].map(({ label, ejecutado, objetivo, unit, p }) => (
-                  <div key={label} style={{ marginBottom: 10 }}>
-                    {!compact && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, alignItems: 'baseline' }}>
-                        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{label}</span>
-                        <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: 10, fontWeight: 700 }}>
-                          {fmtNum(ejecutado)}{unit} <span style={{ color: 'rgba(255,255,255,0.3)', fontWeight: 400 }}>/ {fmtNum(objetivo)}{unit}</span>
-                        </span>
+                {/* KPI boxes: conservación + restauración */}
+                {!compact && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7, marginBottom: 12 }}>
+                    {[
+                      { label: 'ha conservadas', value: activePhase.ha_conservacion, icon: '🏛️' },
+                      { label: 'ha restauradas', value: activePhase.ha_restauracion,  icon: '🌱' },
+                    ].map(({ label, value, icon }) => (
+                      <div key={label} style={{
+                        background: `${c}12`, border: `1px solid ${c}28`, borderRadius: 8,
+                        padding: '10px 8px', textAlign: 'center',
+                      }}>
+                        <div style={{ fontSize: 13, marginBottom: 4, lineHeight: 1 }}>{icon}</div>
+                        <div style={{ color: c, fontSize: value != null && value >= 100000 ? 13 : 16, fontWeight: 800, lineHeight: 1 }}>
+                          {fmtNum(value)}
+                        </div>
+                        <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4, lineHeight: 1.3 }}>
+                          {label}
+                        </div>
                       </div>
-                    )}
-                    {/* Barra de progreso */}
-                    <div style={{ height: 5, borderRadius: 3, background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${p}%`, background: `linear-gradient(90deg, ${c} 0%, ${c}CC 100%)`, borderRadius: 3, transition: 'width 0.6s ease' }} />
-                    </div>
-                    {!compact && (
-                      <div style={{ color: `${c}BB`, fontSize: 9, marginTop: 3, textAlign: 'right' }}>{p}% completado</div>
-                    )}
+                    ))}
                   </div>
-                ))}
+                )}
+
+                {/* Plántulas objetivo */}
+                {!compact && activePhase.plantulas_objetivo != null && (
+                  <div style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '7px 10px', marginBottom: 10,
+                    background: `${c}0A`, border: `1px solid ${c}1E`, borderRadius: 7,
+                  }}>
+                    <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>🌿 Plántulas</span>
+                    <span style={{ color: c, fontSize: 13, fontWeight: 800 }}>{fmtNum(activePhase.plantulas_objetivo)}</span>
+                  </div>
+                )}
 
                 {/* Familias y municipios */}
                 {!compact && (
                   <>
                     {activePhase.familias_vinculadas != null && (
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderTop: `1px solid ${c}18` }}>
-                        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em' }}>🌾 Familias</span>
-                        <span style={{ color: '#fff', fontSize: 12, fontWeight: 700 }}>{activePhase.familias_vinculadas}</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '7px 0', borderTop: `1px solid ${c}18` }}>
+                        <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>🌾 Familias</span>
+                        <span style={{ color: '#fff', fontSize: 14, fontWeight: 700 }}>{activePhase.familias_vinculadas}</span>
                       </div>
                     )}
 
                     {activePhase.municipios_clave && activePhase.municipios_clave.length > 0 && (
                       <div style={{ marginTop: 8 }}>
-                        <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 5 }}>
+                        <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>
                           📍 Municipios
                         </div>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                           {activePhase.municipios_clave.map(m => (
-                            <span key={m} style={{ fontSize: 9, padding: '2px 6px', borderRadius: 4, background: `${c}14`, border: `1px solid ${c}28`, color: `${c}CC` }}>
+                            <span key={m} style={{ fontSize: 10, padding: '3px 7px', borderRadius: 4, background: `${c}14`, border: `1px solid ${c}28`, color: `${c}CC` }}>
                               {m}
                             </span>
                           ))}
@@ -617,7 +621,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                     {/* Descripción */}
                     {activePhase.descripcion && (
                       <div style={{ marginTop: 12, padding: '10px 11px', background: `${c}0A`, border: `1px solid ${c}1E`, borderRadius: 8 }}>
-                        <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 10, lineHeight: 1.65 }}>
+                        <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 11, lineHeight: 1.65 }}>
                           {activePhase.descripcion}
                         </div>
                       </div>
@@ -697,7 +701,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             >
               <span style={{ fontSize: isActive ? iconSize + 4 : iconSize, lineHeight: 1, filter: isActive ? `drop-shadow(0 0 8px ${color})` : 'none', transition: 'font-size 0.18s ease, filter 0.18s ease' }}>{icon}</span>
               {showLabels && (
-                <span style={{ fontSize: sidebarW > 120 ? 10 : 9, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: sidebarW > 160 ? 12 : 11, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
                   {label}
                 </span>
               )}
@@ -724,7 +728,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             >
               <span style={{ fontSize: showLabels ? iconSize : iconSize + 2, lineHeight: 1 }}>🧭</span>
               {showLabels && (
-                <span style={{ fontSize: sidebarW > 120 ? 10 : 9, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: sidebarW > 160 ? 12 : 11, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
                   Conectividad
                 </span>
               )}
@@ -751,9 +755,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             transition: 'all 0.2s ease',
           }}
         >
-          <span style={{ fontSize: showLabels ? 16 : 18, lineHeight: 1 }}>🌿</span>
+          <span style={{ fontSize: showLabels ? 18 : 20, lineHeight: 1 }}>🌿</span>
           {showLabels && (
-            <span style={{ fontSize: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'inherit', textAlign: 'center', lineHeight: 1.3, whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'inherit', textAlign: 'center', lineHeight: 1.3, whiteSpace: 'nowrap' }}>
               Amazonia<br />Emprende
             </span>
           )}
