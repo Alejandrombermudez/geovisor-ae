@@ -10,6 +10,8 @@ import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
 import FitBounds from './FitBounds'
 import ProyeccionLayer from './ProyeccionLayer'
+import StaticLayer from './StaticLayer'
+import { STATIC_LAYERS } from '@/lib/constants'
 import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory, PolygonLayerData, CamaraTrampa, Proyeccion } from '@/types/geovisor'
 
 interface Props {
@@ -146,6 +148,11 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
 
       {/* ── Zoom animado a predio seleccionado ────────────────────── */}
       <FlyToFamilia familiaId={selectedFamiliaId} layerData={layerData} />
+
+      {/* ── Capas estáticas de referencia (Cordillera + Chiribiquete) ─ */}
+      {activeProyeccionId && STATIC_LAYERS.map(cfg => (
+        <StaticLayer key={cfg.id} config={cfg} />
+      ))}
 
       {/* ── Proyecciones / fases geográficas ─────────────────────── */}
       {proyecciones.map((proy) => (

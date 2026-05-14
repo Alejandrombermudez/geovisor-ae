@@ -125,3 +125,11 @@ ALTER TABLE public.proyecciones
 UPDATE public.proyecciones SET ha_conservacion =   8000, ha_restauracion =   5000 WHERE orden = 1;
 UPDATE public.proyecciones SET ha_conservacion = 120000, ha_restauracion =  20000 WHERE orden = 2;
 UPDATE public.proyecciones SET ha_conservacion = 600000, ha_restauracion = 150000 WHERE orden = 3;
+
+-- ============================================================
+-- ACTUALIZAR shapefiles a archivos locales (public/LFCLAUDE/)
+-- Ejecutar en Supabase → SQL Editor
+-- ============================================================
+UPDATE public.proyecciones SET shapefile_url = '/LFCLAUDE/Fase_I.zip'   WHERE orden = 1;
+UPDATE public.proyecciones SET shapefile_url = '/LFCLAUDE/Fase_II.zip'  WHERE orden = 2;
+UPDATE public.proyecciones SET shapefile_url = '/LFCLAUDE/Fase_III.zip' WHERE orden = 3;

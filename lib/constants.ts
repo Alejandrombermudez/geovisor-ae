@@ -25,6 +25,28 @@ export const LAYER_COLORS = {
   camarasConservacion: '#818CF8',  // indigo-400
 } as const
 
+export interface StaticLayerConfig {
+  id: string
+  nombre: string
+  color: string
+  shapefile_url: string
+}
+
+export const STATIC_LAYERS: StaticLayerConfig[] = [
+  {
+    id: 'cordillera',
+    nombre: 'Cordillera Oriental',
+    color: '#8B5CF6',
+    shapefile_url: '/LFCLAUDE/CordilleraOriental.zip',
+  },
+  {
+    id: 'chiribiquete',
+    nombre: 'P.N. Chiribiquete',
+    color: '#F97316',
+    shapefile_url: '/LFCLAUDE/Chiribiquete.zip',
+  },
+]
+
 export const LAYER_LABELS: Record<keyof typeof LAYER_COLORS, string> = {
   siembraFincas: 'Fincas — Siembra',
   restauracion: 'Áreas en restauración',

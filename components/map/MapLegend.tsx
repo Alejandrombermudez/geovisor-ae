@@ -1,6 +1,6 @@
 'use client'
 
-import { LAYER_COLORS } from '@/lib/constants'
+import { LAYER_COLORS, STATIC_LAYERS } from '@/lib/constants'
 import type { VisibleLayers, Proyeccion } from '@/types/geovisor'
 
 interface Props {
@@ -104,11 +104,17 @@ export default function MapLegend({ visibleLayers, leftOffset, proyecciones = []
           🧭 Conectividad
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {/* Fases del plan */}
           {proyecciones.map(proy => {
             const isActive = proy.id === activeProyeccionId
             return (
               <div key={proy.id} style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: isActive ? 1 : 0.45 }}>
-                <ShapeIcon shape="dashed" color={proy.color} />
+                <div style={{
+                  width: 16, height: 10,
+                  background: isActive ? `${proy.color}50` : `${proy.color}22`,
+                  border: `1.5px ${isActive ? 'solid' : 'dashed'} ${proy.color}`,
+                  borderRadius: 2, flexShrink: 0,
+                }} />
                 <div style={{ minWidth: 0 }}>
                   <div style={{ color: isActive ? proy.color : 'rgba(255,255,255,0.72)', fontSize: 11, fontWeight: isActive ? 700 : 400, lineHeight: 1.2, whiteSpace: 'nowrap' }}>
                     {proy.nombre}
@@ -122,6 +128,24 @@ export default function MapLegend({ visibleLayers, leftOffset, proyecciones = []
               </div>
             )
           })}
+
+          {/* Separador */}
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '2px 0' }} />
+
+          {/* Capas de referencia estáticas */}
+          {STATIC_LAYERS.map(cfg => (
+            <div key={cfg.id} style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: 0.75 }}>
+              <div style={{
+                width: 16, height: 10,
+                background: `${cfg.color}12`,
+                border: `1.5px dashed ${cfg.color}`,
+                borderRadius: 2, flexShrink: 0,
+              }} />
+              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: 10, lineHeight: 1.2, whiteSpace: 'nowrap' }}>
+                {cfg.nombre}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     )

@@ -36,35 +36,50 @@ export default function ProyeccionLayer({ proyeccion, isActive }: Props) {
 
   if (!geojson) return null
 
-  const fillOpacity = isActive ? 0.2 : 0.07
-  const weight      = isActive ? 3 : 1.8
-  const opacity     = isActive ? 0.92 : 0.55
+  const fillOpacity = isActive ? 0.42 : 0.07
+  const weight      = isActive ? 3.5  : 1.8
+  const opacity     = isActive ? 1    : 0.45
 
   return (
-    <GeoJSON
-      // key cambia cuando isActive cambia para forzar re-render del estilo
-      key={`proy-${proyeccion.id}-${isActive}`}
-      data={geojson}
-      style={{
-        color:       proyeccion.color,
-        weight,
-        opacity,
-        fillColor:   proyeccion.color,
-        fillOpacity,
-        dashArray:   '10 7',
-      }}
-      onEachFeature={(_: GeoJSON.Feature, layer: Layer) => {
-        layer.bindTooltip(
-          `<div style="font-family:sans-serif;font-size:12px;line-height:1.5">
-            <strong>${proyeccion.nombre}</strong><br/>
-            <span style="color:#9ca3af">${proyeccion.subtitulo ?? ''}</span>
-          </div>`,
-          { sticky: true, direction: 'top', offset: [0, -4] },
-        )
-        const path = layer as L.Path
-        layer.on('mouseover', () => path.setStyle({ fillOpacity: fillOpacity + 0.12 }))
-        layer.on('mouseout',  () => path.setStyle({ fillOpacity }))
-      }}
-    />
+    <>
+      {/* Halo de resplandor para la fase activa */}
+      {isActive && (
+        <GeoJSON
+          key={`proy-${proyeccion.id}-glow`}
+          data={geojson}
+          style={{
+            color:       proyeccion.color,
+            weight:      14,
+            opacity:     0.14,
+            fillOpacity: 0,
+          }}
+        />
+      )}
+
+      <GeoJSON
+        key={`proy-${proyeccion.id}-${isActive}`}
+        data={geojson}
+        style={{
+          color:       proyeccion.color,
+          weight,
+          opacity,
+          fillColor:   proyeccion.color,
+          fillOpacity,
+          dashArray:   isActive ? undefined : '10 7',
+        }}
+        onEachFeature={(_: GeoJSON.Feature, layer: Layer) => {
+          layer.bindTooltip(
+            `<div style="font-family:sans-serif;font-size:12px;line-height:1.5">
+              <strong>${proyeccion.nombre}</strong><br/>
+              <span style="color:#9ca3af">${proyeccion.subtitulo ?? ''}</span>
+            </div>`,
+            { sticky: true, direction: 'top', offset: [0, -4] },
+          )
+          const path = layer as L.Path
+          layer.on('mouseover', () => path.setStyle({ fillOpacity: fillOpacity + 0.1 }))
+          layer.on('mouseout',  () => path.setStyle({ fillOpacity }))
+        }}
+      />
+    </>
   )
 }

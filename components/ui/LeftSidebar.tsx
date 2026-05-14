@@ -88,6 +88,31 @@ function fmtNum(n: number | null | undefined, decimals = 0): string {
   return n.toLocaleString('es-CO', { maximumFractionDigits: decimals })
 }
 
+function ProgressBar({ value, total, color, label }: { value: number | null; total: number | null; color: string; label?: string }) {
+  if (total == null || total === 0) return null
+  const safeVal = value ?? 0
+  const pct = Math.min(100, Math.max(0, Math.round((safeVal / total) * 100)))
+  return (
+    <div style={{ marginTop: 6 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
+        {label && <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9, letterSpacing: '0.03em' }}>{label}</span>}
+        <span style={{ color: color, fontSize: 10, fontWeight: 700, marginLeft: 'auto' }}>{pct}%</span>
+      </div>
+      <div style={{ background: 'rgba(255,255,255,0.12)', borderRadius: 4, height: 6, overflow: 'hidden' }}>
+        <div style={{
+          width: pct === 0 ? '3px' : `${pct}%`,
+          height: '100%',
+          background: pct === 0
+            ? 'rgba(255,255,255,0.2)'
+            : `linear-gradient(90deg, ${color}80, ${color})`,
+          borderRadius: 4,
+          transition: 'width 0.8s ease',
+        }} />
+      </div>
+    </div>
+  )
+}
+
 function getPhaseStatus(yi: number | null, yf: number | null): { label: string; color: string } | null {
   if (!yi || !yf) return null
   const year = new Date().getFullYear()
@@ -576,20 +601,39 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                         <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4, lineHeight: 1.3 }}>
                           {label}
                         </div>
+                        <ProgressBar value={value} total={activePhase.ha_objetivo} color={c} />
                       </div>
                     ))}
+                  </div>
+                )}
+
+                {/* Avance general ha */}
+                {!compact && activePhase.ha_objetivo != null && (
+                  <div style={{
+                    padding: '8px 10px', marginBottom: 10,
+                    background: `${c}0A`, border: `1px solid ${c}1E`, borderRadius: 7,
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+                      <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>📊 Avance total</span>
+                      <span style={{ color: c, fontSize: 11, fontWeight: 700 }}>
+                        {fmtNum(activePhase.ha_ejecutado)} / {fmtNum(activePhase.ha_objetivo)} ha
+                      </span>
+                    </div>
+                    <ProgressBar value={activePhase.ha_ejecutado} total={activePhase.ha_objetivo} color={c} />
                   </div>
                 )}
 
                 {/* Plántulas objetivo */}
                 {!compact && activePhase.plantulas_objetivo != null && (
                   <div style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '7px 10px', marginBottom: 10,
                     background: `${c}0A`, border: `1px solid ${c}1E`, borderRadius: 7,
                   }}>
-                    <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>🌿 Plántulas</span>
-                    <span style={{ color: c, fontSize: 13, fontWeight: 800 }}>{fmtNum(activePhase.plantulas_objetivo)}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>🌿 Plántulas</span>
+                      <span style={{ color: c, fontSize: 13, fontWeight: 800 }}>{fmtNum(activePhase.plantulas_objetivo)}</span>
+                    </div>
+                    <ProgressBar value={activePhase.plantulas_ejecutadas} total={activePhase.plantulas_objetivo} color={c} />
                   </div>
                 )}
 
