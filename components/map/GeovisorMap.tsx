@@ -154,8 +154,8 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         <StaticLayer key={cfg.id} config={cfg} />
       ))}
 
-      {/* ── Proyecciones / fases geográficas ─────────────────────── */}
-      {proyecciones.map((proy) => (
+      {/* ── Proyecciones / fases geográficas — solo en modo Conectividad ── */}
+      {activeProyeccionId && proyecciones.map((proy) => (
         <ProyeccionLayer
           key={proy.id}
           proyeccion={proy}
