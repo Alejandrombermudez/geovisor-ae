@@ -207,99 +207,180 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 3000, display: 'flex', fontFamily: JF }}>
 
-      {/* Panel izquierdo — foto */}
-      <div style={{ flex: '0 0 50%', maxWidth: 600, background: `url('/login-bg.jpg') center/cover no-repeat`, position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '36px 40px' }}>
+      {/* Panel izquierdo — foto (60%, sin maxWidth, todo más grande) */}
+      <div style={{
+        flex: '0 0 60%',
+        background: `url('/login-bg.jpg') center/cover no-repeat`,
+        position: 'relative',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        padding: 'clamp(36px, 4.5vw, 80px) clamp(40px, 5vw, 88px)',
+      }}>
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.38) 100%)' }} />
 
         {/* Logo */}
         <div style={{ position: 'relative', zIndex: 1 }}>
           <img src="/logo-ae-blanco.png" alt="Amazonia Emprende"
-            style={{ height: 56, width: 'auto', objectFit: 'contain' }}
+            style={{ height: 'clamp(72px, 7.5vw, 130px)', width: 'auto', objectFit: 'contain' }}
             onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
           />
         </div>
 
         {/* Tagline */}
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{ fontFamily: JF, fontWeight: 400, fontSize: 34, color: '#fff', margin: '0 0 12px', lineHeight: 1.2, letterSpacing: '0.01em' }}>
+          <h1 style={{
+            fontFamily: JF, fontWeight: 400,
+            fontSize: 'clamp(40px, 4.6vw, 78px)',
+            color: '#fff', margin: '0 0 16px',
+            lineHeight: 1.08, letterSpacing: '0.005em',
+          }}>
             Geoportal<br />Amazonia Emprende
           </h1>
-          <p style={{ fontFamily: JF, fontWeight: 300, fontSize: 14, color: 'rgba(255,255,255,0.72)', margin: 0, letterSpacing: '0.03em' }}>
+          <p style={{
+            fontFamily: JF, fontWeight: 300,
+            fontSize: 'clamp(16px, 1.4vw, 22px)',
+            color: 'rgba(255,255,255,0.78)',
+            margin: 0, letterSpacing: '0.04em',
+          }}>
             El futuro comienza aquí
           </p>
         </div>
       </div>
 
-      {/* Panel derecho — formulario */}
-      <div style={{ flex: 1, background: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '48px 64px', overflowY: 'auto', position: 'relative' }}>
+      {/* Panel derecho — formulario (40%) */}
+      <div style={{
+        flex: '0 0 40%',
+        background: '#fff',
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', alignItems: 'center',
+        padding: 'clamp(36px, 4vw, 80px) clamp(40px, 4.5vw, 96px)',
+        overflowY: 'auto', position: 'relative',
+      }}>
 
         {/* Botón cerrar */}
         {onClose && (
-          <button onClick={onClose} style={{ position: 'absolute', top: 20, right: 24, background: 'rgba(0,0,0,0.06)', border: 'none', borderRadius: '50%', width: 34, height: 34, cursor: 'pointer', color: '#555', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.15s' }}
+          <button onClick={onClose} style={{
+            position: 'absolute', top: 24, right: 28,
+            background: 'rgba(0,0,0,0.06)', border: 'none', borderRadius: '50%',
+            width: 44, height: 44, cursor: 'pointer', color: '#555',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'background 0.15s',
+          }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.12)' }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.06)' }}>
-            {CloseX}
+            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
+              <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
           </button>
         )}
 
-        <div style={{ width: '100%', maxWidth: 360 }}>
-          <h2 style={{ fontFamily: JF, fontWeight: 400, fontSize: 26, color: '#111', margin: '0 0 36px', letterSpacing: '0.01em' }}>
+        <div style={{ width: '100%', maxWidth: 'clamp(340px, 28vw, 520px)' }}>
+          <h2 style={{
+            fontFamily: JF, fontWeight: 300,
+            fontSize: 'clamp(28px, 2.6vw, 44px)',
+            color: '#111', margin: '0 0 clamp(28px, 3vw, 44px)',
+            letterSpacing: '0.005em', lineHeight: 1.2,
+          }}>
             Te damos la bienvenida
           </h2>
 
           {/* ── FORM (inlineado — no sub-componente) ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 22, width: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(20px, 1.8vw, 32px)', width: '100%' }}>
 
             {/* Usuario */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontFamily: JF, fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#555' }}>Usuario</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <label style={{
+                fontFamily: JF, fontWeight: 700,
+                fontSize: 'clamp(10px, 0.85vw, 13px)',
+                letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555',
+              }}>Usuario</label>
               <input
                 type="text" value={username} autoComplete="username" autoCapitalize="none"
                 placeholder="Ingresa tu usuario"
                 onChange={e => { setUsername(e.target.value); setError('') }}
                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                style={{ fontFamily: JF, fontWeight: 400, fontSize: 13, background: '#fff', border: 'none', borderBottom: inputBorder(!!error), borderRadius: 0, padding: '10px 4px', paddingRight: 4, color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                style={{
+                  fontFamily: JF, fontWeight: 400,
+                  fontSize: 'clamp(15px, 1.15vw, 18px)',
+                  background: '#fff', border: 'none', borderBottom: inputBorder(!!error),
+                  borderRadius: 0, padding: '14px 4px',
+                  color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box',
+                  transition: 'border-color 0.2s',
+                }}
                 onFocus={e => { (e.target as HTMLInputElement).style.borderBottomColor = focusColor }}
                 onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = blurBorder(!!error) }}
               />
             </div>
 
             {/* Contraseña */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontFamily: JF, fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#555' }}>Contraseña</label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <label style={{
+                fontFamily: JF, fontWeight: 700,
+                fontSize: 'clamp(10px, 0.85vw, 13px)',
+                letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555',
+              }}>Contraseña</label>
               <div style={{ position: 'relative' }}>
                 <input
                   type={showPass ? 'text' : 'password'} value={password} autoComplete="current-password"
                   placeholder="Ingresa tu contraseña"
                   onChange={e => { setPassword(e.target.value); setError('') }}
                   onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                  style={{ fontFamily: JF, fontWeight: 400, fontSize: 13, background: '#fff', border: 'none', borderBottom: inputBorder(!!error), borderRadius: 0, padding: '10px 4px', paddingRight: 36, color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                  style={{
+                    fontFamily: JF, fontWeight: 400,
+                    fontSize: 'clamp(15px, 1.15vw, 18px)',
+                    background: '#fff', border: 'none', borderBottom: inputBorder(!!error),
+                    borderRadius: 0, padding: '14px 4px', paddingRight: 44,
+                    color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box',
+                    transition: 'border-color 0.2s',
+                  }}
                   onFocus={e => { (e.target as HTMLInputElement).style.borderBottomColor = focusColor }}
                   onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = blurBorder(!!error) }}
                 />
                 <button type="button" tabIndex={-1} onClick={() => setShowPass(v => !v)}
-                  style={{ position: 'absolute', right: 4, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#999', display: 'flex', alignItems: 'center' }}>
+                  style={{
+                    position: 'absolute', right: 4, top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: '#999',
+                    display: 'flex', alignItems: 'center',
+                  }}>
                   {showPass ? EyeOff : EyeOpen}
                 </button>
               </div>
             </div>
 
             {/* Recuérdame */}
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: JF, fontWeight: 300, fontSize: 11, color: '#777', cursor: 'pointer', userSelect: 'none' }}>
+            <label style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              fontFamily: JF, fontWeight: 300,
+              fontSize: 'clamp(13px, 0.95vw, 16px)',
+              color: '#777', cursor: 'pointer', userSelect: 'none',
+            }}>
               <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)}
-                style={{ accentColor: '#74A884', width: 13, height: 13, cursor: 'pointer' }} />
+                style={{ accentColor: '#74A884', width: 16, height: 16, cursor: 'pointer' }} />
               Recuérdame
             </label>
 
             {/* Error */}
-            {error && <p style={{ fontFamily: JF, fontSize: 11, color: '#e53e3e', margin: 0, textAlign: 'center' }}>{error}</p>}
+            {error && <p style={{
+              fontFamily: JF, fontSize: 'clamp(13px, 0.95vw, 15px)',
+              color: '#e53e3e', margin: 0, textAlign: 'center',
+            }}>{error}</p>}
 
             {/* Botón */}
             <button onClick={handleLogin} disabled={loading}
-              style={{ fontFamily: JF, fontWeight: 700, fontSize: 13, letterSpacing: '0.12em', textTransform: 'uppercase', background: loading ? '#555' : '#111', color: '#fff', border: 'none', borderRadius: 4, padding: '13px 0', width: '100%', cursor: loading ? 'wait' : 'pointer', transition: 'opacity 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+              style={{
+                fontFamily: JF, fontWeight: 700,
+                fontSize: 'clamp(14px, 1.05vw, 17px)',
+                letterSpacing: '0.14em', textTransform: 'uppercase',
+                background: loading ? '#555' : '#111', color: '#fff',
+                border: 'none', borderRadius: 6,
+                padding: 'clamp(15px, 1.2vw, 20px) 0', width: '100%',
+                cursor: loading ? 'wait' : 'pointer',
+                transition: 'opacity 0.2s',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+                marginTop: 8,
+              }}
               onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}>
-              {loading ? (<><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'ls-spin 0.8s linear infinite' }}><path d="M12 2a10 10 0 0 1 10 10"/></svg>Verificando...</>) : 'Ingresar'}
+              {loading ? (<><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'ls-spin 0.8s linear infinite' }}><path d="M12 2a10 10 0 0 1 10 10"/></svg>Verificando...</>) : 'Ingresar'}
             </button>
           </div>
           {/* ── fin form ── */}

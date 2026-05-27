@@ -52,9 +52,10 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
   const isLastBlock = reveal >= total
   const isLastSlide = idx === slides.length - 1
 
-  // Reset al cambiar de slide
+  // Scroll-to-top al cambiar de slide (el reset de reveal se hace
+  // sincrónicamente dentro de advance/back para evitar el flash de 1 frame
+  // donde el slide nuevo se renderiza con el reveal alto del anterior)
   useEffect(() => {
-    setReveal(1)
     containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
   }, [idx])
 
@@ -62,7 +63,9 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
     if (reveal < total) {
       setReveal(r => r + 1)
     } else if (!isLastSlide) {
+      // Cambiar slide y resetear reveal en el MISMO render (React batchea).
       setIdx(i => i + 1)
+      setReveal(1)
     } else {
       onFinish()
     }
@@ -72,9 +75,9 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
     if (reveal > 1) {
       setReveal(r => r - 1)
     } else if (idx > 0) {
-      setIdx(i => i - 1)
-      // reveal queda en 1 (effect lo resetea), pero sería mejor llevarlo al final del slide previo:
+      // Ir al slide previo con todo revelado (de un golpe).
       const prev = slides[idx - 1]
+      setIdx(i => i - 1)
       setReveal(blockCount(prev))
     }
   }, [reveal, idx, slides])
@@ -127,23 +130,27 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
         style={{
           position: 'sticky', top: 0, zIndex: 5,
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '18px 28px',
-          background: 'linear-gradient(180deg, rgba(0,0,0,0.55), transparent)',
+          padding: 'clamp(18px, 1.8vw, 28px) clamp(24px, 2.4vw, 40px)',
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.65), transparent)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(14px, 1.4vw, 22px)' }}>
           <img
             src="/logo-ae-blanco.png"
             alt="AE"
-            style={{ width: 32, height: 'auto', objectFit: 'contain' }}
+            style={{
+              width: 'clamp(44px, 3.6vw, 64px)',
+              height: 'auto', objectFit: 'contain',
+            }}
           />
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
             {slides.map((_, i) => (
               <div
                 key={i}
                 style={{
-                  width: i === idx ? 28 : 12, height: 4,
-                  borderRadius: 2,
+                  width: i === idx ? 'clamp(36px, 3vw, 52px)' : 'clamp(14px, 1.2vw, 20px)',
+                  height: 'clamp(4px, 0.5vh, 6px)',
+                  borderRadius: 3,
                   background: i <= idx ? '#74A884' : 'rgba(255,255,255,0.25)',
                   transition: 'all 0.3s ease',
                 }}
@@ -152,8 +159,9 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
           </div>
           <div
             style={{
-              fontSize: 11, fontWeight: 700, letterSpacing: '0.12em',
-              textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)',
+              fontSize: 'clamp(12px, 0.95vw, 15px)',
+              fontWeight: 700, letterSpacing: '0.14em',
+              textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)',
             }}
           >
             {idx + 1} / {slides.length}
@@ -166,8 +174,10 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
           style={{
             background: 'rgba(255,255,255,0.1)',
             border: '1px solid rgba(255,255,255,0.2)',
-            color: '#fff', fontSize: 18,
-            width: 40, height: 40, borderRadius: '50%',
+            color: '#fff', fontSize: 22,
+            width: 'clamp(40px, 3.4vw, 52px)',
+            height: 'clamp(40px, 3.4vw, 52px)',
+            borderRadius: '50%',
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             backdropFilter: 'blur(8px)',
@@ -183,10 +193,11 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
       {/* Body */}
       <main
         style={{
-          minHeight: 'calc(100dvh - 76px)',
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          padding: 'clamp(20px, 4vw, 72px)',
-          maxWidth: 1500, margin: '0 auto', width: '100%',
+          minHeight: 'auto',
+          display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
+          padding: 'clamp(16px, 2.2vw, 48px) clamp(24px, 4vw, 80px) clamp(120px, 11vh, 160px)',
+          maxWidth: 1600, margin: '0 auto', width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         {current.kind === 'title_stats_with_side_image' && (
@@ -296,12 +307,12 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
       style={{
         margin: 0,
         fontFamily: INTRO_FONT,
-        fontSize: 'clamp(28px, 4.4vw, 56px)',
+        fontSize: 'clamp(28px, 3.8vw, 60px)',
         fontWeight: 300,
-        lineHeight: 1.1,
+        lineHeight: 1.08,
         letterSpacing: '0.005em',
         color: '#fff',
-        textShadow: '0 4px 24px rgba(0,0,0,0.4)',
+        textShadow: '0 4px 24px rgba(0,0,0,0.45)',
       }}
     >
       {children}
@@ -313,8 +324,9 @@ function Source({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{
-        marginTop: 24,
-        fontSize: 11, color: 'rgba(255,255,255,0.4)',
+        marginTop: 'clamp(16px, 1.8vw, 28px)',
+        fontSize: 'clamp(11px, 0.85vw, 13px)',
+        color: 'rgba(255,255,255,0.42)',
         letterSpacing: '0.02em', lineHeight: 1.5,
         fontStyle: 'italic',
       }}
@@ -328,7 +340,12 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
   // bloques: 1=title, 2=intro, 3..n+2 = stats, n+3 = footnote
   const statCount = slide.stats.length
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.4fr) minmax(0, 1fr)', gap: 'clamp(24px, 4vw, 64px)', alignItems: 'center' }}>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'minmax(0, 1.1fr) minmax(0, 1fr)',
+      gap: 'clamp(24px, 3vw, 56px)',
+      alignItems: 'start',
+    }}>
       <div>
         <Reveal shown={reveal >= 1}>
           <SectionTitle>{slide.title}</SectionTitle>
@@ -337,11 +354,11 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
         <Reveal shown={reveal >= 2} delay={100}>
           <p
             style={{
-              margin: '20px 0 0',
-              fontSize: 'clamp(15px, 1.6vw, 19px)',
+              margin: 'clamp(16px, 1.6vw, 24px) 0 0',
+              fontSize: 'clamp(15px, 1.4vw, 20px)',
               fontWeight: 300, lineHeight: 1.55,
               color: 'rgba(255,255,255,0.82)',
-              maxWidth: 680,
+              maxWidth: '64ch',
             }}
           >
             {slide.intro}
@@ -350,17 +367,17 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
 
         <div
           style={{
-            marginTop: 'clamp(20px, 3vh, 36px)',
+            marginTop: 'clamp(20px, 2.4vh, 36px)',
             display: 'grid',
             gridTemplateColumns: `repeat(${statCount}, minmax(0, 1fr))`,
-            gap: 14,
+            gap: 'clamp(10px, 1vw, 18px)',
           }}
         >
           {slide.stats.map((s, i) => (
             <Reveal key={i} shown={reveal >= 3 + i} delay={i * 60}>
               <div
                 style={{
-                  padding: '20px 18px',
+                  padding: 'clamp(16px, 1.4vw, 24px) clamp(14px, 1.2vw, 22px)',
                   background: 'rgba(116,168,132,0.12)',
                   border: '1px solid rgba(116,168,132,0.35)',
                   borderRadius: 14,
@@ -371,7 +388,7 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
                   style={{
                     fontFamily: INTRO_FONT,
                     fontWeight: 700,
-                    fontSize: 'clamp(28px, 3.4vw, 44px)',
+                    fontSize: 'clamp(26px, 2.8vw, 46px)',
                     color: '#74A884',
                     letterSpacing: '0.005em', lineHeight: 1,
                   }}
@@ -380,10 +397,11 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
                 </div>
                 <div
                   style={{
-                    marginTop: 8,
-                    fontSize: 11, fontWeight: 600,
+                    marginTop: 10,
+                    fontSize: 'clamp(11px, 0.8vw, 13px)',
+                    fontWeight: 600,
                     letterSpacing: '0.04em',
-                    color: 'rgba(255,255,255,0.7)',
+                    color: 'rgba(255,255,255,0.72)',
                     lineHeight: 1.35,
                   }}
                 >
@@ -397,11 +415,12 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
         <Reveal shown={reveal >= 3 + statCount} delay={120}>
           <p
             style={{
-              margin: '24px 0 0',
-              fontSize: 13, lineHeight: 1.6,
-              color: 'rgba(255,255,255,0.7)',
-              maxWidth: 720,
-              padding: '14px 18px',
+              margin: 'clamp(18px, 2vw, 28px) 0 0',
+              fontSize: 'clamp(13px, 1vw, 15px)',
+              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.74)',
+              maxWidth: '70ch',
+              padding: 'clamp(14px, 1.2vw, 20px) clamp(16px, 1.4vw, 22px)',
               background: 'rgba(255,255,255,0.05)',
               border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: 10,
@@ -413,23 +432,28 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
         </Reveal>
       </div>
 
+      {/* Imagen lateral: contain (no crop), sin aspect-ratio forzado */}
       <div
         style={{
           position: 'relative',
-          aspectRatio: '3/4',
-          maxHeight: '70dvh',
           width: '100%',
+          maxHeight: 'clamp(360px, 65vh, 720px)',
           borderRadius: 16,
           overflow: 'hidden',
+          background: 'rgba(255,255,255,0.04)',
           boxShadow: '0 24px 60px rgba(0,0,0,0.45)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 'clamp(10px, 1vw, 16px)',
         }}
       >
         <img
           src={slide.side_image}
           alt=""
           style={{
-            width: '100%', height: '100%', objectFit: 'cover',
-            transform: 'scale(1.02)',
+            width: '100%', height: '100%',
+            maxHeight: '100%',
+            objectFit: 'contain',
+            display: 'block',
           }}
         />
       </div>
@@ -446,10 +470,10 @@ function RenderMediaSlide({ slide, reveal }: { slide: Slide3; reveal: number }) 
 
       <div
         style={{
-          marginTop: 'clamp(20px, 3vh, 36px)',
+          marginTop: 'clamp(20px, 2.4vh, 36px)',
           display: 'grid',
-          gridTemplateColumns: 'minmax(0, 0.85fr) minmax(0, 1fr)',
-          gap: 'clamp(20px, 3vw, 48px)',
+          gridTemplateColumns: 'minmax(0, 0.95fr) minmax(0, 1fr)',
+          gap: 'clamp(20px, 2.4vw, 48px)',
           alignItems: 'start',
         }}
       >
@@ -458,17 +482,29 @@ function RenderMediaSlide({ slide, reveal }: { slide: Slide3; reveal: number }) 
             style={{
               borderRadius: 16,
               overflow: 'hidden',
-              aspectRatio: '4/5',
-              maxHeight: '70dvh',
+              maxHeight: 'clamp(360px, 65vh, 700px)',
               boxShadow: '0 24px 60px rgba(0,0,0,0.45)',
               background: '#000',
+              position: 'relative',
             }}
             onClick={e => e.stopPropagation()}
+            onContextMenu={e => e.preventDefault()}
           >
             <video
-              controls
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
               poster={slide.media.poster}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              disablePictureInPicture
+              controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+              style={{
+                width: '100%', height: '100%', display: 'block',
+                maxHeight: 'clamp(360px, 65vh, 700px)',
+                objectFit: 'contain', background: '#000',
+                pointerEvents: 'none', // no interacción del usuario
+              }}
             >
               <source src={slide.media.file} type="video/mp4" />
             </video>
@@ -480,8 +516,8 @@ function RenderMediaSlide({ slide, reveal }: { slide: Slide3; reveal: number }) 
             <Reveal key={i} shown={reveal >= 3 + i} delay={i * 100}>
               <p
                 style={{
-                  margin: i === 0 ? 0 : '20px 0 0',
-                  fontSize: 'clamp(15px, 1.55vw, 18px)',
+                  margin: i === 0 ? 0 : 'clamp(16px, 1.6vw, 24px) 0 0',
+                  fontSize: 'clamp(15px, 1.4vw, 19px)',
                   fontWeight: 300, lineHeight: 1.6,
                   color: 'rgba(255,255,255,0.85)',
                 }}
@@ -522,10 +558,10 @@ function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }
 
       <div
         style={{
-          marginTop: 'clamp(24px, 4vh, 48px)',
+          marginTop: 'clamp(20px, 2.8vh, 44px)',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          gap: 'clamp(14px, 1.8vw, 24px)',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: 'clamp(14px, 1.6vw, 24px)',
         }}
       >
         {slide.grid.map((item, i) => (
@@ -535,7 +571,7 @@ function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }
                 borderRadius: 14,
                 overflow: 'hidden',
                 position: 'relative',
-                aspectRatio: '4/3',
+                aspectRatio: '16/9',
                 background: '#1a1a1a',
                 boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
               }}
@@ -553,15 +589,15 @@ function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }
                 style={{
                   position: 'absolute', inset: 0,
                   background:
-                    'linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.85) 100%)',
+                    'linear-gradient(180deg, transparent 35%, rgba(0,0,0,0.88) 100%)',
                 }}
               />
               <div
                 style={{
                   position: 'absolute', bottom: 0, left: 0, right: 0,
-                  padding: '18px 18px 16px',
+                  padding: 'clamp(16px, 1.4vw, 24px) clamp(16px, 1.4vw, 24px) clamp(14px, 1.2vw, 20px)',
                   fontFamily: INTRO_FONT,
-                  fontSize: 'clamp(14px, 1.4vw, 17px)',
+                  fontSize: 'clamp(14px, 1.2vw, 19px)',
                   fontWeight: 700,
                   lineHeight: 1.3,
                   color: '#fff',
