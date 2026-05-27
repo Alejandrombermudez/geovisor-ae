@@ -121,8 +121,10 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
         backgroundRepeat: 'no-repeat',
         fontFamily: INTRO_FONT,
         color: '#fff',
-        overflow: 'auto',
+        overflow: 'hidden',   // sin scrollbar; el wheel/keys avanzan reveal
         cursor: 'pointer',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       {/* Header con progreso + cerrar */}
@@ -190,14 +192,16 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
         </button>
       </header>
 
-      {/* Body */}
+      {/* Body — altura controlada para que SIEMPRE quepa sin scrollbar */}
       <main
         style={{
-          minHeight: 'auto',
+          flex: 1,
+          minHeight: 0,
           display: 'flex', flexDirection: 'column', justifyContent: 'flex-start',
-          padding: 'clamp(16px, 2.2vw, 48px) clamp(24px, 4vw, 80px) clamp(120px, 11vh, 160px)',
+          padding: 'clamp(12px, 1.6vw, 32px) clamp(24px, 4vw, 80px) clamp(100px, 9vh, 140px)',
           maxWidth: 1600, margin: '0 auto', width: '100%',
           boxSizing: 'border-box',
+          overflow: 'hidden',
         }}
       >
         {current.kind === 'title_stats_with_side_image' && (
@@ -307,12 +311,14 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
       style={{
         margin: 0,
         fontFamily: INTRO_FONT,
-        fontSize: 'clamp(28px, 3.8vw, 60px)',
+        // Más comedido — antes ocupaba 3 líneas en titulares largos
+        fontSize: 'clamp(22px, 2.6vw, 40px)',
         fontWeight: 300,
-        lineHeight: 1.08,
+        lineHeight: 1.12,
         letterSpacing: '0.005em',
         color: '#fff',
         textShadow: '0 4px 24px rgba(0,0,0,0.45)',
+        maxWidth: '24ch',
       }}
     >
       {children}
@@ -355,10 +361,10 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
           <p
             style={{
               margin: 'clamp(16px, 1.6vw, 24px) 0 0',
-              fontSize: 'clamp(15px, 1.4vw, 20px)',
+              fontSize: 'clamp(16px, 1.55vw, 22px)',
               fontWeight: 300, lineHeight: 1.55,
-              color: 'rgba(255,255,255,0.82)',
-              maxWidth: '64ch',
+              color: 'rgba(255,255,255,0.86)',
+              maxWidth: '60ch',
             }}
           >
             {slide.intro}
@@ -388,7 +394,7 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
                   style={{
                     fontFamily: INTRO_FONT,
                     fontWeight: 700,
-                    fontSize: 'clamp(26px, 2.8vw, 46px)',
+                    fontSize: 'clamp(28px, 3vw, 48px)',
                     color: '#74A884',
                     letterSpacing: '0.005em', lineHeight: 1,
                   }}
@@ -398,10 +404,10 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
                 <div
                   style={{
                     marginTop: 10,
-                    fontSize: 'clamp(11px, 0.8vw, 13px)',
+                    fontSize: 'clamp(12px, 0.95vw, 15px)',
                     fontWeight: 600,
                     letterSpacing: '0.04em',
-                    color: 'rgba(255,255,255,0.72)',
+                    color: 'rgba(255,255,255,0.78)',
                     lineHeight: 1.35,
                   }}
                 >
@@ -416,14 +422,16 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
           <p
             style={{
               margin: 'clamp(18px, 2vw, 28px) 0 0',
-              fontSize: 'clamp(13px, 1vw, 15px)',
+              fontSize: 'clamp(14px, 1.1vw, 17px)',
               lineHeight: 1.6,
-              color: 'rgba(255,255,255,0.74)',
+              color: 'rgba(255,255,255,0.82)',
               maxWidth: '70ch',
               padding: 'clamp(14px, 1.2vw, 20px) clamp(16px, 1.4vw, 22px)',
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: 10,
+              background: 'rgba(255,255,255,0.08)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              borderRadius: 12,
+              backdropFilter: 'blur(14px) saturate(140%)',
+              WebkitBackdropFilter: 'blur(14px) saturate(140%)',
             }}
           >
             {slide.footnote}
@@ -511,19 +519,31 @@ function RenderMediaSlide({ slide, reveal }: { slide: Slide3; reveal: number }) 
           </div>
         </Reveal>
 
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(14px, 1.4vw, 22px)' }}>
           {slide.text_blocks.map((t, i) => (
             <Reveal key={i} shown={reveal >= 3 + i} delay={i * 100}>
-              <p
+              <div
                 style={{
-                  margin: i === 0 ? 0 : 'clamp(16px, 1.6vw, 24px) 0 0',
-                  fontSize: 'clamp(15px, 1.4vw, 19px)',
-                  fontWeight: 300, lineHeight: 1.6,
-                  color: 'rgba(255,255,255,0.85)',
+                  padding: 'clamp(18px, 1.8vw, 30px) clamp(20px, 2vw, 32px)',
+                  background: 'rgba(255,255,255,0.10)',
+                  border: '1px solid rgba(255,255,255,0.22)',
+                  borderRadius: 16,
+                  backdropFilter: 'blur(18px) saturate(160%)',
+                  WebkitBackdropFilter: 'blur(18px) saturate(160%)',
+                  boxShadow: '0 12px 36px rgba(0,0,0,0.25)',
                 }}
               >
-                {t}
-              </p>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: 'clamp(16px, 1.55vw, 22px)',
+                    fontWeight: 300, lineHeight: 1.55,
+                    color: 'rgba(255,255,255,0.94)',
+                  }}
+                >
+                  {t}
+                </p>
+              </div>
             </Reveal>
           ))}
 

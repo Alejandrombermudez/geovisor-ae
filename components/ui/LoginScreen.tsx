@@ -249,11 +249,12 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
       {/* Panel derecho — formulario (40%) */}
       <div style={{
         flex: '0 0 40%',
+        minWidth: 420,
         background: '#fff',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
-        padding: 'clamp(36px, 4vw, 80px) clamp(40px, 4.5vw, 96px)',
-        overflowY: 'auto', position: 'relative',
+        padding: 'clamp(24px, 2.6vw, 56px) clamp(32px, 3.6vw, 72px)',
+        overflow: 'hidden', position: 'relative',
       }}>
 
         {/* Botón cerrar */}
@@ -273,18 +274,18 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
           </button>
         )}
 
-        <div style={{ width: '100%', maxWidth: 'clamp(340px, 28vw, 520px)' }}>
+        <div style={{ width: '100%', maxWidth: 'clamp(340px, 26vw, 480px)' }}>
           <h2 style={{
             fontFamily: JF, fontWeight: 300,
-            fontSize: 'clamp(28px, 2.6vw, 44px)',
-            color: '#111', margin: '0 0 clamp(28px, 3vw, 44px)',
+            fontSize: 'clamp(26px, 2.2vw, 38px)',
+            color: '#111', margin: '0 0 clamp(20px, 2vw, 32px)',
             letterSpacing: '0.005em', lineHeight: 1.2,
           }}>
             Te damos la bienvenida
           </h2>
 
           {/* ── FORM (inlineado — no sub-componente) ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(20px, 1.8vw, 32px)', width: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px, 1.4vw, 24px)', width: '100%' }}>
 
             {/* Usuario */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -300,9 +301,9 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
                 style={{
                   fontFamily: JF, fontWeight: 400,
-                  fontSize: 'clamp(15px, 1.15vw, 18px)',
+                  fontSize: 'clamp(14px, 1.05vw, 17px)',
                   background: '#fff', border: 'none', borderBottom: inputBorder(!!error),
-                  borderRadius: 0, padding: '14px 4px',
+                  borderRadius: 0, padding: '11px 4px',
                   color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box',
                   transition: 'border-color 0.2s',
                 }}
@@ -326,9 +327,9 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
                   onKeyDown={e => e.key === 'Enter' && handleLogin()}
                   style={{
                     fontFamily: JF, fontWeight: 400,
-                    fontSize: 'clamp(15px, 1.15vw, 18px)',
+                    fontSize: 'clamp(14px, 1.05vw, 17px)',
                     background: '#fff', border: 'none', borderBottom: inputBorder(!!error),
-                    borderRadius: 0, padding: '14px 4px', paddingRight: 44,
+                    borderRadius: 0, padding: '11px 4px', paddingRight: 44,
                     color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box',
                     transition: 'border-color 0.2s',
                   }}
@@ -368,15 +369,15 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
             <button onClick={handleLogin} disabled={loading}
               style={{
                 fontFamily: JF, fontWeight: 700,
-                fontSize: 'clamp(14px, 1.05vw, 17px)',
+                fontSize: 'clamp(13px, 0.95vw, 15px)',
                 letterSpacing: '0.14em', textTransform: 'uppercase',
                 background: loading ? '#555' : '#111', color: '#fff',
                 border: 'none', borderRadius: 6,
-                padding: 'clamp(15px, 1.2vw, 20px) 0', width: '100%',
+                padding: 'clamp(12px, 1vw, 16px) 0', width: '100%',
                 cursor: loading ? 'wait' : 'pointer',
                 transition: 'opacity 0.2s',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                marginTop: 8,
+                marginTop: 4,
               }}
               onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
               onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}>

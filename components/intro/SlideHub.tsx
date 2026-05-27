@@ -32,6 +32,7 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
         flexDirection: 'column',
         opacity: visible ? 1 : 0,
         transition: 'opacity 0.6s ease',
+        overflow: 'hidden',
       }}
     >
       {/* Botón cerrar (esquina superior-derecha) */}
