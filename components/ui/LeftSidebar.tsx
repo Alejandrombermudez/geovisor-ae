@@ -12,6 +12,8 @@ interface Props {
   proyecciones?: Proyeccion[]
   activeProyeccionId?: string | null
   onSelectProyeccion?: (id: string | null) => void
+  authUser?: string | null
+  onLogout?: () => void
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -124,7 +126,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones'>('main')
@@ -808,7 +810,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           )}
         </button>
 
-        <AuthButton embedded showLabels={showLabels} sidebarW={sidebarW} />
+        <AuthButton embedded showLabels={showLabels} sidebarW={sidebarW} externalUser={authUser} onExternalLogout={onLogout} />
         <SizeControl />
       </div>
 

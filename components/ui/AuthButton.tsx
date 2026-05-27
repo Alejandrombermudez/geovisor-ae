@@ -21,10 +21,14 @@ interface Props {
   embedded?: boolean
   showLabels?: boolean
   sidebarW?: number
+  /** Si se provee desde afuera, el componente usa auth externo en lugar del interno */
+  externalUser?: string | null
+  onExternalLogout?: () => void
 }
 
-export default function AuthButton({ embedded = false, showLabels = true, sidebarW = 140 }: Props) {
-  const [user,      setUser]      = useState<string | null>(null)
+export default function AuthButton({ embedded = false, showLabels = true, sidebarW = 140, externalUser, onExternalLogout }: Props) {
+  const [internalUser, setInternalUser] = useState<string | null>(null)
+  const user = externalUser !== undefined ? externalUser : internalUser
   const [showModal, setShowModal] = useState(false)
   const [showMenu,  setShowMenu]  = useState(false)
   const [username,  setUsername]  = useState('')
@@ -37,11 +41,12 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
   const menuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (externalUser !== undefined) return // auth gestionado externamente
     try {
       const stored = localStorage.getItem(LS_KEY)
-      if (stored) setUser(stored)
+      if (stored) setInternalUser(stored)
     } catch { /* noop */ }
-  }, [])
+  }, [externalUser])
 
   useEffect(() => {
     if (!showMenu) return
@@ -61,7 +66,7 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
       const key = username.trim().toLowerCase()
       if (ACCOUNTS[key] && ACCOUNTS[key] === password) {
         const display = DISPLAY_NAMES[key]
-        setUser(display)
+        setInternalUser(display)
         try { localStorage.setItem(LS_KEY, display) } catch { /* noop */ }
         setShowModal(false)
         setUsername('')
@@ -74,9 +79,13 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
   }
 
   const logout = () => {
-    setUser(null)
     setShowMenu(false)
-    try { localStorage.removeItem(LS_KEY) } catch { /* noop */ }
+    if (onExternalLogout) {
+      onExternalLogout()
+    } else {
+      setInternalUser(null)
+      try { localStorage.removeItem(LS_KEY) } catch { /* noop */ }
+    }
   }
 
   const openModal = () => {

@@ -10,6 +10,7 @@ import RightPanel from '@/components/ui/RightPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
+import LoginScreen from '@/components/ui/LoginScreen'
 
 const GeovisorMap = dynamic(
   () => import('@/components/map/GeovisorMap'),
@@ -32,7 +33,24 @@ const ALL_VISIBLE: VisibleLayers = {
 
 const RIGHT_RATIO = 0.35
 
+const LS_KEY = 'geoae_user'
+
 export default function GeovisorPage() {
+  // ── Auth ────────────────────────────────────────────────────────────────
+  const [authUser,     setAuthUser]     = useState<string | null>(null)
+  const [authChecked,  setAuthChecked]  = useState(false)
+
+  useEffect(() => {
+    try { setAuthUser(localStorage.getItem(LS_KEY)) } catch { /* noop */ }
+    setAuthChecked(true)
+  }, [])
+
+  const handleLogin  = useCallback((user: string) => setAuthUser(user), [])
+  const handleLogout = useCallback(() => {
+    try { localStorage.removeItem(LS_KEY) } catch { /* noop */ }
+    setAuthUser(null)
+  }, [])
+
   const { data, siembraFamilias, rasFamilias, loadingLayers, error } = useGeovisorData()
   const [activeCategory,     setActiveCategory]     = useState<ActiveCategory>(null)
   const [selectedFamiliaId,  setSelectedFamiliaId]  = useState<string | null>(null)
@@ -137,6 +155,10 @@ export default function GeovisorPage() {
     userSelect: 'none',
   }
 
+  // Espera a leer localStorage antes de decidir qué renderizar
+  if (!authChecked) return <LoadingOverlay message="Iniciando..." />
+  if (!authUser)    return <LoginScreen onLogin={handleLogin} />
+
   return (
     <div style={{ height: '100dvh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
       <GeovisorMap
@@ -157,6 +179,8 @@ export default function GeovisorPage() {
         proyecciones={proyecciones}
         activeProyeccionId={activeProyeccionId}
         onSelectProyeccion={handleSelectProyeccion}
+        authUser={authUser}
+        onLogout={handleLogout}
       />
 
       <RightPanel
