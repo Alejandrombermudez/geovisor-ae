@@ -15,6 +15,7 @@ interface Props {
   authUser?: string | null
   onLogout?: () => void
   onRequestLogin?: () => void
+  onOpenIntro?: () => void
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -127,7 +128,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones'>('main')
@@ -339,7 +340,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           {/* Logo / marca */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: compact ? '0 6px 12px' : '0 14px 14px', gap: 8 }}>
             {!logoError ? (
-              <img src="/logo-ae.png" alt="AE" onError={() => setLogoError(true)}
+              <img src="/logo-ae-blanco.png" alt="AE" onError={() => setLogoError(true)}
                 style={{ width: Math.min(80, Math.max(32, Math.round(sidebarW * 0.44))), height: 'auto', objectFit: 'contain' }}
               />
             ) : (
@@ -711,7 +712,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
       {/* Logo */}
       <div style={{ marginBottom: 12, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', overflow: 'hidden' }}>
         {!logoError ? (
-          <img src="/logo-ae.png" alt="Amazonia Emprende" onError={() => setLogoError(true)}
+          <img src="/logo-ae-blanco.png" alt="Amazonia Emprende" onError={() => setLogoError(true)}
             style={{ width: logoSize, height: 'auto', objectFit: 'contain', transition: 'width 0.25s ease', flexShrink: 0 }}
           />
         ) : (
@@ -787,6 +788,32 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
       {/* Sección inferior fija */}
       <div style={{ flexShrink: 0, width: '100%' }}>
+        {/* Botón "Acerca del proyecto" — abre la intro */}
+        {onOpenIntro && (
+          <button
+            onClick={onOpenIntro}
+            onMouseEnter={() => setHovered('intro')} onMouseLeave={() => setHovered(null)}
+            title={showLabels ? undefined : 'Acerca del proyecto'}
+            style={{
+              width: '100%', background: hovered === 'intro' ? 'rgba(104,152,184,0.12)' : 'transparent',
+              border: 'none', borderLeft: '4px solid transparent',
+              borderTop: '1px solid rgba(255,255,255,0.06)',
+              color: hovered === 'intro' ? 'rgba(104,152,184,0.95)' : 'rgba(255,255,255,0.42)',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 3, padding: '11px 4px',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: showLabels ? 18 : 20, lineHeight: 1 }}>📖</span>
+            {showLabels && (
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'inherit', textAlign: 'center', lineHeight: 1.3, whiteSpace: 'nowrap' }}>
+                Acerca del<br />proyecto
+              </span>
+            )}
+          </button>
+        )}
+
         {/* Botón "Amazonia Emprende" */}
         <button
           onClick={openAbout}

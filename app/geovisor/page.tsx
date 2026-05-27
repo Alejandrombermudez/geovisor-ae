@@ -11,6 +11,7 @@ import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
 import LoginScreen from '@/components/ui/LoginScreen'
+import IntroOverlay, { type IntroPhase } from '@/components/intro/IntroOverlay'
 
 const GeovisorMap = dynamic(
   () => import('@/components/map/GeovisorMap'),
@@ -47,10 +48,35 @@ export default function GeovisorPage() {
 
   const [showLogin,    setShowLogin]    = useState(false)
 
-  const handleLogin  = useCallback((user: string) => { setAuthUser(user); setShowLogin(false) }, [])
+  // ── Intro overlay ──────────────────────────────────────────────────────
+  // Fase activa de la intro. 'idle' = oculta.
+  const [introPhase, setIntroPhase] = useState<IntroPhase | 'idle'>('idle')
+  // Si la intro arranca tras un login, se setea aquí para mostrar el WelcomePrompt
+  // cuando ya se vio antes (showWelcomeOnReturn=true). Apertura manual desde el
+  // sidebar nunca pasa por welcome — va directo al hub.
+  const [introViaLogin, setIntroViaLogin] = useState(false)
+
+  const handleLogin = useCallback((user: string) => {
+    setAuthUser(user)
+    setShowLogin(false)
+    // Disparar intro animada
+    setIntroViaLogin(true)
+    setIntroPhase('logo')
+  }, [])
   const handleLogout = useCallback(() => {
     try { localStorage.removeItem(LS_KEY) } catch { /* noop */ }
     setAuthUser(null)
+  }, [])
+
+  const handleCloseIntro = useCallback(() => {
+    setIntroPhase('idle')
+    setIntroViaLogin(false)
+  }, [])
+
+  const handleOpenIntroFromSidebar = useCallback(() => {
+    // Apertura manual → directo al hub (saltar typewriter y welcome)
+    setIntroViaLogin(false)
+    setIntroPhase('hub')
   }, [])
 
   const { data, siembraFamilias, rasFamilias, loadingLayers, error } = useGeovisorData()
@@ -180,6 +206,7 @@ export default function GeovisorPage() {
         authUser={authUser}
         onLogout={handleLogout}
         onRequestLogin={() => setShowLogin(true)}
+        onOpenIntro={handleOpenIntroFromSidebar}
       />
 
       <RightPanel
@@ -268,6 +295,16 @@ export default function GeovisorPage() {
       {/* Login como overlay — solo aparece si el usuario hace clic en "Iniciar sesión" */}
       {showLogin && !authUser && (
         <LoginScreen onLogin={handleLogin} onClose={() => setShowLogin(false)} />
+      )}
+
+      {/* Intro overlay — animación, slides hub, sub-flows */}
+      {introPhase !== 'idle' && (
+        <IntroOverlay
+          initialPhase={introPhase}
+          userName={authUser ?? ''}
+          showWelcomeOnReturn={introViaLogin}
+          onClose={handleCloseIntro}
+        />
       )}
     </div>
   )
