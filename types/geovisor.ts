@@ -125,6 +125,21 @@ export interface Proyeccion {
   orden: number
 }
 
+// ── Bancolombia · veredas con proyección temporal ────────────────────────────
+
+export interface VeredaProyeccion {
+  id: number
+  codigo_ver: string
+  nombre_ver: string
+  nomb_mpio: string
+  nom_dep: string
+  area_ha: number | null
+  /** Año en que se interviene la vereda (2026–2035) */
+  anio_intervencion: number
+  /** GeoJSON Feature completo (geometry + properties) */
+  geojson_feature: GeoJSON.Feature
+}
+
 // ── Fotos del predio ─────────────────────────────────────────────────────────
 
 export type FotoCategoria = 'predio' | 'familia' | 'copa_arboles' | 'tronco' | 'otras'

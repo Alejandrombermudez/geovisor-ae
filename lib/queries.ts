@@ -1,5 +1,33 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
-import type { SiembraFamilia, RasFamilia, CamaraTrampa } from '@/types/geovisor'
+import type { SiembraFamilia, RasFamilia, CamaraTrampa, VeredaProyeccion } from '@/types/geovisor'
+
+/**
+ * Fetch veredas Bancolombia filtradas por año de intervención.
+ * Requiere que exista bancolombia.veredas_proyeccion en Supabase.
+ * - year: año exacto
+ * - yearLte: todos los años ≤ ese valor (modo acumulativo para slider)
+ * TODO: llamar desde el hook/componente del slider cuando se active.
+ */
+export async function fetchVeredasBancolombia(
+  supabase: SupabaseClient,
+  options: { year?: number; yearLte?: number } = {}
+): Promise<VeredaProyeccion[]> {
+  let query = supabase
+    .schema('bancolombia')
+    .from('veredas_proyeccion')
+    .select('id, codigo_ver, nombre_ver, nomb_mpio, nom_dep, area_ha, anio_intervencion, geojson_feature')
+    .order('anio_intervencion', { ascending: true })
+
+  if (options.year !== undefined) {
+    query = query.eq('anio_intervencion', options.year)
+  } else if (options.yearLte !== undefined) {
+    query = query.lte('anio_intervencion', options.yearLte)
+  }
+
+  const { data, error } = await query
+  if (error) throw error
+  return (data ?? []) as VeredaProyeccion[]
+}
 
 export async function fetchSiembraFamilias(supabase: SupabaseClient): Promise<SiembraFamilia[]> {
   const { data, error } = await supabase
