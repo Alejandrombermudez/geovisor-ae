@@ -46,24 +46,61 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
   const [reveal, setReveal] = useState(1) // empieza mostrando 1 bloque
   const wheelLock = useRef(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const mainRef = useRef<HTMLDivElement | null>(null)
 
   const current = slides[idx]
   const total = useMemo(() => blockCount(current), [current])
   const isLastBlock = reveal >= total
   const isLastSlide = idx === slides.length - 1
+  const [canScrollMore, setCanScrollMore] = useState(false)
 
-  // Scroll-to-top al cambiar de slide (el reset de reveal se hace
-  // sincrónicamente dentro de advance/back para evitar el flash de 1 frame
-  // donde el slide nuevo se renderiza con el reveal alto del anterior)
+  // Detectar si hay contenido oculto debajo (para mostrar el hint adecuado).
   useEffect(() => {
-    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    const m = mainRef.current
+    if (!m) return
+    const update = () => {
+      setCanScrollMore(m.scrollHeight - m.scrollTop - m.clientHeight > 8)
+    }
+    update()
+    m.addEventListener('scroll', update)
+    // Re-medir cuando cambia reveal/idx (el contenido cambia de altura)
+    const t = requestAnimationFrame(update)
+    return () => { m.removeEventListener('scroll', update); cancelAnimationFrame(t) }
+  }, [reveal, idx])
+
+  // Scroll-to-top al cambiar de slide
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0 })
   }, [idx])
 
+  /** ¿Hay contenido oculto debajo (overflow no visible aún)? */
+  function hasMoreBelow(): boolean {
+    const m = mainRef.current
+    if (!m) return false
+    return m.scrollHeight - m.scrollTop - m.clientHeight > 8
+  }
+
+  /** ¿Estamos al tope (sin scroll hacia arriba pendiente)? */
+  function isAtTop(): boolean {
+    const m = mainRef.current
+    if (!m) return true
+    return m.scrollTop <= 8
+  }
+
   const advance = useCallback(() => {
+    // 1. Si quedan bloques por revelar → revelar
     if (reveal < total) {
       setReveal(r => r + 1)
-    } else if (!isLastSlide) {
-      // Cambiar slide y resetear reveal en el MISMO render (React batchea).
+      return
+    }
+    // 2. Si todo revelado pero hay contenido por debajo → bajar la vista
+    if (hasMoreBelow()) {
+      const m = mainRef.current
+      if (m) m.scrollBy({ top: m.clientHeight * 0.75, behavior: 'smooth' })
+      return
+    }
+    // 3. Avanzar al siguiente slide
+    if (!isLastSlide) {
       setIdx(i => i + 1)
       setReveal(1)
     } else {
@@ -72,13 +109,26 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
   }, [reveal, total, isLastSlide, onFinish])
 
   const back = useCallback(() => {
+    // 1. Si hay scroll, subir primero
+    if (!isAtTop()) {
+      const m = mainRef.current
+      if (m) m.scrollBy({ top: -m.clientHeight * 0.75, behavior: 'smooth' })
+      return
+    }
+    // 2. Quitar el último bloque revelado
     if (reveal > 1) {
       setReveal(r => r - 1)
-    } else if (idx > 0) {
-      // Ir al slide previo con todo revelado (de un golpe).
+      return
+    }
+    // 3. Volver al slide anterior (con todo revelado y scroll abajo)
+    if (idx > 0) {
       const prev = slides[idx - 1]
       setIdx(i => i - 1)
       setReveal(blockCount(prev))
+      requestAnimationFrame(() => {
+        const m = mainRef.current
+        if (m) m.scrollTo({ top: m.scrollHeight })
+      })
     }
   }, [reveal, idx, slides])
 
@@ -93,18 +143,19 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [advance, back, onClose])
 
-  // Scroll (wheel) con lock para no avanzar 5 bloques de un golpe
+  // Wheel: lock para evitar disparos múltiples; passive:false para preventDefault
   useEffect(() => {
     function onWheel(e: WheelEvent) {
+      e.preventDefault()
       const now = Date.now()
-      if (now - wheelLock.current < 450) return
+      if (now - wheelLock.current < 350) return
       wheelLock.current = now
       if (e.deltaY > 0) advance()
       else if (e.deltaY < 0) back()
     }
     const el = containerRef.current
     if (!el) return
-    el.addEventListener('wheel', onWheel, { passive: true })
+    el.addEventListener('wheel', onWheel, { passive: false })
     return () => el.removeEventListener('wheel', onWheel)
   }, [advance, back])
 
@@ -192,8 +243,10 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
         </button>
       </header>
 
-      {/* Body — altura controlada para que SIEMPRE quepa sin scrollbar */}
+      {/* Body — scroll interno SIN barra; el scroll lo gobierna advance/back */}
       <main
+        ref={mainRef}
+        className="geo-slide-main"
         style={{
           flex: 1,
           minHeight: 0,
@@ -201,7 +254,9 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
           padding: 'clamp(12px, 1.6vw, 32px) clamp(24px, 4vw, 80px) clamp(100px, 9vh, 140px)',
           maxWidth: 1600, margin: '0 auto', width: '100%',
           boxSizing: 'border-box',
-          overflow: 'hidden',
+          overflow: 'auto',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
         }}
       >
         {current.kind === 'title_stats_with_side_image' && (
@@ -223,22 +278,22 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
           zIndex: 5, pointerEvents: 'none',
         }}
       >
-        {!isLastBlock ? (
+        {(!isLastBlock || canScrollMore) ? (
           <div
             style={{
               display: 'flex', alignItems: 'center', gap: 8,
               padding: '10px 18px',
-              background: 'rgba(0,0,0,0.45)',
+              background: 'rgba(0,0,0,0.5)',
               backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.18)',
               borderRadius: 999,
-              color: 'rgba(255,255,255,0.78)',
+              color: 'rgba(255,255,255,0.85)',
               fontSize: 12, fontWeight: 600,
               letterSpacing: '0.08em', textTransform: 'uppercase',
               animation: 'introHintBob 1.8s ease-in-out infinite',
             }}
           >
-            Scroll · Clic · Espacio
+            {isLastBlock && canScrollMore ? 'Continuar' : 'Scroll · Clic · Espacio'}
             <span style={{ fontSize: 14 }}>↓</span>
           </div>
         ) : (
@@ -279,6 +334,7 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
           from { opacity: 0; transform: translateY(18px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        .geo-slide-main::-webkit-scrollbar { width: 0; height: 0; display: none; }
       `}</style>
     </div>
   )

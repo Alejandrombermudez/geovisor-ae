@@ -207,15 +207,17 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 3000, display: 'flex', fontFamily: JF }}>
 
-      {/* Panel izquierdo — foto (60%, sin maxWidth, todo más grande) */}
+      {/* Panel izquierdo — foto desktop hires (60%) */}
       <div style={{
         flex: '0 0 60%',
-        background: `url('/login-bg.jpg') center/cover no-repeat`,
+        minWidth: 0,
+        background: `url('/login-bg-desktop.jpg') center/cover no-repeat #1a1a1a`,
         position: 'relative',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: 'clamp(36px, 4.5vw, 80px) clamp(40px, 5vw, 88px)',
+        overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.38) 100%)' }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.34) 100%)' }} />
 
         {/* Logo */}
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -249,12 +251,13 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
       {/* Panel derecho — formulario (40%) */}
       <div style={{
         flex: '0 0 40%',
-        minWidth: 420,
+        minWidth: 0,
         background: '#fff',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
-        padding: 'clamp(24px, 2.6vw, 56px) clamp(32px, 3.6vw, 72px)',
+        padding: 'clamp(24px, 2.6vw, 56px) clamp(28px, 3vw, 64px)',
         overflow: 'hidden', position: 'relative',
+        boxSizing: 'border-box',
       }}>
 
         {/* Botón cerrar */}
@@ -274,7 +277,11 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
           </button>
         )}
 
-        <div style={{ width: '100%', maxWidth: 'clamp(340px, 26vw, 480px)' }}>
+        <div style={{
+          width: '100%',
+          maxWidth: 'clamp(320px, 24vw, 440px)',
+          marginLeft: 'auto', marginRight: 'auto',
+        }}>
           <h2 style={{
             fontFamily: JF, fontWeight: 300,
             fontSize: 'clamp(26px, 2.2vw, 38px)',
