@@ -41,6 +41,28 @@ const ADVANCE_KEYS = new Set([
 ])
 const BACK_KEYS = new Set(['ArrowUp', 'ArrowLeft', 'PageUp'])
 
+/** Animación de scroll custom — más suave que la nativa `behavior: 'smooth'`.
+ *  Duration ~900ms con easing easeInOutCubic. Cancela cualquier animación
+ *  anterior antes de iniciar la nueva. */
+function smoothScrollBy(el: HTMLElement, deltaY: number, duration = 900): Promise<void> {
+  return new Promise(resolve => {
+    const start = el.scrollTop
+    const target = Math.max(0, Math.min(el.scrollHeight - el.clientHeight, start + deltaY))
+    const dist = target - start
+    if (Math.abs(dist) < 1) { resolve(); return }
+    const t0 = performance.now()
+    function step(now: number) {
+      const t = Math.min(1, (now - t0) / duration)
+      // easeInOutCubic
+      const eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+      el.scrollTop = start + dist * eased
+      if (t < 1) requestAnimationFrame(step)
+      else resolve()
+    }
+    requestAnimationFrame(step)
+  })
+}
+
 export default function SlideFlow({ slides, onFinish, onClose }: Props) {
   const [idx, setIdx] = useState(0)
   const [reveal, setReveal] = useState(1) // empieza mostrando 1 bloque
@@ -88,15 +110,26 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
   }
 
   const advance = useCallback(() => {
-    // 1. Si quedan bloques por revelar → revelar
+    // 1. Si quedan bloques por revelar → revelar + acompañar con un pequeño
+    //    scroll suave para que el bloque nuevo entre al viewport ("2 en 1").
     if (reveal < total) {
       setReveal(r => r + 1)
+      // Tras el render, comprobar si el bloque nuevo se quedó fuera y bajar.
+      requestAnimationFrame(() => {
+        const m = mainRef.current
+        if (!m) return
+        const remaining = m.scrollHeight - m.scrollTop - m.clientHeight
+        if (remaining > 8) {
+          // Bajar lo justo para verlo (máx 40% del viewport, mín lo necesario)
+          smoothScrollBy(m, Math.min(remaining, m.clientHeight * 0.4))
+        }
+      })
       return
     }
     // 2. Si todo revelado pero hay contenido por debajo → bajar la vista
     if (hasMoreBelow()) {
       const m = mainRef.current
-      if (m) m.scrollBy({ top: m.clientHeight * 0.75, behavior: 'smooth' })
+      if (m) smoothScrollBy(m, m.clientHeight * 0.75)
       return
     }
     // 3. Avanzar al siguiente slide
@@ -112,7 +145,7 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
     // 1. Si hay scroll, subir primero
     if (!isAtTop()) {
       const m = mainRef.current
-      if (m) m.scrollBy({ top: -m.clientHeight * 0.75, behavior: 'smooth' })
+      if (m) smoothScrollBy(m, -m.clientHeight * 0.75)
       return
     }
     // 2. Quitar el último bloque revelado
@@ -148,7 +181,7 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
     function onWheel(e: WheelEvent) {
       e.preventDefault()
       const now = Date.now()
-      if (now - wheelLock.current < 350) return
+      if (now - wheelLock.current < 600) return
       wheelLock.current = now
       if (e.deltaY > 0) advance()
       else if (e.deltaY < 0) back()
@@ -345,15 +378,18 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
 // ───────────────────────────────────────────────────────────────────────────────
 
 function Reveal({
-  shown, delay = 0, children,
-}: { shown: boolean; delay?: number; children: React.ReactNode }) {
+  shown, delay = 0, fill = false, children,
+}: { shown: boolean; delay?: number; fill?: boolean; children: React.ReactNode }) {
   return (
     <div
       style={{
         opacity: shown ? 1 : 0,
         transform: shown ? 'translateY(0)' : 'translateY(18px)',
-        transition: `all 0.6s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+        transition: `all 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
         pointerEvents: shown ? 'auto' : 'none',
+        width: fill ? '100%' : undefined,
+        height: fill ? '100%' : undefined,
+        minHeight: fill ? 0 : undefined,
       }}
     >
       {children}
@@ -627,27 +663,29 @@ function RenderMediaSlide({ slide, reveal }: { slide: Slide3; reveal: number }) 
 
 function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }) {
   return (
-    <div>
+    <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0 }}>
       <Reveal shown={reveal >= 1}>
         <SectionTitle>{slide.title}</SectionTitle>
       </Reveal>
 
       <div
         style={{
-          marginTop: 'clamp(20px, 2.8vh, 44px)',
+          flex: 1, minHeight: 0,
+          marginTop: 'clamp(16px, 2vh, 32px)',
           display: 'grid',
           gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-          gap: 'clamp(14px, 1.6vw, 24px)',
+          gridTemplateRows: 'repeat(2, minmax(0, 1fr))',
+          gap: 'clamp(12px, 1.4vw, 22px)',
         }}
       >
         {slide.grid.map((item, i) => (
-          <Reveal key={i} shown={reveal >= 2 + i} delay={i * 80}>
+          <Reveal key={i} shown={reveal >= 2 + i} delay={i * 80} fill>
             <div
               style={{
+                width: '100%', height: '100%',
                 borderRadius: 14,
                 overflow: 'hidden',
                 position: 'relative',
-                aspectRatio: '16/9',
                 background: '#1a1a1a',
                 boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
               }}
@@ -671,11 +709,11 @@ function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }
               <div
                 style={{
                   position: 'absolute', bottom: 0, left: 0, right: 0,
-                  padding: 'clamp(16px, 1.4vw, 24px) clamp(16px, 1.4vw, 24px) clamp(14px, 1.2vw, 20px)',
+                  padding: 'clamp(14px, 1.2vw, 22px) clamp(16px, 1.4vw, 24px) clamp(12px, 1vw, 18px)',
                   fontFamily: INTRO_FONT,
-                  fontSize: 'clamp(14px, 1.2vw, 19px)',
+                  fontSize: 'clamp(13px, 1.1vw, 18px)',
                   fontWeight: 700,
-                  lineHeight: 1.3,
+                  lineHeight: 1.25,
                   color: '#fff',
                 }}
               >

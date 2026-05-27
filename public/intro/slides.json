@@ -69,7 +69,7 @@
     "4": {
       "id": "riesgos_futuros",
       "kind": "title_plus_2x2_grid",
-      "title": "Invertir temprano reduce riesgos futuros asociados a:",
+      "title": "Invertir temprano reduce riesgos futuros:",
       "background": "/intro/image8.jpeg",
       "grid": [
         { "label": "Crisis hídrica",                         "image": "/intro/image9.png",  "position": "top-left" },
