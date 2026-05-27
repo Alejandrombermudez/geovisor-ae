@@ -45,7 +45,9 @@ export default function GeovisorPage() {
     setAuthChecked(true)
   }, [])
 
-  const handleLogin  = useCallback((user: string) => setAuthUser(user), [])
+  const [showLogin,    setShowLogin]    = useState(false)
+
+  const handleLogin  = useCallback((user: string) => { setAuthUser(user); setShowLogin(false) }, [])
   const handleLogout = useCallback(() => {
     try { localStorage.removeItem(LS_KEY) } catch { /* noop */ }
     setAuthUser(null)
@@ -155,10 +157,6 @@ export default function GeovisorPage() {
     userSelect: 'none',
   }
 
-  // Espera a leer localStorage antes de decidir qué renderizar
-  if (!authChecked) return <LoadingOverlay message="Iniciando..." />
-  if (!authUser)    return <LoginScreen onLogin={handleLogin} />
-
   return (
     <div style={{ height: '100dvh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
       <GeovisorMap
@@ -181,6 +179,7 @@ export default function GeovisorPage() {
         onSelectProyeccion={handleSelectProyeccion}
         authUser={authUser}
         onLogout={handleLogout}
+        onRequestLogin={() => setShowLogin(true)}
       />
 
       <RightPanel
@@ -264,6 +263,11 @@ export default function GeovisorPage() {
         >
           {error}
         </div>
+      )}
+
+      {/* Login como overlay — solo aparece si el usuario hace clic en "Iniciar sesión" */}
+      {showLogin && !authUser && (
+        <LoginScreen onLogin={handleLogin} onClose={() => setShowLogin(false)} />
       )}
     </div>
   )

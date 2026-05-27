@@ -15,9 +15,10 @@ const JF = `'Josefin Sans', var(--font-josefin), system-ui, sans-serif`
 
 interface Props {
   onLogin: (user: string) => void
+  onClose?: () => void
 }
 
-export default function LoginScreen({ onLogin }: Props) {
+export default function LoginScreen({ onLogin, onClose }: Props) {
   const [username,  setUsername]  = useState('')
   const [password,  setPassword]  = useState('')
   const [remember,  setRemember]  = useState(false)
@@ -236,6 +237,21 @@ export default function LoginScreen({ onLogin }: Props) {
 
         <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 32px', overflowY: 'auto' }}>
 
+          {/* Botón cerrar */}
+          {onClose && (
+            <button onClick={onClose} style={{
+              position: 'absolute', top: 16, right: 0,
+              background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%',
+              width: 34, height: 34, cursor: 'pointer', color: '#fff',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              backdropFilter: 'blur(6px)',
+            }}>
+              <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
+                <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              </svg>
+            </button>
+          )}
+
           {/* Título */}
           <div style={{
             marginTop: 56, textAlign: 'center',
@@ -337,6 +353,24 @@ export default function LoginScreen({ onLogin }: Props) {
         overflowY: 'auto',
       }}>
         <div style={{ width: '100%', maxWidth: 360 }}>
+
+          {/* Botón cerrar (desktop) */}
+          {onClose && (
+            <button onClick={onClose} style={{
+              position: 'absolute', top: 20, right: 24,
+              background: 'rgba(0,0,0,0.06)', border: 'none', borderRadius: '50%',
+              width: 34, height: 34, cursor: 'pointer', color: '#555',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'background 0.15s',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.12)' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.06)' }}
+            >
+              <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
+                <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+              </svg>
+            </button>
+          )}
 
           {/* Título del form */}
           <h2 style={{

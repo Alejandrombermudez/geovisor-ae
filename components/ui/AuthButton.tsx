@@ -24,9 +24,10 @@ interface Props {
   /** Si se provee desde afuera, el componente usa auth externo en lugar del interno */
   externalUser?: string | null
   onExternalLogout?: () => void
+  onRequestLogin?: () => void
 }
 
-export default function AuthButton({ embedded = false, showLabels = true, sidebarW = 140, externalUser, onExternalLogout }: Props) {
+export default function AuthButton({ embedded = false, showLabels = true, sidebarW = 140, externalUser, onExternalLogout, onRequestLogin }: Props) {
   const [internalUser, setInternalUser] = useState<string | null>(null)
   const user = externalUser !== undefined ? externalUser : internalUser
   const [showModal, setShowModal] = useState(false)
@@ -389,7 +390,7 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
         ) : (
           // ── Not logged-in: botón de acceso ────────────────────────
           <button
-            onClick={openModal}
+            onClick={onRequestLogin ?? openModal}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             title={compact ? 'Iniciar sesión' : undefined}
