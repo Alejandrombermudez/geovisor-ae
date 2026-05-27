@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import type { ActiveCategory, Proyeccion } from '@/types/geovisor'
+import AuthButton from '@/components/ui/AuthButton'
 
 interface Props {
   activeCategory: ActiveCategory
@@ -807,6 +808,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           )}
         </button>
 
+        <AuthButton embedded showLabels={showLabels} sidebarW={sidebarW} />
         <SizeControl />
       </div>
 

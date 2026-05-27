@@ -65,6 +65,14 @@ export default function GeovisorPage() {
     setSelectedFamiliaId(null)
   }, [])
 
+  const handleSelectProyeccion = useCallback((id: string | null) => {
+    setActiveProyeccionId(id)
+    if (id !== null) {
+      setActiveCategory(null)
+      setSelectedFamiliaId(null)
+    }
+  }, [])
+
   useEffect(() => {
     setScreenW(window.innerWidth)
     function onResize() { setScreenW(window.innerWidth) }
@@ -148,7 +156,7 @@ export default function GeovisorPage() {
         isMobile={isMobile}
         proyecciones={proyecciones}
         activeProyeccionId={activeProyeccionId}
-        onSelectProyeccion={setActiveProyeccionId}
+        onSelectProyeccion={handleSelectProyeccion}
       />
 
       <RightPanel
