@@ -794,13 +794,13 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             {/* Título */}
             {!compact && (
               <div style={{ marginBottom: 12 }}>
-                <div style={{ color: METAS_COLOR, fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+                <div style={{ color: METAS_COLOR, fontSize: 14, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
                   Metas · Fase 1
                 </div>
-                <div style={{ color: '#fff', fontSize: 18, fontWeight: 800, lineHeight: 1.25, marginBottom: 3 }}>
+                <div style={{ color: '#fff', fontSize: 20, fontWeight: 800, lineHeight: 1.25, marginBottom: 3 }}>
                   Plan Andino-Amazónico
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, letterSpacing: '0.02em' }}>
+                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14, letterSpacing: '0.02em' }}>
                   Restauración · 2026 – 2032
                 </div>
               </div>
@@ -813,13 +813,13 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 background: `${METAS_COLOR}0D`, border: `1px solid ${METAS_COLOR}25`,
                 borderRadius: 9,
               }}>
-                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>
                   Veredas en el mapa
                 </div>
-                <div style={{ color: '#fff', fontSize: 18, fontWeight: 800 }}>
-                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 14, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
+                <div style={{ color: '#fff', fontSize: 20, fontWeight: 800 }}>
+                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 15, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
                 </div>
-                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 13, marginTop: 4, lineHeight: 1.5 }}>
+                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 14, marginTop: 4, lineHeight: 1.5 }}>
                   {VEREDAS_POR_AÑO[metasYear]?.join(' · ') ?? ''}
                 </div>
               </div>
