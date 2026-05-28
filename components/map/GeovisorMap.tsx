@@ -56,6 +56,14 @@ const YEAR_COLORS: Record<number, { stroke: string; fill: string }> = {
   2032: { stroke: '#34D399', fill: '#6EE7B7' },  // Teal
 }
 
+// Mapeo año-slider → anio del polígono que cubre ese año.
+// Polígono 1 (anio=2026) cubre 2026 y 2027; Polígono 5 (anio=2031) cubre 2031 y 2032.
+function effectivePolygonYear(sliderYear: number): number {
+  if (sliderYear === 2027) return 2026
+  if (sliderYear === 2032) return 2031
+  return sliderYear
+}
+
 function renderVeredasLayer(
   features: VeredaFeature[],
   year: number,
@@ -78,7 +86,7 @@ function renderVeredasLayer(
     {
       style: (feature) => {
         const anio = (feature as VeredaFeature).properties.anio ?? year
-        const isCurrentYear = anio === year
+        const isCurrentYear = anio === effectivePolygonYear(year)
         const palette = YEAR_COLORS[anio] ?? { stroke: '#C49A40', fill: '#C49A40' }
         return {
           color:       palette.stroke,
@@ -110,8 +118,9 @@ function renderVeredasLayer(
   geo.addTo(layerGroup)
   layerRef.current = geo
 
-  // Fly-to veredas del año actual (las nuevas)
-  const current = filtered.filter(f => f.properties.anio === year)
+  // Fly-to veredas del año actual (mapeado: 2027→Polígono 1, 2032→Polígono 5)
+  const polyYear = effectivePolygonYear(year)
+  const current = filtered.filter(f => f.properties.anio === polyYear)
   if (current.length > 0) {
     const bounds = L.geoJSON({ type: 'FeatureCollection', features: current } as GeoJSON.FeatureCollection).getBounds()
     if (bounds.isValid()) {

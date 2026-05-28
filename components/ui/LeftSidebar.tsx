@@ -928,23 +928,23 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             {/* Leyenda de polígonos por año ─────────────────────────── */}
             {!compact && (
               <div style={{
-                marginTop: 18, paddingTop: 14,
+                marginTop: 20, paddingTop: 16,
                 borderTop: '1px solid rgba(255,255,255,0.08)',
               }}>
                 <div style={{
-                  color: 'rgba(255,255,255,0.38)', fontSize: 12,
-                  textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6,
+                  color: 'rgba(255,255,255,0.42)', fontSize: 14,
+                  textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 7,
                 }}>
                   Leyenda
                 </div>
                 <div style={{
-                  color: `${METAS_COLOR}DD`, fontSize: 14, fontWeight: 700,
+                  color: `${METAS_COLOR}DD`, fontSize: 16, fontWeight: 700,
                   lineHeight: 1.35, marginBottom: 3,
                 }}>
                   Fase 1 · 2026 – 2030
                 </div>
                 <div style={{
-                  color: 'rgba(255,255,255,0.5)', fontSize: 13, marginBottom: 12,
+                  color: 'rgba(255,255,255,0.55)', fontSize: 15, marginBottom: 14,
                 }}>
                   Piedemonte Andino-Amazónico
                 </div>
@@ -956,17 +956,17 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   { label: '2031 – 2032', stroke: '#FB923C', fill: '#FDBA74' },
                 ].map(({ label, stroke, fill }) => (
                   <div key={label} style={{
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    padding: '6px 0',
+                    display: 'flex', alignItems: 'center', gap: 11,
+                    padding: '7px 0',
                   }}>
                     <div style={{
-                      width: 16, height: 16, borderRadius: 4,
+                      width: 18, height: 18, borderRadius: 4,
                       background: fill,
                       border: `1.5px solid ${stroke}`,
                       flexShrink: 0,
                     }} />
                     <span style={{
-                      color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 600,
+                      color: 'rgba(255,255,255,0.72)', fontSize: 15, fontWeight: 600,
                     }}>
                       {label}
                     </span>
