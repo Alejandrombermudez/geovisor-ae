@@ -794,13 +794,13 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             {/* Título */}
             {!compact && (
               <div style={{ marginBottom: 12 }}>
-                <div style={{ color: METAS_COLOR, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
-                  🎯 Metas · Fase 1
+                <div style={{ color: METAS_COLOR, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+                  Metas · Fase 1
                 </div>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 800, lineHeight: 1.25, marginBottom: 3 }}>
+                <div style={{ color: '#fff', fontSize: 15, fontWeight: 800, lineHeight: 1.25, marginBottom: 3 }}>
                   Plan Andino-Amazónico
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, letterSpacing: '0.02em' }}>
+                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, letterSpacing: '0.02em' }}>
                   Restauración · 2026 – 2032
                 </div>
               </div>
@@ -813,13 +813,13 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 background: `${METAS_COLOR}0D`, border: `1px solid ${METAS_COLOR}25`,
                 borderRadius: 8,
               }}>
-                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>
-                  📍 Veredas en el mapa
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>
+                  Veredas en el mapa
                 </div>
-                <div style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>
-                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
+                <div style={{ color: '#fff', fontSize: 15, fontWeight: 800 }}>
+                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
                 </div>
-                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 9, marginTop: 4, lineHeight: 1.5 }}>
+                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 11, marginTop: 4, lineHeight: 1.5 }}>
                   {VEREDAS_POR_AÑO[metasYear]?.join(' · ') ?? ''}
                 </div>
               </div>
@@ -828,17 +828,17 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             {/* Selector de año — dropdown */}
             {!compact && (
               <div style={{ marginBottom: 10 }}>
-                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
-                  📅 Año de intervención
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+                  Año de intervención
                 </div>
                 <select
                   value={metasYear}
                   onChange={e => handleMetasYear(Number(e.target.value))}
                   style={{
-                    width: '100%', padding: '8px 10px',
+                    width: '100%', padding: '9px 12px',
                     background: 'rgba(255,255,255,0.08)',
                     border: `1px solid ${METAS_COLOR}40`,
-                    borderRadius: 8, color: '#fff', fontSize: 12, fontWeight: 700,
+                    borderRadius: 8, color: '#fff', fontSize: 14, fontWeight: 700,
                     cursor: 'pointer', outline: 'none',
                     appearance: 'none', WebkitAppearance: 'none',
                   }}
@@ -854,9 +854,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             <div style={{ marginBottom: 14 }}>
               {!compact && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, fontWeight: 600 }}>{YEAR_MIN}</span>
-                  <span style={{ color: METAS_COLOR, fontSize: 18, fontWeight: 800, letterSpacing: '-0.01em' }}>{metasYear}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, fontWeight: 600 }}>{YEAR_MAX}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 600 }}>{YEAR_MIN}</span>
+                  <span style={{ color: METAS_COLOR, fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em' }}>{metasYear}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 600 }}>{YEAR_MAX}</span>
                 </div>
               )}
               {/* Track + input invisible superpuesto */}
@@ -894,9 +894,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                         background: y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.07)',
                         border: `1px solid ${y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.10)'}`,
                         borderRadius: 6,
-                        color: y === metasYear ? '#000' : 'rgba(255,255,255,0.5)',
-                        fontSize: 11, fontWeight: 700,
-                        padding: '6px 0',
+                        color: y === metasYear ? '#000' : 'rgba(255,255,255,0.55)',
+                        fontSize: 13, fontWeight: 700,
+                        padding: '9px 0',
                         cursor: 'pointer', transition: 'all 0.15s ease',
                         textAlign: 'center',
                       }}
@@ -911,18 +911,17 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
               <button
                 onClick={onOpenMetasMetrics}
                 style={{
-                  width: '100%', padding: '10px 12px',
+                  width: '100%', padding: '14px 12px',
                   background: `linear-gradient(135deg, ${METAS_COLOR} 0%, #F97316 100%)`,
                   border: 'none', borderRadius: 8, color: '#000',
-                  fontSize: 12, fontWeight: 800, cursor: 'pointer',
-                  letterSpacing: '0.03em', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', gap: 7,
+                  fontSize: 16, fontWeight: 800, cursor: 'pointer',
+                  letterSpacing: '0.03em',
                   transition: 'opacity 0.15s ease',
                 }}
                 onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
                 onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
               >
-                📊 Métricas
+                Métricas
               </button>
             )}
           </div>
