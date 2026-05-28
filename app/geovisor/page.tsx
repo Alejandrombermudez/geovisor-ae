@@ -94,12 +94,30 @@ export default function GeovisorPage() {
   /** true → LeftSidebar abre la vista Metas (activado desde intro hub card 3) */
   const [openMetasView,     setOpenMetasView]     = useState(false)
 
+  /** Activa/desactiva la vista Metas: habilita Fase I, oculta capas de familias */
+  const handleMetasViewToggle = useCallback((open: boolean) => {
+    if (open) {
+      const fase1 = proyecciones[0]
+      if (fase1) setActiveProyeccionId(fase1.id)
+      setActiveCategory(null)
+      setSelectedFamiliaId(null)
+      setMetasLayerActive(true)
+    } else {
+      setActiveProyeccionId(null)
+      setMetasLayerActive(false)
+    }
+  }, [proyecciones])
+
   const handleOpenMetasFromHub = useCallback(() => {
-    setMetasLayerActive(true)
     setOpenMetasView(true)
-    // Resetear el flag de apertura tras un tick para que pueda volver a dispararse
     setTimeout(() => setOpenMetasView(false), 300)
-  }, [])
+    // También activar la vista Metas como si viniera del sidebar
+    const fase1 = proyecciones[0]
+    if (fase1) setActiveProyeccionId(fase1.id)
+    setActiveCategory(null)
+    setSelectedFamiliaId(null)
+    setMetasLayerActive(true)
+  }, [proyecciones])
 
   const handleCloseMetasMetrics = useCallback(() => {
     setMetasMetricsOpen(false)
@@ -214,6 +232,7 @@ export default function GeovisorPage() {
         proyecciones={proyecciones}
         activeProyeccionId={activeProyeccionId}
         metasYear={metasLayerActive ? metasYear : null}
+        metasMode={metasLayerActive}
       />
 
       <LeftSidebar
@@ -232,6 +251,7 @@ export default function GeovisorPage() {
         onMetasYearChange={(y) => { setMetasYear(y); setMetasLayerActive(true) }}
         onOpenMetasMetrics={() => setMetasMetricsOpen(true)}
         openMetasView={openMetasView}
+        onMetasViewToggle={handleMetasViewToggle}
       />
 
       <RightPanel

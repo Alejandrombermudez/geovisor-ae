@@ -24,6 +24,8 @@ interface Props {
   activeProyeccionId?: string | null
   /** Año seleccionado en la vista Metas. null = capa oculta */
   metasYear?: number | null
+  /** En modo Metas solo renderizar la proyección activa (no Fase II ni III) */
+  metasMode?: boolean
 }
 
 // ── Capa de veredas Metas (GeoJSON filtrado por año acumulado) ───────────────
@@ -43,6 +45,17 @@ interface VeredaFeature {
 
 // GeoJSON cacheado globalmente para no re-fetchear en cada cambio de año
 let _veredasCache: VeredaFeature[] | null = null
+
+// Paleta de colores por año — visualmente distintos, legibles sobre satélite
+const YEAR_COLORS: Record<number, { stroke: string; fill: string }> = {
+  2026: { stroke: '#F59E0B', fill: '#FCD34D' },  // Amber
+  2027: { stroke: '#10B981', fill: '#6EE7B7' },  // Emerald
+  2028: { stroke: '#60A5FA', fill: '#93C5FD' },  // Blue
+  2029: { stroke: '#C084FC', fill: '#DDD6FE' },  // Purple
+  2030: { stroke: '#F472B6', fill: '#FBCFE8' },  // Pink
+  2031: { stroke: '#FB923C', fill: '#FDBA74' },  // Orange
+  2032: { stroke: '#34D399', fill: '#6EE7B7' },  // Teal
+}
 
 function renderVeredasLayer(
   features: VeredaFeature[],
@@ -67,25 +80,27 @@ function renderVeredasLayer(
       style: (feature) => {
         const anio = (feature as VeredaFeature).properties.anio ?? year
         const isCurrentYear = anio === year
+        const palette = YEAR_COLORS[anio] ?? { stroke: '#FAB758', fill: '#FAB758' }
         return {
-          color:       '#FAB758',
-          fillColor:   '#FAB758',
+          color:       palette.stroke,
+          fillColor:   palette.fill,
           weight:      isCurrentYear ? 2.5 : 1.5,
-          opacity:     isCurrentYear ? 0.9 : 0.55,
-          fillOpacity: isCurrentYear ? 0.22 : 0.10,
+          opacity:     isCurrentYear ? 0.92 : 0.6,
+          fillOpacity: isCurrentYear ? 0.32 : 0.12,
         }
       },
       onEachFeature: (feature, lyr) => {
-        const p = (feature as VeredaFeature).properties
-        const area = p.area_ha != null ? p.area_ha.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : '—'
+        const p      = (feature as VeredaFeature).properties
+        const area   = p.area_ha != null ? p.area_ha.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : '—'
+        const pal    = YEAR_COLORS[p.anio ?? 0] ?? { stroke: '#FAB758' }
         lyr.bindTooltip(
           `<div style="font-family:system-ui;font-size:12px;line-height:1.6">
             <strong style="font-size:13px">${p.nombre_ver}</strong><br/>
             ${p.nomb_mpio} · ${area} ha<br/>
-            <span style="color:#FAB758;font-weight:700">AE ${p.meta_ae.toLocaleString('es-CO')} ha</span>
+            <span style="color:#74A884;font-weight:700">AE ${p.meta_ae.toLocaleString('es-CO')} ha</span>
             &nbsp;·&nbsp;
             <span style="color:#6898B8;font-weight:700">FB ${p.meta_fb.toLocaleString('es-CO')} ha</span><br/>
-            <span style="color:rgba(255,255,255,0.55);font-size:10px">Año de intervención: ${p.anio}</span>
+            <span style="color:${pal.stroke};font-weight:600;font-size:10px">● Intervención ${p.anio}</span>
           </div>`,
           { sticky: true },
         )
@@ -163,7 +178,7 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
   return null
 }
 
-export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null, metasYear = null }: Props) {
+export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null, metasYear = null, metasMode = false }: Props) {
   // When a family is selected, only show its layers; otherwise show everything
   const polyFilter = (item: PolygonLayerData) =>
     !selectedFamiliaId || item.familia.id === selectedFamiliaId
@@ -272,14 +287,17 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         <StaticLayer key={cfg.id} config={cfg} />
       ))}
 
-      {/* ── Proyecciones / fases geográficas — solo en modo Conectividad ── */}
-      {activeProyeccionId && proyecciones.map((proy) => (
-        <ProyeccionLayer
-          key={proy.id}
-          proyeccion={proy}
-          isActive={proy.id === activeProyeccionId}
-        />
-      ))}
+      {/* ── Proyecciones / fases geográficas ─────────────────────────── */}
+      {activeProyeccionId && proyecciones
+        // En modo Metas solo mostrar la proyección activa (Fase I); en Conectividad mostrar todas
+        .filter(p => !metasMode || p.id === activeProyeccionId)
+        .map((proy) => (
+          <ProyeccionLayer
+            key={proy.id}
+            proyeccion={proy}
+            isActive={proy.id === activeProyeccionId}
+          />
+        ))}
 
       {/* ── Cámaras trampa ────────────────────────────────────────── */}
       {visibleLayers.camarasSiembra && (

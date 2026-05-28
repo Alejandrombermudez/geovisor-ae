@@ -23,6 +23,8 @@ interface Props {
   onOpenMetasMetrics?: () => void
   /** Fuerza la apertura de la vista Metas (desde el intro hub) */
   openMetasView?: boolean
+  /** Llamado cuando se entra/sale de la vista Metas — para activar/desactivar Fase 1 en el mapa */
+  onMetasViewToggle?: (open: boolean) => void
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -135,7 +137,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas'>('main')
@@ -200,9 +202,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
   const openMetas = useCallback(() => {
     setView('metas')
     setSidebarW(presets[2])
-    // Notifica el año actual al padre para activar la capa en el mapa
     onMetasYearChange?.(metasYear)
-  }, [presets, metasYear, onMetasYearChange])
+    onMetasViewToggle?.(true)
+  }, [presets, metasYear, onMetasYearChange, onMetasViewToggle])
 
   // Cuando el sidebar se abre en la vista Metas y el usuario ya estaba en esa vista,
   // también debemos notificar al padre si aún no se notificó
@@ -223,10 +225,12 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
   }, [onSelectProyeccion])
 
   const backToMain = useCallback(() => {
+    // Si volvemos desde la vista Metas, notificar al padre para desactivar Fase 1
+    if (view === 'metas') onMetasViewToggle?.(false)
     setView('main')
     setActivePhaseFallback(null)
     onSelectProyeccion?.(null)
-  }, [onSelectProyeccion])
+  }, [view, onSelectProyeccion, onMetasViewToggle])
 
   const startDrag = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
