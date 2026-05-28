@@ -1,0 +1,120 @@
+{
+  "amazonia_emprende": {
+    "label": "Amazonia Emprende",
+    "color": "#74A884",
+    "proyectos": [
+      "Ley 2173 / enriquecimiento",
+      "Conexión Biodiversa",
+      "Obras por Impuesto"
+    ],
+    "por_anio": {
+      "2026": {
+        "ley2173": null,
+        "conexion": 22,
+        "obras": null,
+        "total": 22,
+        "acumulado": 22
+      },
+      "2027": {
+        "ley2173": 606,
+        "conexion": 500,
+        "obras": 500,
+        "total": 1606,
+        "acumulado": 1628
+      },
+      "2028": {
+        "ley2173": 1515,
+        "conexion": 1500,
+        "obras": 700,
+        "total": 3715,
+        "acumulado": 5343
+      },
+      "2029": {
+        "ley2173": 3030,
+        "conexion": 2000,
+        "obras": 1300,
+        "total": 6330,
+        "acumulado": 11674
+      },
+      "2030": {
+        "ley2173": 3030,
+        "conexion": 2500,
+        "obras": 1800,
+        "total": 7330,
+        "acumulado": 19004
+      },
+      "2031": {
+        "ley2173": 4545,
+        "conexion": 3000,
+        "obras": 2300,
+        "total": 9845,
+        "acumulado": 28849
+      },
+      "2032": {
+        "ley2173": 6061,
+        "conexion": 3500,
+        "obras": 2800,
+        "total": 12361,
+        "acumulado": 41210
+      }
+    }
+  },
+  "bancolombia": {
+    "label": "Fundación Bancolombia",
+    "color": "#6898B8",
+    "proyectos": [
+      "Ley 2173 / enriquecimiento",
+      "Conexión Biodiversa",
+      "Obras por Impuesto"
+    ],
+    "por_anio": {
+      "2027": {
+        "ley2173": 152,
+        "conexion": 0,
+        "obras": 150,
+        "total": 302,
+        "acumulado": 302
+      },
+      "2028": {
+        "ley2173": 152,
+        "conexion": 0,
+        "obras": 210,
+        "total": 362,
+        "acumulado": 664
+      },
+      "2029": {
+        "ley2173": 152,
+        "conexion": 0,
+        "obras": 390,
+        "total": 542,
+        "acumulado": 1206
+      },
+      "2030": {
+        "ley2173": 152,
+        "conexion": 0,
+        "obras": 540,
+        "total": 692,
+        "acumulado": 1898
+      },
+      "2031": {
+        "ley2173": 152,
+        "conexion": 0,
+        "obras": 690,
+        "total": 842,
+        "acumulado": 2740
+      },
+      "2032": {
+        "ley2173": 152,
+        "conexion": 0,
+        "obras": 840,
+        "total": 992,
+        "acumulado": 3732
+      }
+    }
+  },
+  "meta_total_ae": 41210,
+  "meta_total_fb": 3732,
+  "anio_inicio": 2026,
+  "anio_fin": 2032,
+  "nombre_fase": "Fase 1 — Plan Andino-Amazónico del Caquetá"
+}

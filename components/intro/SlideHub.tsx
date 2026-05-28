@@ -5,7 +5,7 @@ import { INTRO_FONT, type Slide1 } from '@/lib/intro-slides'
 
 interface Props {
   slide: Slide1
-  onCardClick: (targetSlides: number[]) => void
+  onCardClick: (cardId: string, targetSlides: number[]) => void
   onClose: () => void
 }
 
@@ -144,22 +144,29 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
           }}
         >
           {slide.cards.map((card, i) => {
-            const disabled = !card.enabled
+            // La tercera card (como) siempre habilitada — redirige a Metas
+            const isMetasCard = card.id === 'como'
+            const disabled = isMetasCard ? false : !card.enabled
+            const METAS_ACCENT = '#FAB758'
             return (
               <button
                 key={card.id}
-                onClick={() => !disabled && onCardClick(card.target_slides)}
+                onClick={() => !disabled && onCardClick(card.id, card.target_slides)}
                 disabled={disabled}
                 style={{
                   textAlign: 'left',
                   background: disabled
                     ? 'rgba(255,255,255,0.04)'
-                    : 'rgba(255,255,255,0.08)',
+                    : isMetasCard
+                      ? 'rgba(250,183,88,0.08)'
+                      : 'rgba(255,255,255,0.08)',
                   backdropFilter: 'blur(14px)',
                   WebkitBackdropFilter: 'blur(14px)',
                   border: disabled
                     ? '1px solid rgba(255,255,255,0.08)'
-                    : '1px solid rgba(116,168,132,0.35)',
+                    : isMetasCard
+                      ? `1px solid ${METAS_ACCENT}50`
+                      : '1px solid rgba(116,168,132,0.35)',
                   borderRadius: 18,
                   padding: 'clamp(20px, 2.4vw, 30px)',
                   color: disabled ? 'rgba(255,255,255,0.4)' : '#fff',
@@ -173,13 +180,13 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
                 }}
                 onMouseEnter={e => {
                   if (disabled) return
-                  e.currentTarget.style.background = 'rgba(116,168,132,0.18)'
-                  e.currentTarget.style.borderColor = 'rgba(116,168,132,0.65)'
+                  e.currentTarget.style.background = isMetasCard ? 'rgba(250,183,88,0.18)' : 'rgba(116,168,132,0.18)'
+                  e.currentTarget.style.borderColor = isMetasCard ? `${METAS_ACCENT}90` : 'rgba(116,168,132,0.65)'
                 }}
                 onMouseLeave={e => {
                   if (disabled) return
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
-                  e.currentTarget.style.borderColor = 'rgba(116,168,132,0.35)'
+                  e.currentTarget.style.background = isMetasCard ? 'rgba(250,183,88,0.08)' : 'rgba(255,255,255,0.08)'
+                  e.currentTarget.style.borderColor = isMetasCard ? `${METAS_ACCENT}50` : 'rgba(116,168,132,0.35)'
                 }}
               >
                 <div
@@ -187,8 +194,10 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
                     width: 'clamp(38px, 3.2vw, 52px)', height: 'clamp(38px, 3.2vw, 52px)', borderRadius: '50%',
                     background: disabled
                       ? 'rgba(255,255,255,0.08)'
-                      : 'linear-gradient(135deg, #74A884, #6898B8)',
-                    color: '#fff',
+                      : isMetasCard
+                        ? `linear-gradient(135deg, ${METAS_ACCENT}, #F97316)`
+                        : 'linear-gradient(135deg, #74A884, #6898B8)',
+                    color: isMetasCard ? '#000' : '#fff',
                     fontSize: 'clamp(16px, 1.3vw, 20px)', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}
@@ -227,10 +236,19 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
                     display: 'flex', alignItems: 'center', gap: 8,
                     fontSize: 'clamp(12px, 0.9vw, 14px)', fontWeight: 700, letterSpacing: '0.12em',
                     textTransform: 'uppercase',
-                    color: disabled ? 'rgba(255,255,255,0.32)' : '#74A884',
+                    color: disabled
+                      ? 'rgba(255,255,255,0.32)'
+                      : isMetasCard
+                        ? METAS_ACCENT
+                        : '#74A884',
                   }}
                 >
-                  {card.coming_soon ? (
+                  {isMetasCard ? (
+                    <>
+                      Ver Metas
+                      <span aria-hidden style={{ fontSize: 16, transform: 'translateY(-1px)' }}>🎯</span>
+                    </>
+                  ) : card.coming_soon ? (
                     'Próximamente'
                   ) : (
                     <>

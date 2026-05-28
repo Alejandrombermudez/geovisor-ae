@@ -57,7 +57,7 @@ export interface RasFamilia {
   updated_at: string | null
 }
 
-export type ActiveCategory = 'siembra' | 'ras' | null
+export type ActiveCategory = 'siembra' | 'ras' | 'metas' | null
 
 export interface FotoCamara {
   id: string

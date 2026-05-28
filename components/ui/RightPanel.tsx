@@ -44,9 +44,11 @@ export default function RightPanel({
   isMobile,
   selectedFamiliaId,
 }: Props) {
-  const isOpen = activeCategory !== null
-  const config = activeCategory ? CATEGORY_CONFIG[activeCategory] : null
-  const familias = activeCategory === 'siembra' ? siembraFamilias : rasFamilias
+  // RightPanel solo maneja 'siembra' y 'ras'; 'metas' tiene su propio MetasPanel
+  const activeFamilyCategory = activeCategory === 'siembra' || activeCategory === 'ras' ? activeCategory : null
+  const isOpen = activeFamilyCategory !== null
+  const config = activeFamilyCategory ? CATEGORY_CONFIG[activeFamilyCategory] : null
+  const familias = activeFamilyCategory === 'siembra' ? siembraFamilias : rasFamilias
 
   const [viewerState, setViewerState] = useState<{ photos: FotoPredio[]; index: number } | null>(null)
   useEffect(() => { setViewerState(null) }, [activeCategory])
@@ -416,7 +418,7 @@ export default function RightPanel({
                   ) : (
                     <FamilyCard
                       familia={f}
-                      category={activeCategory!}
+                      category={activeFamilyCategory!}
                       accentColor={config!.color}
                       isSelected={f.id === selectedFamiliaId}
                       onSelect={() => onSelectFamilia(f.id)}

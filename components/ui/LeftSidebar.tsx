@@ -16,6 +16,13 @@ interface Props {
   onLogout?: () => void
   onRequestLogin?: () => void
   onOpenIntro?: () => void
+  /** Año seleccionado en la vista Metas (notificado al padre para el mapa) */
+  metasYear?: number
+  onMetasYearChange?: (year: number) => void
+  /** Abre el panel derecho de Métricas */
+  onOpenMetasMetrics?: () => void
+  /** Fuerza la apertura de la vista Metas (desde el intro hub) */
+  openMetasView?: boolean
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -128,12 +135,16 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
-  const [view,      setView]      = useState<'main' | 'about' | 'proyecciones'>('main')
+  const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas'>('main')
   const [hovered,   setHovered]   = useState<string | null>(null)
   const [logoError, setLogoError] = useState(false)
+
+  // Estado interno de año en vista Metas (se sincroniza con el padre via onMetasYearChange)
+  const [metasYear, setMetasYear] = useState(metasYearProp)
+  const METAS_YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032] as const
 
   // Fase actualmente visible en la vista proyecciones
   const [activePhaseFallback, setActivePhaseFallback] = useState<string | null>(null)
@@ -185,6 +196,26 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
       onSelectProyeccion?.(first)
     }
   }, [presets, activeProyeccionId, proyecciones, onSelectProyeccion])
+
+  const openMetas = useCallback(() => {
+    setView('metas')
+    setSidebarW(presets[2])
+    // Notifica el año actual al padre para activar la capa en el mapa
+    onMetasYearChange?.(metasYear)
+  }, [presets, metasYear, onMetasYearChange])
+
+  // Cuando el sidebar se abre en la vista Metas y el usuario ya estaba en esa vista,
+  // también debemos notificar al padre si aún no se notificó
+
+  const handleMetasYear = useCallback((year: number) => {
+    setMetasYear(year)
+    onMetasYearChange?.(year)
+  }, [onMetasYearChange])
+
+  // Abrir la vista Metas si el padre lo solicita (desde el hub intro)
+  useEffect(() => {
+    if (openMetasView) openMetas()
+  }, [openMetasView, openMetas])
 
   const selectPhase = useCallback((id: string) => {
     setActivePhaseFallback(id)
@@ -706,6 +737,193 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
     )
   }
 
+  // ── Vista "Metas" ────────────────────────────────────────────────────────
+  if (view === 'metas') {
+    const compact = !showLabels
+    const YEAR_MIN  = 2026
+    const YEAR_MAX  = 2032
+    const YEAR_RANGE = YEAR_MAX - YEAR_MIN
+    const sliderPct  = YEAR_RANGE > 0 ? ((metasYear - YEAR_MIN) / YEAR_RANGE) * 100 : 0
+    const METAS_COLOR = '#FAB758'
+
+    // Info de la capa por año seleccionado (cuántas veredas acumuladas)
+    const VEREDAS_POR_AÑO: Record<number, string[]> = {
+      2026: ['Delicias', 'Lagunilla'],
+      2027: ['La Raya', 'Buenos Aires'],
+      2028: ['Bodoquero', 'La Turbia Alta', 'Macagual'],
+      2029: ['Bocagrande', 'San Gil', 'Vuelta del Gallo', 'Costa Rica'],
+      2030: ['La Iberia', 'La Turbia Arriba', 'San Pablo', 'Santo Domingo'],
+      2031: ['Alto Venecia', 'Vergel', 'La Astilla'],
+      2032: ['Alto Jordán', 'Santuario', 'Jordán Alto', 'Las Iglesias Bajas'],
+    }
+    // Acumulado hasta el año seleccionado
+    const veredasAcum = METAS_YEARS
+      .filter(y => y <= metasYear)
+      .flatMap(y => VEREDAS_POR_AÑO[y] ?? [])
+
+    return (
+      <div style={sidebarBase}>
+        {/* Botón volver */}
+        <button onClick={backToMain} onMouseEnter={() => setHovered('back')} onMouseLeave={() => setHovered(null)}
+          style={{
+            width: '100%', background: hovered === 'back' ? 'rgba(255,255,255,0.07)' : 'transparent',
+            border: 'none', borderLeft: '4px solid transparent',
+            color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center',
+            justifyContent: compact ? 'center' : 'flex-start',
+            gap: 8, padding: compact ? '12px 4px' : '11px 14px',
+            fontSize: 12, fontWeight: 600, flexShrink: 0, transition: 'all 0.15s ease',
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+            <path d="M9 2.5L4.5 7 9 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {!compact && <span>Volver</span>}
+        </button>
+
+        <div style={{ width: '80%', height: 1, background: 'rgba(255,255,255,0.08)', margin: '2px 0 10px', flexShrink: 0 }} />
+
+        {/* Contenido scrollable */}
+        <div className="geo-about-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
+          <div style={{ padding: compact ? '0 4px 16px' : '0 12px 16px' }}>
+
+            {/* Título */}
+            {!compact && (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ color: METAS_COLOR, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+                  🎯 Metas · Fase 1
+                </div>
+                <div style={{ color: '#fff', fontSize: 13, fontWeight: 800, lineHeight: 1.25, marginBottom: 3 }}>
+                  Plan Andino-Amazónico
+                </div>
+                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, letterSpacing: '0.02em' }}>
+                  Restauración · 2026 – 2032
+                </div>
+              </div>
+            )}
+
+            {/* Info general de la capa */}
+            {!compact && (
+              <div style={{
+                padding: '9px 11px', marginBottom: 12,
+                background: `${METAS_COLOR}0D`, border: `1px solid ${METAS_COLOR}25`,
+                borderRadius: 8,
+              }}>
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>
+                  📍 Veredas en el mapa
+                </div>
+                <div style={{ color: '#fff', fontSize: 13, fontWeight: 800 }}>
+                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 10, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
+                </div>
+                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 9, marginTop: 4, lineHeight: 1.5 }}>
+                  {VEREDAS_POR_AÑO[metasYear]?.join(' · ') ?? ''}
+                </div>
+              </div>
+            )}
+
+            {/* Selector de año — dropdown */}
+            {!compact && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 9, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+                  📅 Año de intervención
+                </div>
+                <select
+                  value={metasYear}
+                  onChange={e => handleMetasYear(Number(e.target.value))}
+                  style={{
+                    width: '100%', padding: '8px 10px',
+                    background: 'rgba(255,255,255,0.08)',
+                    border: `1px solid ${METAS_COLOR}40`,
+                    borderRadius: 8, color: '#fff', fontSize: 12, fontWeight: 700,
+                    cursor: 'pointer', outline: 'none',
+                    appearance: 'none', WebkitAppearance: 'none',
+                  }}
+                >
+                  {METAS_YEARS.map(y => (
+                    <option key={y} value={y} style={{ background: '#1a1a1a' }}>{y}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {/* Barra de progreso de años */}
+            <div style={{ marginBottom: 12 }}>
+              {!compact && (
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9 }}>{YEAR_MIN}</span>
+                  <span style={{ color: METAS_COLOR, fontSize: 10, fontWeight: 700 }}>{metasYear}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9 }}>{YEAR_MAX}</span>
+                </div>
+              )}
+              <div style={{ position: 'relative', padding: '4px 0' }}>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 4, height: 6, overflow: 'visible', position: 'relative' }}>
+                  <div style={{
+                    width: `${sliderPct}%`, height: '100%',
+                    background: `linear-gradient(90deg, ${METAS_COLOR}80, ${METAS_COLOR})`,
+                    borderRadius: 4, transition: 'width 0.5s ease',
+                  }} />
+                </div>
+                <input
+                  type="range"
+                  min={YEAR_MIN}
+                  max={YEAR_MAX}
+                  step={1}
+                  value={metasYear}
+                  onChange={e => handleMetasYear(Number(e.target.value))}
+                  style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    opacity: 0, cursor: 'pointer', margin: 0,
+                  }}
+                />
+              </div>
+              {!compact && (
+                <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 6, gap: 2 }}>
+                  {METAS_YEARS.map(y => (
+                    <button
+                      key={y}
+                      onClick={() => handleMetasYear(y)}
+                      style={{
+                        background: y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.08)',
+                        border: 'none', borderRadius: 4,
+                        color: y === metasYear ? '#000' : 'rgba(255,255,255,0.45)',
+                        fontSize: 8, fontWeight: 700, padding: '3px 4px',
+                        cursor: 'pointer', transition: 'all 0.15s ease',
+                        minWidth: 24,
+                      }}
+                    >{y}</button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Botón Métricas */}
+            {!compact && (
+              <button
+                onClick={onOpenMetasMetrics}
+                style={{
+                  width: '100%', padding: '10px 12px',
+                  background: `linear-gradient(135deg, ${METAS_COLOR} 0%, #F97316 100%)`,
+                  border: 'none', borderRadius: 8, color: '#000',
+                  fontSize: 12, fontWeight: 800, cursor: 'pointer',
+                  letterSpacing: '0.03em', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', gap: 7,
+                  transition: 'opacity 0.15s ease',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+              >
+                📊 Métricas
+              </button>
+            )}
+          </div>
+        </div>
+
+        <SizeControl />
+        <DragHandle />
+      </div>
+    )
+  }
+
   // ── Vista principal ───────────────────────────────────────────────────────
   return (
     <div style={sidebarBase}>
@@ -758,7 +976,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           )
         })}
 
-        {/* Separador + botón Proyecciones */}
+        {/* Separador + botón Proyecciones (Conectividad) */}
         {proyecciones.length > 0 && (
           <>
             <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '6px auto 4px' }} />
@@ -784,12 +1002,37 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             </button>
           </>
         )}
+
+        {/* Botón Metas (debajo de Conectividad) */}
+        <>
+          <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px auto 2px' }} />
+          <button
+            onClick={openMetas}
+            onMouseEnter={() => setHovered('metas')} onMouseLeave={() => setHovered(null)}
+            title={showLabels ? undefined : 'Metas de restauración · Fase 1'}
+            style={{
+              background: hovered === 'metas' ? 'rgba(250,183,89,0.12)' : 'transparent',
+              border: 'none', borderLeft: '4px solid transparent',
+              color: hovered === 'metas' ? '#FAB758' : 'rgba(255,255,255,0.45)',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 5, width: '100%', padding: '12px 4px', transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: showLabels ? iconSize : iconSize + 2, lineHeight: 1 }}>🎯</span>
+            {showLabels && (
+              <span style={{ fontSize: sidebarW > 160 ? 12 : 11, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                Metas
+              </span>
+            )}
+          </button>
+        </>
       </div>
 
       {/* Sección inferior fija */}
       <div style={{ flexShrink: 0, width: '100%' }}>
-        {/* Botón "Acerca del proyecto" — abre la intro */}
-        {onOpenIntro && (
+        {/* Botón "Acerca del proyecto" — visible SOLO cuando el usuario está autenticado */}
+        {onOpenIntro && authUser && (
           <button
             onClick={onOpenIntro}
             onMouseEnter={() => setHovered('intro')} onMouseLeave={() => setHovered(null)}

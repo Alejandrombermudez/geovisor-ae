@@ -7,6 +7,7 @@ import type { SiembraFamilia, RasFamilia, ActiveCategory, VisibleLayers, Proyecc
 import { useGeovisorData } from '@/hooks/useGeovisorData'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
+import MetasPanel from '@/components/ui/MetasPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
@@ -84,6 +85,25 @@ export default function GeovisorPage() {
   const [selectedFamiliaId,  setSelectedFamiliaId]  = useState<string | null>(null)
   const [proyecciones,       setProyecciones]       = useState<Proyeccion[]>([])
   const [activeProyeccionId, setActiveProyeccionId] = useState<string | null>(null)
+
+  // ── Metas ──────────────────────────────────────────────────────────────
+  const [metasYear,         setMetasYear]         = useState(2026)
+  const [metasMetricsOpen,  setMetasMetricsOpen]  = useState(false)
+  /** Controla si la capa de veredas está visible en el mapa */
+  const [metasLayerActive,  setMetasLayerActive]  = useState(false)
+  /** true → LeftSidebar abre la vista Metas (activado desde intro hub card 3) */
+  const [openMetasView,     setOpenMetasView]     = useState(false)
+
+  const handleOpenMetasFromHub = useCallback(() => {
+    setMetasLayerActive(true)
+    setOpenMetasView(true)
+    // Resetear el flag de apertura tras un tick para que pueda volver a dispararse
+    setTimeout(() => setOpenMetasView(false), 300)
+  }, [])
+
+  const handleCloseMetasMetrics = useCallback(() => {
+    setMetasMetricsOpen(false)
+  }, [])
 
   useEffect(() => {
     fetch('/api/proyecciones')
@@ -193,6 +213,7 @@ export default function GeovisorPage() {
         onFamiliaClick={handleFamiliaClick}
         proyecciones={proyecciones}
         activeProyeccionId={activeProyeccionId}
+        metasYear={metasLayerActive ? metasYear : null}
       />
 
       <LeftSidebar
@@ -207,6 +228,10 @@ export default function GeovisorPage() {
         onLogout={handleLogout}
         onRequestLogin={() => setShowLogin(true)}
         onOpenIntro={handleOpenIntroFromSidebar}
+        metasYear={metasYear}
+        onMetasYearChange={(y) => { setMetasYear(y); setMetasLayerActive(true) }}
+        onOpenMetasMetrics={() => setMetasMetricsOpen(true)}
+        openMetasView={openMetasView}
       />
 
       <RightPanel
@@ -292,6 +317,16 @@ export default function GeovisorPage() {
         </div>
       )}
 
+      {/* Panel derecho de Métricas (Metas) */}
+      {metasMetricsOpen && (
+        <MetasPanel
+          selectedYear={metasYear}
+          width={rightWidth}
+          onClose={handleCloseMetasMetrics}
+          isMobile={isMobile}
+        />
+      )}
+
       {/* Login como overlay — solo aparece si el usuario hace clic en "Iniciar sesión" */}
       {showLogin && !authUser && (
         <LoginScreen onLogin={handleLogin} onClose={() => setShowLogin(false)} />
@@ -304,6 +339,7 @@ export default function GeovisorPage() {
           userName={authUser ?? ''}
           showWelcomeOnReturn={introViaLogin}
           onClose={handleCloseIntro}
+          onOpenMetas={handleOpenMetasFromHub}
         />
       )}
     </div>

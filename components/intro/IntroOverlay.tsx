@@ -24,6 +24,8 @@ interface Props {
   showWelcomeOnReturn: boolean
   /** Cerrar la intro y volver al mapa */
   onClose: () => void
+  /** Callback para abrir la vista Metas desde la tercera card del hub */
+  onOpenMetas?: () => void
 }
 
 export default function IntroOverlay({
@@ -31,6 +33,7 @@ export default function IntroOverlay({
   userName,
   showWelcomeOnReturn,
   onClose,
+  onOpenMetas,
 }: Props) {
   const [phase, setPhase] = useState<IntroPhase>(initialPhase)
   const [flowSlides, setFlowSlides] = useState<AnySlide[]>([])
@@ -64,7 +67,13 @@ export default function IntroOverlay({
   }, [showWelcomeOnReturn, onClose])
 
   const handleCardClick = useCallback(
-    (targets: number[]) => {
+    (cardId: string, targets: number[]) => {
+      // La tercera card (¿Cómo lo hacemos?) redirige a la vista Metas
+      if (cardId === 'como') {
+        onClose()
+        onOpenMetas?.()
+        return
+      }
       if (!data || targets.length === 0) return
       const list: AnySlide[] = targets
         .map(n => data.slides[String(n) as '1' | '2' | '3' | '4' | '5'])
@@ -73,7 +82,7 @@ export default function IntroOverlay({
       setFlowSlides(list)
       setPhase('flow')
     },
-    [data],
+    [data, onClose, onOpenMetas],
   )
 
   const handleFlowFinish = useCallback(() => {
@@ -155,7 +164,6 @@ export default function IntroOverlay({
       />
     )
   }
-
   // phase === 'flow'
   return (
     <SlideFlow
