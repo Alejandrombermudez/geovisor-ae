@@ -793,14 +793,14 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
             {/* Título */}
             {!compact && (
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ color: METAS_COLOR, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ color: METAS_COLOR, fontSize: 22, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>
                   Metas · Fase 1
                 </div>
-                <div style={{ color: '#fff', fontSize: 15, fontWeight: 800, lineHeight: 1.25, marginBottom: 3 }}>
+                <div style={{ color: '#fff', fontSize: 30, fontWeight: 800, lineHeight: 1.2, marginBottom: 4 }}>
                   Plan Andino-Amazónico
                 </div>
-                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11, letterSpacing: '0.02em' }}>
+                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 22, letterSpacing: '0.02em' }}>
                   Restauración · 2026 – 2032
                 </div>
               </div>
@@ -809,17 +809,17 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             {/* Info general de la capa */}
             {!compact && (
               <div style={{
-                padding: '9px 11px', marginBottom: 12,
+                padding: '14px 16px', marginBottom: 16,
                 background: `${METAS_COLOR}0D`, border: `1px solid ${METAS_COLOR}25`,
-                borderRadius: 8,
+                borderRadius: 10,
               }}>
-                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 5 }}>
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 20, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                   Veredas en el mapa
                 </div>
-                <div style={{ color: '#fff', fontSize: 15, fontWeight: 800 }}>
-                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 12, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
+                <div style={{ color: '#fff', fontSize: 30, fontWeight: 800 }}>
+                  {veredasAcum.length} <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: 24, fontWeight: 400 }}>acumuladas hasta {metasYear}</span>
                 </div>
-                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 11, marginTop: 4, lineHeight: 1.5 }}>
+                <div style={{ color: `${METAS_COLOR}BB`, fontSize: 22, marginTop: 6, lineHeight: 1.5 }}>
                   {VEREDAS_POR_AÑO[metasYear]?.join(' · ') ?? ''}
                 </div>
               </div>
@@ -827,18 +827,18 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
             {/* Selector de año — dropdown */}
             {!compact && (
-              <div style={{ marginBottom: 10 }}>
-                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ color: 'rgba(255,255,255,0.38)', fontSize: 20, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
                   Año de intervención
                 </div>
                 <select
                   value={metasYear}
                   onChange={e => handleMetasYear(Number(e.target.value))}
                   style={{
-                    width: '100%', padding: '9px 12px',
+                    width: '100%', padding: '14px 16px',
                     background: 'rgba(255,255,255,0.08)',
                     border: `1px solid ${METAS_COLOR}40`,
-                    borderRadius: 8, color: '#fff', fontSize: 14, fontWeight: 700,
+                    borderRadius: 10, color: '#fff', fontSize: 28, fontWeight: 700,
                     cursor: 'pointer', outline: 'none',
                     appearance: 'none', WebkitAppearance: 'none',
                   }}
@@ -851,21 +851,21 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             )}
 
             {/* Barra de progreso de años */}
-            <div style={{ marginBottom: 14 }}>
+            <div style={{ marginBottom: 20 }}>
               {!compact && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 600 }}>{YEAR_MIN}</span>
-                  <span style={{ color: METAS_COLOR, fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em' }}>{metasYear}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, fontWeight: 600 }}>{YEAR_MAX}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 26, fontWeight: 600 }}>{YEAR_MIN}</span>
+                  <span style={{ color: METAS_COLOR, fontSize: 44, fontWeight: 800, letterSpacing: '-0.02em' }}>{metasYear}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 26, fontWeight: 600 }}>{YEAR_MAX}</span>
                 </div>
               )}
               {/* Track + input invisible superpuesto */}
-              <div style={{ position: 'relative', padding: '8px 0' }}>
-                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 6, height: 12, overflow: 'visible', position: 'relative' }}>
+              <div style={{ position: 'relative', padding: '10px 0' }}>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 8, height: 20, overflow: 'visible', position: 'relative' }}>
                   <div style={{
                     width: `${sliderPct}%`, height: '100%',
                     background: `linear-gradient(90deg, ${METAS_COLOR}70, ${METAS_COLOR})`,
-                    borderRadius: 6, transition: 'width 0.4s ease',
+                    borderRadius: 8, transition: 'width 0.4s ease',
                   }} />
                 </div>
                 <input
@@ -884,7 +884,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
               </div>
               {/* Chips de año — ancho en % para que se adapte a cualquier panel */}
               {!compact && (
-                <div style={{ display: 'flex', width: '100%', marginTop: 8, gap: '1%' }}>
+                <div style={{ display: 'flex', width: '100%', marginTop: 12, gap: '1%' }}>
                   {METAS_YEARS.map(y => (
                     <button
                       key={y}
@@ -893,10 +893,10 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                         flex: 1,
                         background: y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.07)',
                         border: `1px solid ${y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.10)'}`,
-                        borderRadius: 6,
+                        borderRadius: 8,
                         color: y === metasYear ? '#000' : 'rgba(255,255,255,0.55)',
-                        fontSize: 13, fontWeight: 700,
-                        padding: '9px 0',
+                        fontSize: 26, fontWeight: 700,
+                        padding: '16px 0',
                         cursor: 'pointer', transition: 'all 0.15s ease',
                         textAlign: 'center',
                       }}
@@ -911,10 +911,10 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
               <button
                 onClick={onOpenMetasMetrics}
                 style={{
-                  width: '100%', padding: '14px 12px',
+                  width: '100%', padding: '22px 12px',
                   background: `linear-gradient(135deg, ${METAS_COLOR} 0%, #F97316 100%)`,
-                  border: 'none', borderRadius: 8, color: '#000',
-                  fontSize: 16, fontWeight: 800, cursor: 'pointer',
+                  border: 'none', borderRadius: 10, color: '#000',
+                  fontSize: 32, fontWeight: 800, cursor: 'pointer',
                   letterSpacing: '0.03em',
                   transition: 'opacity 0.15s ease',
                 }}
