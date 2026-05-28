@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 
 const ACCOUNTS: Record<string, string> = {
-  bancolombia: 'Bancolombia_AE_2026',
+  bancolombia: 'Bancol',
 }
 const DISPLAY_NAMES: Record<string, string> = {
   bancolombia: 'Bancolombia',
