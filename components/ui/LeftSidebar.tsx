@@ -146,7 +146,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
   // Estado interno de año en vista Metas (se sincroniza con el padre via onMetasYearChange)
   const [metasYear, setMetasYear] = useState(metasYearProp)
-  const METAS_YEARS = [2026, 2027, 2028, 2029, 2030] as const
+  const METAS_YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032] as const
 
   // Fase actualmente visible en la vista proyecciones
   const [activePhaseFallback, setActivePhaseFallback] = useState<string | null>(null)
@@ -745,7 +745,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
   if (view === 'metas') {
     const compact = !showLabels
     const YEAR_MIN  = 2026
-    const YEAR_MAX  = 2030
+    const YEAR_MAX  = 2032
     const YEAR_RANGE = YEAR_MAX - YEAR_MIN
     const sliderPct  = YEAR_RANGE > 0 ? ((metasYear - YEAR_MIN) / YEAR_RANGE) * 100 : 0
     const METAS_COLOR = '#C49A40'
@@ -756,8 +756,8 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
       2027: [],
       2028: ['La Raya', 'Buenos Aires'],
       2029: ['Bodoquero', 'La Turbia Alta', 'Macagual'],
-      2030: ['Bocagrande', 'San Gil', 'Vuelta del Gallo', 'Costa Rica', 'La Iberia', 'La Turbia Arriba', 'San Pablo', 'Santo Domingo'],
-      2031: [],
+      2030: ['Bocagrande', 'San Gil', 'Vuelta del Gallo', 'Costa Rica'],
+      2031: ['La Iberia', 'La Turbia Arriba', 'San Pablo', 'Santo Domingo'],
       2032: [],
     }
     // Acumulado hasta el año seleccionado
@@ -1011,6 +1011,33 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             </button>
           </>
         )}
+
+        {/* Botón Metas (debajo de Conectividad) — sin ícono */}
+        <>
+          <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px auto 2px' }} />
+          <button
+            onClick={openMetas}
+            onMouseEnter={() => setHovered('metas')} onMouseLeave={() => setHovered(null)}
+            title={showLabels ? undefined : 'Metas de restauración · Fase 1'}
+            style={{
+              background: hovered === 'metas' ? 'rgba(196,154,64,0.12)' : 'transparent',
+              border: 'none', borderLeft: '4px solid transparent',
+              color: hovered === 'metas' ? '#C49A40' : 'rgba(255,255,255,0.45)',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 5, width: '100%', padding: '16px 4px', transition: 'all 0.2s ease',
+            }}
+          >
+            {showLabels && (
+              <span style={{ fontSize: sidebarW > 160 ? 12 : 11, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                Metas
+              </span>
+            )}
+            {!showLabels && (
+              <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase' }}>M</span>
+            )}
+          </button>
+        </>
 
       </div>
 
