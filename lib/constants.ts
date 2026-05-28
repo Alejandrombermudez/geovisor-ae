@@ -3,8 +3,9 @@ export const ESRI_SATELLITE_URL =
 
 export const ESRI_SATELLITE_ATTRIBUTION = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 
-export const MAP_CENTER: [number, number] = [-1.5, -72.0]
-export const MAP_ZOOM = 7
+// Vista por defecto: Colombia completa
+export const MAP_CENTER: [number, number] = [4.0, -73.0]
+export const MAP_ZOOM = 6
 
 /** Bounding box aproximado de Colombia para detectar CRS incorrecto */
 export const COLOMBIA_BBOX = {

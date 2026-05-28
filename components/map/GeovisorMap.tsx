@@ -8,7 +8,6 @@ import { MAP_CENTER, MAP_ZOOM, ESRI_SATELLITE_URL, ESRI_SATELLITE_ATTRIBUTION, L
 import PolygonLayer from './PolygonLayer'
 import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
-import FitBounds from './FitBounds'
 import ProyeccionLayer from './ProyeccionLayer'
 import StaticLayer from './StaticLayer'
 import { STATIC_LAYERS } from '@/lib/constants'
@@ -266,15 +265,9 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         />
       )}
 
-      {/* ── Auto-zoom inicial a todos los datos ───────────────────── */}
-      <FitBounds layers={[
-        layerData.siembraFincas,
-        layerData.restauracion,
-        layerData.siembraArboles,
-        layerData.rasFincas,
-        layerData.conservacion,
-        layerData.rasArboles,
-      ]} />
+      {/* ── Zoom inicial: vista por defecto Colombia (MAP_CENTER / MAP_ZOOM en constants) ───
+            FitBounds desactivado intencionalmente — el usuario puede hacer zoom manualmente
+            o seleccionar una familia/proyección/año para volar a esa ubicación. */}
 
       {/* ── Zoom animado a predio seleccionado ────────────────────── */}
       <FlyToFamilia familiaId={selectedFamiliaId} layerData={layerData} />
