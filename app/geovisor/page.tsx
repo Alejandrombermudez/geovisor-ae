@@ -22,17 +22,6 @@ const GeovisorMap = dynamic(
   }
 )
 
-const ALL_VISIBLE: VisibleLayers = {
-  siembraFincas: true,
-  restauracion: true,
-  siembraArboles: true,
-  rasFincas: true,
-  conservacion: true,
-  rasArboles: true,
-  camarasSiembra: true,
-  camarasConservacion: true,
-}
-
 const RIGHT_RATIO = 0.35
 
 const LS_KEY = 'geoae_user'
@@ -192,7 +181,8 @@ export default function GeovisorPage() {
         camarasSiembra: false, camarasConservacion: true,
       }
     }
-    return ALL_VISIBLE
+    // Default sin selección: mapa limpio (vista Colombia)
+    return ALL_HIDDEN
   }, [activeCategory, activeProyeccionId, ALL_HIDDEN])
 
   // Posición de los botones de zoom
