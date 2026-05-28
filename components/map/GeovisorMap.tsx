@@ -41,65 +41,100 @@ interface VeredaFeature {
   }
 }
 
+// GeoJSON cacheado globalmente para no re-fetchear en cada cambio de año
+let _veredasCache: VeredaFeature[] | null = null
+
+function renderVeredasLayer(
+  features: VeredaFeature[],
+  year: number,
+  layerRef: { current: L.GeoJSON | null },
+  layerGroup: L.LayerGroup,
+  map: L.Map,
+) {
+  // Limpia capa anterior
+  if (layerRef.current) {
+    layerGroup.removeLayer(layerRef.current)
+    layerRef.current = null
+  }
+
+  const filtered = features.filter(
+    f => f.properties.anio != null && f.properties.anio <= year,
+  )
+
+  const geo = L.geoJSON(
+    { type: 'FeatureCollection', features: filtered } as GeoJSON.FeatureCollection,
+    {
+      style: (feature) => {
+        const anio = (feature as VeredaFeature).properties.anio ?? year
+        const isCurrentYear = anio === year
+        return {
+          color:       '#FAB758',
+          fillColor:   '#FAB758',
+          weight:      isCurrentYear ? 2.5 : 1.5,
+          opacity:     isCurrentYear ? 0.9 : 0.55,
+          fillOpacity: isCurrentYear ? 0.22 : 0.10,
+        }
+      },
+      onEachFeature: (feature, lyr) => {
+        const p = (feature as VeredaFeature).properties
+        const area = p.area_ha != null ? p.area_ha.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : '—'
+        lyr.bindTooltip(
+          `<div style="font-family:system-ui;font-size:12px;line-height:1.6">
+            <strong style="font-size:13px">${p.nombre_ver}</strong><br/>
+            ${p.nomb_mpio} · ${area} ha<br/>
+            <span style="color:#FAB758;font-weight:700">AE ${p.meta_ae.toLocaleString('es-CO')} ha</span>
+            &nbsp;·&nbsp;
+            <span style="color:#6898B8;font-weight:700">FB ${p.meta_fb.toLocaleString('es-CO')} ha</span><br/>
+            <span style="color:rgba(255,255,255,0.55);font-size:10px">Año de intervención: ${p.anio}</span>
+          </div>`,
+          { sticky: true },
+        )
+      },
+    },
+  )
+
+  geo.addTo(layerGroup)
+  layerRef.current = geo
+
+  // Fly-to veredas del año actual (las nuevas)
+  const current = filtered.filter(f => f.properties.anio === year)
+  if (current.length > 0) {
+    const bounds = L.geoJSON({ type: 'FeatureCollection', features: current } as GeoJSON.FeatureCollection).getBounds()
+    if (bounds.isValid()) {
+      map.flyToBounds(bounds, { padding: [80, 80], maxZoom: 12, duration: 1.0 })
+    }
+  }
+}
+
 function MetasVeredasLayer({ year }: { year: number }) {
-  const map = useMap()
-  const [layerGroup] = useState(() => L.layerGroup())
+  const map    = useMap()
+  const lgRef  = useState(() => L.layerGroup())[0]   // estable durante toda la vida del componente
+  const geoRef = { current: null as L.GeoJSON | null }
 
+  // Montar / desmontar el layer group UNA SOLA VEZ
   useEffect(() => {
-    layerGroup.addTo(map)
-    return () => { layerGroup.remove() }
-  }, [map, layerGroup])
+    lgRef.addTo(map)
+    return () => { lgRef.clearLayers(); lgRef.remove() }
+  }, [map, lgRef])
 
+  // Actualizar la capa cuando cambia el año — nunca refetchea si ya tenemos el GeoJSON
   useEffect(() => {
+    let alive = true
+    if (_veredasCache) {
+      renderVeredasLayer(_veredasCache, year, geoRef, lgRef, map)
+      return
+    }
     fetch('/metas/veredas.geojson')
       .then(r => r.json())
       .then((geojson: { features: VeredaFeature[] }) => {
-        layerGroup.clearLayers()
-        const filtered = geojson.features.filter(
-          f => f.properties.anio != null && f.properties.anio <= year,
-        )
-        const geo = L.geoJSON(
-          { type: 'FeatureCollection', features: filtered } as GeoJSON.FeatureCollection,
-          {
-            style: (feature) => {
-              const anio = (feature as VeredaFeature).properties.anio ?? year
-              const isCurrentYear = anio === year
-              return {
-                color:       '#FAB758',
-                fillColor:   '#FAB758',
-                weight:      isCurrentYear ? 2.5 : 1.5,
-                opacity:     isCurrentYear ? 0.9 : 0.55,
-                fillOpacity: isCurrentYear ? 0.22 : 0.10,
-              }
-            },
-            onEachFeature: (feature, lyr) => {
-              const p = (feature as VeredaFeature).properties
-              lyr.bindTooltip(
-                `<div style="font-family:system-ui;font-size:12px;line-height:1.5">
-                  <strong>${p.nombre_ver}</strong><br/>
-                  ${p.nomb_mpio}<br/>
-                  Área: ${p.area_ha != null ? p.area_ha.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : '—'} ha<br/>
-                  <span style="color:#FAB758">AE: ${p.meta_ae} ha · FB: ${p.meta_fb} ha</span><br/>
-                  Año: ${p.anio}
-                </div>`,
-                { sticky: true, className: 'leaflet-tooltip-metas' },
-              )
-            },
-          },
-        )
-        geo.addTo(layerGroup)
-        // Hacer zoom a las veredas del año actual
-        const current = geojson.features.filter(f => f.properties.anio === year)
-        if (current.length > 0) {
-          const curGeo = L.geoJSON({ type: 'FeatureCollection', features: current } as GeoJSON.FeatureCollection)
-          const bounds = curGeo.getBounds()
-          if (bounds.isValid()) {
-            map.flyToBounds(bounds, { padding: [80, 80], maxZoom: 12, duration: 1.0 })
-          }
-        }
+        if (!alive) return
+        _veredasCache = geojson.features
+        renderVeredasLayer(_veredasCache, year, geoRef, lgRef, map)
       })
       .catch(e => console.warn('[MetasVeredasLayer]', e))
-  }, [year, layerGroup, map])
+    return () => { alive = false }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [year])
 
   return null
 }
