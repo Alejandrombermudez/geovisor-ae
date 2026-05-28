@@ -851,20 +851,21 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             )}
 
             {/* Barra de progreso de años */}
-            <div style={{ marginBottom: 12 }}>
+            <div style={{ marginBottom: 14 }}>
               {!compact && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9 }}>{YEAR_MIN}</span>
-                  <span style={{ color: METAS_COLOR, fontSize: 10, fontWeight: 700 }}>{metasYear}</span>
-                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 9 }}>{YEAR_MAX}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, fontWeight: 600 }}>{YEAR_MIN}</span>
+                  <span style={{ color: METAS_COLOR, fontSize: 18, fontWeight: 800, letterSpacing: '-0.01em' }}>{metasYear}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12, fontWeight: 600 }}>{YEAR_MAX}</span>
                 </div>
               )}
-              <div style={{ position: 'relative', padding: '4px 0' }}>
-                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 4, height: 6, overflow: 'visible', position: 'relative' }}>
+              {/* Track + input invisible superpuesto */}
+              <div style={{ position: 'relative', padding: '8px 0' }}>
+                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 6, height: 12, overflow: 'visible', position: 'relative' }}>
                   <div style={{
                     width: `${sliderPct}%`, height: '100%',
-                    background: `linear-gradient(90deg, ${METAS_COLOR}80, ${METAS_COLOR})`,
-                    borderRadius: 4, transition: 'width 0.5s ease',
+                    background: `linear-gradient(90deg, ${METAS_COLOR}70, ${METAS_COLOR})`,
+                    borderRadius: 6, transition: 'width 0.4s ease',
                   }} />
                 </div>
                 <input
@@ -875,24 +876,29 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   value={metasYear}
                   onChange={e => handleMetasYear(Number(e.target.value))}
                   style={{
-                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    position: 'absolute', top: 0, left: 0,
+                    width: '100%', height: '100%',
                     opacity: 0, cursor: 'pointer', margin: 0,
                   }}
                 />
               </div>
+              {/* Chips de año — ancho en % para que se adapte a cualquier panel */}
               {!compact && (
-                <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: 6, gap: 2 }}>
+                <div style={{ display: 'flex', width: '100%', marginTop: 8, gap: '1%' }}>
                   {METAS_YEARS.map(y => (
                     <button
                       key={y}
                       onClick={() => handleMetasYear(y)}
                       style={{
-                        background: y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.08)',
-                        border: 'none', borderRadius: 4,
-                        color: y === metasYear ? '#000' : 'rgba(255,255,255,0.45)',
-                        fontSize: 8, fontWeight: 700, padding: '3px 4px',
+                        flex: 1,
+                        background: y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.07)',
+                        border: `1px solid ${y === metasYear ? METAS_COLOR : 'rgba(255,255,255,0.10)'}`,
+                        borderRadius: 6,
+                        color: y === metasYear ? '#000' : 'rgba(255,255,255,0.5)',
+                        fontSize: 11, fontWeight: 700,
+                        padding: '6px 0',
                         cursor: 'pointer', transition: 'all 0.15s ease',
-                        minWidth: 24,
+                        textAlign: 'center',
                       }}
                     >{y}</button>
                   ))}

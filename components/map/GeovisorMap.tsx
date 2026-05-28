@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -124,7 +124,7 @@ function renderVeredasLayer(
 function MetasVeredasLayer({ year }: { year: number }) {
   const map    = useMap()
   const lgRef  = useState(() => L.layerGroup())[0]   // estable durante toda la vida del componente
-  const geoRef = { current: null as L.GeoJSON | null }
+  const geoRef = useRef<L.GeoJSON | null>(null)       // persiste entre renders para poder limpiar la capa anterior
 
   // Montar / desmontar el layer group UNA SOLA VEZ
   useEffect(() => {

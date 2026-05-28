@@ -245,8 +245,8 @@ function EntitySection({
           flexShrink: 0, boxShadow: `0 0 0 4px ${color}0C`,
         }}>{emoji}</div>
         <div>
-          <div style={{ color: '#fff', fontSize: 16, fontWeight: 800 }}>{label}</div>
-          <div style={{ color: `${color}CC`, fontSize: 13, marginTop: 1 }}>
+          <div style={{ color: '#fff', fontSize: 17, fontWeight: 800 }}>{label}</div>
+          <div style={{ color: `${color}CC`, fontSize: 14, marginTop: 2 }}>
             {noData ? 'Sin actividad este año' : `Meta ${year}: ${fmt(data!.total)} ha`}
           </div>
         </div>
@@ -271,14 +271,14 @@ function EntitySection({
               <div key={kl} style={{
                 background: highlight ? `${color}1A` : 'rgba(255,255,255,0.05)',
                 border: `1px solid ${highlight ? color + '40' : 'rgba(255,255,255,0.09)'}`,
-                borderRadius: 10, padding: '14px 14px', textAlign: 'center',
+                borderRadius: 10, padding: '16px 10px', textAlign: 'center',
               }}>
-                <div style={{ color, fontSize: 22, fontWeight: 800, lineHeight: 1 }}>
+                <div style={{ color, fontSize: 28, fontWeight: 800, lineHeight: 1, letterSpacing: '-0.02em' }}>
                   {fmt(value)}
                 </div>
                 <div style={{
-                  color: 'rgba(255,255,255,0.38)', fontSize: 10,
-                  textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 5,
+                  color: 'rgba(255,255,255,0.42)', fontSize: 11,
+                  textTransform: 'uppercase', letterSpacing: '0.05em', marginTop: 6,
                 }}>
                   ha · {kl}
                 </div>
@@ -292,8 +292,8 @@ function EntitySection({
             background: `${color}0C`, border: `1px solid ${color}22`, borderRadius: 10,
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>📈 Hacia la meta total</span>
-              <span style={{ color, fontSize: 12, fontWeight: 700 }}>
+              <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 13 }}>Hacia la meta total</span>
+              <span style={{ color, fontSize: 13, fontWeight: 700 }}>
                 {fmt(data!.acumulado)} / {fmt(metaTotal)} ha
               </span>
             </div>
@@ -317,14 +317,14 @@ function EntitySection({
               padding: '9px 0', borderBottom: '1px solid rgba(255,255,255,0.05)',
             }}>
               <span style={{
-                color: 'rgba(255,255,255,0.6)', fontSize: 12,
+                color: 'rgba(255,255,255,0.6)', fontSize: 13,
                 maxWidth: '68%', lineHeight: 1.35,
               }}>
                 {pLabel}
               </span>
               <span style={{
                 color: (val != null && Number(val) > 0) ? color : 'rgba(255,255,255,0.25)',
-                fontSize: 13, fontWeight: 700,
+                fontSize: 14, fontWeight: 700,
               }}>
                 {val != null ? `${fmt(Number(val))} ha` : '—'}
               </span>
@@ -369,10 +369,10 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
         overflow: 'hidden',
       }
 
-  const TOGGLE_OPTIONS: { key: ViewMode; emoji: string; label: string; color: string }[] = [
-    { key: 'ae',    emoji: '🌿', label: 'Amazonia E.',  color: AE_COLOR },
-    { key: 'fb',    emoji: '🏦', label: 'Bancolombia',  color: FB_COLOR },
-    { key: 'ambas', emoji: '⚡', label: 'Ambas',        color: ACCENT   },
+  const TOGGLE_OPTIONS: { key: ViewMode; label: string; color: string }[] = [
+    { key: 'ae',    label: 'Amazonia E.',  color: AE_COLOR },
+    { key: 'fb',    label: 'Bancolombia',  color: FB_COLOR },
+    { key: 'ambas', label: 'Total',        color: ACCENT   },
   ]
 
   return (
@@ -427,20 +427,18 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
               onClick={() => setViewMode(opt.key)}
               style={{
                 flex: 1,
-                padding: '8px 6px',
+                padding: '9px 6px',
                 background: isActive ? `${opt.color}1E` : 'rgba(255,255,255,0.04)',
                 border: `1.5px solid ${isActive ? opt.color + '60' : 'rgba(255,255,255,0.09)'}`,
                 borderRadius: 9,
                 color: isActive ? opt.color : 'rgba(255,255,255,0.45)',
-                fontSize: 11, fontWeight: isActive ? 700 : 500,
+                fontSize: 12, fontWeight: isActive ? 700 : 500,
                 cursor: 'pointer',
                 transition: 'all 0.15s',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
                 letterSpacing: '0.01em',
               }}
             >
-              <span style={{ fontSize: 15 }}>{opt.emoji}</span>
-              <span>{opt.label}</span>
+              {opt.label}
             </button>
           )
         })}
