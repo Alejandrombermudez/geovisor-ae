@@ -8,10 +8,18 @@ const ACCOUNTS: Record<string, string> = {
 const DISPLAY_NAMES: Record<string, string> = {
   bancolombia: 'Bancolombia',
 }
-const LS_KEY     = 'geoae_user'
+const LS_KEY      = 'geoae_user'
 const LS_REMEMBER = 'geoae_remember'
 
-const JF = `'Josefin Sans', var(--font-josefin), system-ui, sans-serif`
+const JF      = `'Josefin Sans', var(--font-josefin), system-ui, sans-serif`
+const PRIMARY = '#0d7377'
+
+const BG_IMAGES = [
+  '/portada/DJI_0055.jpg',
+  '/portada/DSC06314.jpg',
+  '/portada/DSC01817.jpg',
+  '/portada/DSC02224.jpg',
+]
 
 interface Props {
   onLogin: (user: string) => void
@@ -25,11 +33,19 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
   const [showPass, setShowPass] = useState(false)
   const [error,    setError]    = useState('')
   const [loading,  setLoading]  = useState(false)
+  const [bgIndex,  setBgIndex]  = useState(0)
 
-  // Inicializa con el valor real para evitar flash desktop→mobile
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== 'undefined' ? window.innerWidth < 768 : false
   )
+
+  // Slideshow automático — cambia imagen cada 8 s con crossfade de 2 s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % BG_IMAGES.length)
+    }, 8000)
+    return () => clearInterval(timer)
+  }, [])
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
@@ -66,289 +82,303 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
     }, 500)
   }
 
-  // ── Valores de estilo que dependen de isMobile ────────────────────────────
-  const labelColor   = isMobile ? 'rgba(255,255,255,0.75)' : '#555'
-  const inputBg      = isMobile ? 'rgba(255,255,255,0.15)' : '#fff'
-  const inputColor   = isMobile ? '#fff'                   : '#222'
-  const inputRadius  = isMobile ? 6 : 0
-  const inputPadding = isMobile ? '10px 12px' : '10px 4px'
-  const inputBdBlur  = isMobile ? 'blur(4px)'  : 'none'
-  const inputBorder  = (hasErr: boolean) =>
-    `1px solid ${hasErr ? '#e53e3e' : isMobile ? 'rgba(255,255,255,0.5)' : '#ccc'}`
-  const focusColor   = '#74A884'
-  const blurBorder   = (hasErr: boolean) =>
-    hasErr ? '#e53e3e' : isMobile ? 'rgba(255,255,255,0.5)' : '#ccc'
-
-  // ── SVG ojo ──────────────────────────────────────────────────────────────
+  // ── SVG icons ─────────────────────────────────────────────────────────────
   const EyeOpen = (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
     </svg>
   )
   const EyeOff = (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
       <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>
     </svg>
   )
   const CloseX = (
-    <svg width="13" height="13" viewBox="0 0 12 12" fill="none">
+    <svg width="14" height="14" viewBox="0 0 12 12" fill="none">
       <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
     </svg>
   )
 
-  // ── MOBILE ────────────────────────────────────────────────────────────────
-  if (isMobile) {
-    return (
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 3000,
-        background: `url('/login-bg.jpg') center/cover no-repeat`,
-        display: 'flex', flexDirection: 'column',
-        fontFamily: JF,
-      }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.72) 100%)' }} />
+  // ── Helpers de estilo para inputs ─────────────────────────────────────────
+  const inputBorderColor = (hasErr: boolean) =>
+    hasErr ? '#f87171' : 'rgba(255,255,255,0.20)'
 
-        <div style={{ position: 'relative', zIndex: 1, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 32px', overflowY: 'auto' }}>
+  const inputStyle = (hasErr: boolean): React.CSSProperties => ({
+    fontFamily: JF, fontWeight: 400,
+    fontSize: 'clamp(13px, 0.95vw, 15px)',
+    background: 'rgba(255,255,255,0.10)',
+    border: `1px solid ${inputBorderColor(hasErr)}`,
+    borderRadius: 'clamp(10px, 0.85vw, 14px)',
+    padding: 'clamp(12px, 0.95vw, 17px) clamp(14px, 1.1vw, 18px)',
+    color: '#fff',
+    outline: 'none',
+    width: '100%',
+    boxSizing: 'border-box',
+    transition: 'border-color 0.2s',
+  })
 
-          {/* Botón cerrar */}
-          {onClose && (
-            <button onClick={onClose} style={{
-              position: 'absolute', top: 16, right: 0,
-              background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%',
-              width: 34, height: 34, cursor: 'pointer', color: '#fff',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              backdropFilter: 'blur(6px)',
-            }}>
-              {CloseX}
-            </button>
-          )}
-
-          {/* Título */}
-          <div style={{ marginTop: 56, textAlign: 'center', fontFamily: JF, fontWeight: 400, fontSize: 28, lineHeight: 1.25, color: '#fff', letterSpacing: '0.01em', marginBottom: 28 }}>
-            Geoportal<br />Amazonia Emprende
-          </div>
-
-          {/* Logo */}
-          <img src="/logo-ae-blanco.png" alt="Amazonia Emprende"
-            style={{ width: 96, height: 'auto', marginBottom: 32, objectFit: 'contain' }}
-            onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
-          />
-
-          {/* Bienvenido */}
-          <p style={{ fontFamily: JF, fontWeight: 400, fontSize: 15, color: '#fff', marginBottom: 24, alignSelf: 'flex-start' }}>
-            Bienvenido
-          </p>
-
-          {/* ── FORM (inlineado — no sub-componente) ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 18, width: '100%' }}>
-
-            {/* Usuario */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontFamily: JF, fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: labelColor }}>Usuario</label>
-              <input
-                type="text" value={username} autoComplete="username" autoCapitalize="none"
-                placeholder="Ingresa tu usuario"
-                onChange={e => { setUsername(e.target.value); setError('') }}
-                onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                style={{ fontFamily: JF, fontWeight: 400, fontSize: 13, background: inputBg, border: 'none', borderBottom: inputBorder(!!error), borderRadius: inputRadius, padding: inputPadding, color: inputColor, outline: 'none', width: '100%', boxSizing: 'border-box', backdropFilter: inputBdBlur, transition: 'border-color 0.2s' }}
-                onFocus={e => { (e.target as HTMLInputElement).style.borderBottomColor = focusColor }}
-                onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = blurBorder(!!error) }}
-              />
-            </div>
-
-            {/* Contraseña */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-              <label style={{ fontFamily: JF, fontWeight: 700, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: labelColor }}>Contraseña</label>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type={showPass ? 'text' : 'password'} value={password} autoComplete="current-password"
-                  placeholder="Ingresa tu contraseña"
-                  onChange={e => { setPassword(e.target.value); setError('') }}
-                  onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                  style={{ fontFamily: JF, fontWeight: 400, fontSize: 13, background: inputBg, border: 'none', borderBottom: inputBorder(!!error), borderRadius: inputRadius, padding: inputPadding, paddingRight: 36, color: inputColor, outline: 'none', width: '100%', boxSizing: 'border-box', backdropFilter: inputBdBlur, transition: 'border-color 0.2s' }}
-                  onFocus={e => { (e.target as HTMLInputElement).style.borderBottomColor = focusColor }}
-                  onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = blurBorder(!!error) }}
-                />
-                <button type="button" tabIndex={-1} onClick={() => setShowPass(v => !v)}
-                  style={{ position: 'absolute', right: 4, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center' }}>
-                  {showPass ? EyeOff : EyeOpen}
-                </button>
-              </div>
-            </div>
-
-            {/* Recuérdame */}
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: JF, fontWeight: 300, fontSize: 11, color: 'rgba(255,255,255,0.7)', cursor: 'pointer', userSelect: 'none' }}>
-              <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)}
-                style={{ accentColor: '#74A884', width: 13, height: 13, cursor: 'pointer' }} />
-              Recuérdame
-            </label>
-
-            {/* Error */}
-            {error && <p style={{ fontFamily: JF, fontSize: 11, color: '#fca5a5', margin: 0, textAlign: 'center' }}>{error}</p>}
-
-            {/* Botón */}
-            <button onClick={handleLogin} disabled={loading}
-              style={{ fontFamily: JF, fontWeight: 700, fontSize: 13, letterSpacing: '0.12em', textTransform: 'uppercase', background: loading ? '#555' : 'rgba(255,255,255,0.92)', color: '#111', border: 'none', borderRadius: 30, padding: '13px 0', width: '100%', cursor: loading ? 'wait' : 'pointer', transition: 'opacity 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
-              onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}>
-              {loading ? (<><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'ls-spin 0.8s linear infinite' }}><path d="M12 2a10 10 0 0 1 10 10"/></svg>Verificando...</>) : 'Ingresar'}
-            </button>
-          </div>
-          {/* ── fin form ── */}
-
-          <div style={{ flex: 1, minHeight: 32 }} />
-        </div>
-
-        <style>{`@keyframes ls-spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    )
-  }
-
-  // ── DESKTOP ───────────────────────────────────────────────────────────────
+  // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 3000, display: 'flex', fontFamily: JF }}>
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 3000,
+      display: 'flex',
+      flexDirection: isMobile ? 'column' : 'row',
+      fontFamily: JF,
+      overflow: 'hidden',
+    }}>
 
-      {/* Panel izquierdo — foto desktop hires (60%) */}
-      <div style={{
-        flex: '0 0 60%',
-        minWidth: 0,
-        background: `url('/login-bg-desktop.jpg') center/cover no-repeat #1a1a1a`,
-        position: 'relative',
-        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-        padding: 'clamp(36px, 4.5vw, 80px) clamp(40px, 5vw, 88px)',
-        overflow: 'hidden',
-      }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.34) 100%)' }} />
-
-        {/* Logo */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <img src="/logo-ae-blanco.png" alt="Amazonia Emprende"
-            style={{ height: 'clamp(72px, 7.5vw, 130px)', width: 'auto', objectFit: 'contain' }}
-            onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+      {/* ── Fondo fotográfico con crossfade ── */}
+      {BG_IMAGES.map((src, i) => (
+        <div
+          key={src}
+          style={{
+            position: 'absolute', inset: 0,
+            opacity: i === bgIndex ? 1 : 0,
+            transition: 'opacity 2s ease-in-out',
+            zIndex: 0,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={src} alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
           />
         </div>
+      ))}
 
-        {/* Tagline */}
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <h1 style={{
-            fontFamily: JF, fontWeight: 400,
-            fontSize: 'clamp(40px, 4.6vw, 78px)',
-            color: '#fff', margin: '0 0 16px',
-            lineHeight: 1.08, letterSpacing: '0.005em',
-          }}>
-            Geoportal<br />Amazonia Emprende
-          </h1>
-          <p style={{
-            fontFamily: JF, fontWeight: 300,
-            fontSize: 'clamp(16px, 1.4vw, 22px)',
-            color: 'rgba(255,255,255,0.78)',
-            margin: 0, letterSpacing: '0.04em',
-          }}>
-            El futuro comienza aquí
-          </p>
-        </div>
-      </div>
-
-      {/* Panel derecho — formulario (40%) */}
+      {/* ── Overlay oscuro direccional ── */}
       <div style={{
-        flex: '0 0 40%',
+        position: 'absolute', inset: 0,
+        background: isMobile
+          ? 'linear-gradient(to bottom, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.70) 100%)'
+          : 'linear-gradient(to right, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 45%, rgba(0,0,0,0.28) 100%)',
+        zIndex: 1,
+      }} />
+
+      {/* ── ZONA IZQUIERDA: Branding (solo desktop) ── */}
+      {!isMobile && (
+        <div style={{
+          flex: '0 0 60%',
+          minWidth: 0,
+          boxSizing: 'border-box',
+          position: 'relative',
+          zIndex: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          padding: 'clamp(40px, 4.5vw, 96px) clamp(48px, 5.2vw, 110px)',
+          overflow: 'hidden',
+        }}>
+          {/* Logo (esquina superior, grande) */}
+          <div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-ae-blanco.png"
+              alt="Amazonia Emprende"
+              style={{
+                height: 'clamp(110px, 11vw, 220px)',
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+              }}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            />
+          </div>
+
+          {/* Título + tagline (esquina inferior izquierda) */}
+          <div style={{ maxWidth: '95%' }}>
+            <h1 style={{
+              fontFamily: JF,
+              fontWeight: 400,
+              fontSize: 'clamp(48px, 5.8vw, 116px)',
+              color: '#fff',
+              margin: '0 0 clamp(14px, 1.3vw, 28px)',
+              lineHeight: 1.04,
+              letterSpacing: '0.005em',
+            }}>
+              Geoportal<br />Amazonia Emprende
+            </h1>
+            <p style={{
+              fontFamily: JF,
+              fontWeight: 300,
+              fontSize: 'clamp(16px, 1.35vw, 26px)',
+              color: 'rgba(255,255,255,0.82)',
+              margin: 0,
+              letterSpacing: '0.04em',
+            }}>
+              El futuro comienza aquí
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── ZONA DERECHA: Card glassmorphism ── */}
+      <div style={{
+        flex: isMobile ? '1' : '0 0 40%',
         minWidth: 0,
-        background: '#fff',
-        display: 'flex', flexDirection: 'column',
-        justifyContent: 'center', alignItems: 'center',
-        padding: 'clamp(24px, 2.6vw, 56px) clamp(28px, 3vw, 64px)',
-        overflow: 'hidden', position: 'relative',
         boxSizing: 'border-box',
+        position: 'relative',
+        zIndex: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingTop: isMobile ? '48px' : 'clamp(32px, 3vw, 72px)',
+        paddingBottom: isMobile ? '40px' : 'clamp(32px, 3vw, 72px)',
+        paddingLeft: isMobile ? '24px' : 'clamp(14px, 2vw, 44px)',
+        paddingRight: isMobile ? '24px' : 'clamp(44px, 5vw, 100px)',
+        minHeight: '100vh',
+        overflowY: 'auto',
       }}>
 
         {/* Botón cerrar */}
         {onClose && (
-          <button onClick={onClose} style={{
-            position: 'absolute', top: 24, right: 28,
-            background: 'rgba(0,0,0,0.06)', border: 'none', borderRadius: '50%',
-            width: 44, height: 44, cursor: 'pointer', color: '#555',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'background 0.15s',
-          }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.12)' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(0,0,0,0.06)' }}>
-            <svg width="16" height="16" viewBox="0 0 12 12" fill="none">
-              <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-            </svg>
+          <button
+            onClick={onClose}
+            style={{
+              position: 'absolute',
+              top: 'clamp(18px, 1.8vw, 32px)',
+              right: 'clamp(18px, 1.8vw, 32px)',
+              background: 'rgba(255,255,255,0.12)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              borderRadius: '50%',
+              width: 'clamp(36px, 2.6vw, 48px)',
+              height: 'clamp(36px, 2.6vw, 48px)',
+              cursor: 'pointer', color: 'rgba(255,255,255,0.78)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'background 0.15s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.22)' }}
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.12)' }}
+          >
+            {CloseX}
           </button>
         )}
 
+        {/* Branding compacto mobile */}
+        {isMobile && (
+          <div style={{
+            display: 'flex', flexDirection: 'column', alignItems: 'center',
+            gap: 12, marginBottom: 28,
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-ae-blanco.png"
+              alt="Amazonia Emprende"
+              style={{ height: 88, width: 'auto', objectFit: 'contain', opacity: 0.95 }}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            />
+            <p style={{
+              color: '#fff', fontSize: 22, fontWeight: 400,
+              textAlign: 'center', lineHeight: 1.25, letterSpacing: '0.01em',
+              margin: 0,
+            }}>
+              Geoportal<br />Amazonia Emprende
+            </p>
+            <p style={{
+              color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 300,
+              margin: 0, letterSpacing: '0.04em',
+            }}>
+              El futuro comienza aquí
+            </p>
+          </div>
+        )}
+
+        {/* ── Card glassmorphism ── */}
         <div style={{
           width: '100%',
-          maxWidth: 'clamp(320px, 24vw, 440px)',
-          marginLeft: 'auto', marginRight: 'auto',
+          maxWidth: isMobile ? 420 : 'clamp(340px, 24vw, 460px)',
+          background: 'rgba(255,255,255,0.10)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          border: '1px solid rgba(255,255,255,0.22)',
+          borderRadius: 'clamp(20px, 1.8vw, 30px)',
+          boxShadow: '0 25px 60px rgba(0,0,0,0.55)',
+          padding: isMobile ? '32px 24px' : 'clamp(32px, 2.8vw, 52px)',
         }}>
+
+          {/* Título */}
           <h2 style={{
-            fontFamily: JF, fontWeight: 300,
-            fontSize: 'clamp(26px, 2.2vw, 38px)',
-            color: '#111', margin: '0 0 clamp(20px, 2vw, 32px)',
-            letterSpacing: '0.005em', lineHeight: 1.2,
+            color: '#fff',
+            fontSize: 'clamp(20px, 1.7vw, 30px)',
+            fontWeight: 700,
+            margin: '0 0 clamp(6px, 0.5vw, 10px)',
+            letterSpacing: '-0.005em',
+            lineHeight: 1.2,
           }}>
             Te damos la bienvenida
           </h2>
+          <p style={{
+            color: 'rgba(255,255,255,0.55)',
+            fontSize: 'clamp(11px, 0.85vw, 14px)',
+            margin: '0 0 clamp(22px, 2vw, 36px)',
+          }}>
+            Ingresa tus credenciales para continuar
+          </p>
 
-          {/* ── FORM (inlineado — no sub-componente) ── */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px, 1.4vw, 24px)', width: '100%' }}>
+          {/* ── Formulario ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px, 1.4vw, 24px)' }}>
 
             {/* Usuario */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(6px, 0.55vw, 10px)' }}>
               <label style={{
-                fontFamily: JF, fontWeight: 700,
-                fontSize: 'clamp(10px, 0.85vw, 13px)',
-                letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555',
-              }}>Usuario</label>
+                color: 'rgba(255,255,255,0.72)',
+                fontSize: 'clamp(9px, 0.68vw, 11px)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.10em',
+              }}>
+                Usuario
+              </label>
               <input
-                type="text" value={username} autoComplete="username" autoCapitalize="none"
+                type="text" value={username}
+                autoComplete="username" autoCapitalize="none"
                 placeholder="Ingresa tu usuario"
                 onChange={e => { setUsername(e.target.value); setError('') }}
                 onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                style={{
-                  fontFamily: JF, fontWeight: 400,
-                  fontSize: 'clamp(14px, 1.05vw, 17px)',
-                  background: '#fff', border: 'none', borderBottom: inputBorder(!!error),
-                  borderRadius: 0, padding: '11px 4px',
-                  color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box',
-                  transition: 'border-color 0.2s',
-                }}
-                onFocus={e => { (e.target as HTMLInputElement).style.borderBottomColor = focusColor }}
-                onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = blurBorder(!!error) }}
+                className="ls-input"
+                style={inputStyle(!!error)}
+                onFocus={e => { if (!error) (e.target as HTMLInputElement).style.borderColor = PRIMARY }}
+                onBlur={e => { if (!error) (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.20)' }}
               />
             </div>
 
             {/* Contraseña */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(6px, 0.55vw, 10px)' }}>
               <label style={{
-                fontFamily: JF, fontWeight: 700,
-                fontSize: 'clamp(10px, 0.85vw, 13px)',
-                letterSpacing: '0.1em', textTransform: 'uppercase', color: '#555',
-              }}>Contraseña</label>
+                color: 'rgba(255,255,255,0.72)',
+                fontSize: 'clamp(9px, 0.68vw, 11px)',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.10em',
+              }}>
+                Contraseña
+              </label>
               <div style={{ position: 'relative' }}>
                 <input
-                  type={showPass ? 'text' : 'password'} value={password} autoComplete="current-password"
+                  type={showPass ? 'text' : 'password'} value={password}
+                  autoComplete="current-password"
                   placeholder="Ingresa tu contraseña"
                   onChange={e => { setPassword(e.target.value); setError('') }}
                   onKeyDown={e => e.key === 'Enter' && handleLogin()}
-                  style={{
-                    fontFamily: JF, fontWeight: 400,
-                    fontSize: 'clamp(14px, 1.05vw, 17px)',
-                    background: '#fff', border: 'none', borderBottom: inputBorder(!!error),
-                    borderRadius: 0, padding: '11px 4px', paddingRight: 44,
-                    color: '#222', outline: 'none', width: '100%', boxSizing: 'border-box',
-                    transition: 'border-color 0.2s',
-                  }}
-                  onFocus={e => { (e.target as HTMLInputElement).style.borderBottomColor = focusColor }}
-                  onBlur={e => { (e.target as HTMLInputElement).style.borderBottomColor = blurBorder(!!error) }}
+                  className="ls-input"
+                  style={{ ...inputStyle(!!error), paddingRight: 48 }}
+                  onFocus={e => { if (!error) (e.target as HTMLInputElement).style.borderColor = PRIMARY }}
+                  onBlur={e => { if (!error) (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.20)' }}
                 />
-                <button type="button" tabIndex={-1} onClick={() => setShowPass(v => !v)}
+                <button
+                  type="button" tabIndex={-1}
+                  onClick={() => setShowPass(v => !v)}
                   style={{
-                    position: 'absolute', right: 4, top: '50%', transform: 'translateY(-50%)',
-                    background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: '#999',
+                    position: 'absolute', right: 'clamp(10px, 0.8vw, 14px)', top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', cursor: 'pointer', padding: 4,
+                    color: 'rgba(255,255,255,0.48)',
                     display: 'flex', alignItems: 'center',
-                  }}>
+                  }}
+                >
                   {showPass ? EyeOff : EyeOpen}
                 </button>
               </div>
@@ -356,46 +386,87 @@ export default function LoginScreen({ onLogin, onClose }: Props) {
 
             {/* Recuérdame */}
             <label style={{
-              display: 'flex', alignItems: 'center', gap: 10,
+              display: 'flex', alignItems: 'center',
+              gap: 'clamp(8px, 0.6vw, 12px)',
               fontFamily: JF, fontWeight: 300,
-              fontSize: 'clamp(13px, 0.95vw, 16px)',
-              color: '#777', cursor: 'pointer', userSelect: 'none',
+              fontSize: 'clamp(12px, 0.88vw, 14px)',
+              color: 'rgba(255,255,255,0.62)',
+              cursor: 'pointer', userSelect: 'none',
             }}>
-              <input type="checkbox" checked={remember} onChange={e => setRemember(e.target.checked)}
-                style={{ accentColor: '#74A884', width: 16, height: 16, cursor: 'pointer' }} />
+              <input
+                type="checkbox" checked={remember}
+                onChange={e => setRemember(e.target.checked)}
+                style={{
+                  accentColor: PRIMARY,
+                  width: 'clamp(15px, 1.1vw, 18px)',
+                  height: 'clamp(15px, 1.1vw, 18px)',
+                  cursor: 'pointer',
+                }}
+              />
               Recuérdame
             </label>
 
             {/* Error */}
-            {error && <p style={{
-              fontFamily: JF, fontSize: 'clamp(13px, 0.95vw, 15px)',
-              color: '#e53e3e', margin: 0, textAlign: 'center',
-            }}>{error}</p>}
+            {error && (
+              <div style={{
+                background: 'rgba(239,68,68,0.15)',
+                border: '1px solid rgba(239,68,68,0.30)',
+                borderRadius: 'clamp(8px, 0.7vw, 12px)',
+                padding: 'clamp(8px, 0.7vw, 12px) clamp(12px, 1vw, 16px)',
+                color: '#fca5a5',
+                fontSize: 'clamp(12px, 0.95vw, 15px)',
+                textAlign: 'center',
+              }}>
+                {error}
+              </div>
+            )}
 
-            {/* Botón */}
-            <button onClick={handleLogin} disabled={loading}
+            {/* Botón Ingresar */}
+            <button
+              onClick={handleLogin}
+              disabled={loading}
               style={{
                 fontFamily: JF, fontWeight: 700,
-                fontSize: 'clamp(13px, 0.95vw, 15px)',
-                letterSpacing: '0.14em', textTransform: 'uppercase',
-                background: loading ? '#555' : '#111', color: '#fff',
-                border: 'none', borderRadius: 6,
-                padding: 'clamp(12px, 1vw, 16px) 0', width: '100%',
+                fontSize: 'clamp(12px, 0.95vw, 15px)',
+                letterSpacing: '0.12em', textTransform: 'uppercase',
+                background: loading
+                  ? 'rgba(255,255,255,0.18)'
+                  : `linear-gradient(135deg, ${PRIMARY} 0%, #14b8a6 100%)`,
+                color: '#fff',
+                border: 'none',
+                borderRadius: 'clamp(12px, 1vw, 16px)',
+                padding: 'clamp(14px, 1.1vw, 20px) 0',
+                width: '100%',
                 cursor: loading ? 'wait' : 'pointer',
                 transition: 'opacity 0.2s',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                marginTop: 4,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: 'clamp(8px, 0.6vw, 12px)',
+                boxShadow: loading ? 'none' : '0 6px 20px rgba(13,115,119,0.4)',
+                marginTop: 'clamp(4px, 0.4vw, 8px)',
               }}
-              onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = '0.85' }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}>
-              {loading ? (<><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'ls-spin 0.8s linear infinite' }}><path d="M12 2a10 10 0 0 1 10 10"/></svg>Verificando...</>) : 'Ingresar'}
+              onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.opacity = '0.88' }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.opacity = '1' }}
+            >
+              {loading ? (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ animation: 'ls-spin 0.8s linear infinite' }}>
+                    <path d="M12 2a10 10 0 0 1 10 10"/>
+                  </svg>
+                  Verificando...
+                </>
+              ) : 'Ingresar'}
             </button>
           </div>
-          {/* ── fin form ── */}
+          {/* ── fin formulario ── */}
+
         </div>
       </div>
 
-      <style>{`@keyframes ls-spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes ls-spin { to { transform: rotate(360deg); } }
+        .ls-input::placeholder { color: rgba(255,255,255,0.35); }
+        .ls-input::-webkit-input-placeholder { color: rgba(255,255,255,0.35); }
+      `}</style>
     </div>
   )
 }

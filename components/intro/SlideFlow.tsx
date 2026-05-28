@@ -225,7 +225,7 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
             src="/logo-ae-blanco.png"
             alt="AE"
             style={{
-              width: 'clamp(44px, 3.6vw, 64px)',
+              width: 'clamp(50px, 4.2vw, 72px)',
               height: 'auto', objectFit: 'contain',
             }}
           />
@@ -245,7 +245,7 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
           </div>
           <div
             style={{
-              fontSize: 'clamp(12px, 0.95vw, 15px)',
+              fontSize: 'clamp(13px, 1.05vw, 17px)',
               fontWeight: 700, letterSpacing: '0.14em',
               textTransform: 'uppercase', color: 'rgba(255,255,255,0.6)',
             }}
@@ -321,7 +321,7 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
               border: '1px solid rgba(255,255,255,0.18)',
               borderRadius: 999,
               color: 'rgba(255,255,255,0.85)',
-              fontSize: 12, fontWeight: 600,
+              fontSize: 14, fontWeight: 600,
               letterSpacing: '0.08em', textTransform: 'uppercase',
               animation: 'introHintBob 1.8s ease-in-out infinite',
             }}
@@ -337,10 +337,10 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
               background: 'linear-gradient(135deg, #74A884 0%, #6898B8 100%)',
               color: '#fff',
               fontFamily: INTRO_FONT,
-              fontSize: 14, fontWeight: 700,
+              fontSize: 16, fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase',
               border: 'none', borderRadius: 999,
-              padding: '14px 36px', cursor: 'pointer',
+              padding: '16px 44px', cursor: 'pointer',
               boxShadow: '0 12px 32px rgba(116,168,132,0.5)',
               display: 'inline-flex', alignItems: 'center', gap: 10,
               transition: 'transform 0.18s ease, box-shadow 0.18s ease',
@@ -403,14 +403,13 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
       style={{
         margin: 0,
         fontFamily: INTRO_FONT,
-        // Más comedido — antes ocupaba 3 líneas en titulares largos
-        fontSize: 'clamp(22px, 2.6vw, 40px)',
+        fontSize: 'clamp(28px, 3.2vw, 52px)',
         fontWeight: 300,
-        lineHeight: 1.12,
+        lineHeight: 1.1,
         letterSpacing: '0.005em',
         color: '#fff',
         textShadow: '0 4px 24px rgba(0,0,0,0.45)',
-        maxWidth: '24ch',
+        maxWidth: '26ch',
       }}
     >
       {children}
@@ -452,8 +451,8 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
         <Reveal shown={reveal >= 2} delay={100}>
           <p
             style={{
-              margin: 'clamp(16px, 1.6vw, 24px) 0 0',
-              fontSize: 'clamp(16px, 1.55vw, 22px)',
+              margin: 'clamp(18px, 1.8vw, 28px) 0 0',
+              fontSize: 'clamp(18px, 1.8vw, 26px)',
               fontWeight: 300, lineHeight: 1.55,
               color: 'rgba(255,255,255,0.86)',
               maxWidth: '60ch',
@@ -486,7 +485,7 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
                   style={{
                     fontFamily: INTRO_FONT,
                     fontWeight: 700,
-                    fontSize: 'clamp(28px, 3vw, 48px)',
+                    fontSize: 'clamp(34px, 3.6vw, 58px)',
                     color: '#74A884',
                     letterSpacing: '0.005em', lineHeight: 1,
                   }}
@@ -496,7 +495,7 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
                 <div
                   style={{
                     marginTop: 10,
-                    fontSize: 'clamp(12px, 0.95vw, 15px)',
+                    fontSize: 'clamp(13px, 1.1vw, 17px)',
                     fontWeight: 600,
                     letterSpacing: '0.04em',
                     color: 'rgba(255,255,255,0.78)',
@@ -514,7 +513,7 @@ function RenderStatsSlide({ slide, reveal }: { slide: Slide2; reveal: number }) 
           <p
             style={{
               margin: 'clamp(18px, 2vw, 28px) 0 0',
-              fontSize: 'clamp(14px, 1.1vw, 17px)',
+              fontSize: 'clamp(16px, 1.3vw, 20px)',
               lineHeight: 1.6,
               color: 'rgba(255,255,255,0.82)',
               maxWidth: '70ch',
@@ -628,7 +627,7 @@ function RenderMediaSlide({ slide, reveal }: { slide: Slide3; reveal: number }) 
                 <p
                   style={{
                     margin: 0,
-                    fontSize: 'clamp(16px, 1.55vw, 22px)',
+                    fontSize: 'clamp(18px, 1.8vw, 26px)',
                     fontWeight: 300, lineHeight: 1.55,
                     color: 'rgba(255,255,255,0.94)',
                   }}
@@ -711,7 +710,7 @@ function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }
                   position: 'absolute', bottom: 0, left: 0, right: 0,
                   padding: 'clamp(14px, 1.2vw, 22px) clamp(16px, 1.4vw, 24px) clamp(12px, 1vw, 18px)',
                   fontFamily: INTRO_FONT,
-                  fontSize: 'clamp(13px, 1.1vw, 18px)',
+                  fontSize: 'clamp(15px, 1.3vw, 21px)',
                   fontWeight: 700,
                   lineHeight: 1.25,
                   color: '#fff',

@@ -59,18 +59,18 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
       <header
         style={{
           padding: 'clamp(28px, 5vh, 56px) clamp(24px, 6vw, 80px) 0',
-          display: 'flex', alignItems: 'center', gap: 16,
+          display: 'flex', alignItems: 'center', gap: 18,
         }}
       >
         <img
           src="/logo-ae-blanco.png"
           alt="AE"
-          style={{ width: 52, height: 'auto', objectFit: 'contain' }}
+          style={{ width: 'clamp(52px, 4.5vw, 76px)', height: 'auto', objectFit: 'contain' }}
         />
         <div>
           <div
             style={{
-              fontSize: 11, fontWeight: 700, letterSpacing: '0.16em',
+              fontSize: 'clamp(12px, 0.9vw, 14px)', fontWeight: 700, letterSpacing: '0.16em',
               textTransform: 'uppercase', color: '#74A884',
             }}
           >
@@ -78,8 +78,8 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
           </div>
           <div
             style={{
-              fontSize: 13, fontWeight: 300, letterSpacing: '0.04em',
-              color: 'rgba(255,255,255,0.55)', marginTop: 2,
+              fontSize: 'clamp(13px, 1vw, 16px)', fontWeight: 300, letterSpacing: '0.04em',
+              color: 'rgba(255,255,255,0.55)', marginTop: 3,
             }}
           >
             Geoportal · Bienvenida
@@ -93,10 +93,14 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
           flex: 1,
           display: 'flex', flexDirection: 'column',
           justifyContent: 'center',
-          padding: 'clamp(24px, 6vw, 80px)',
+          paddingTop: 'clamp(12px, 2vh, 32px)',
+          paddingBottom: 'clamp(52px, 9vh, 110px)',
+          paddingLeft: 'clamp(24px, 6vw, 80px)',
+          paddingRight: 'clamp(24px, 6vw, 80px)',
           maxWidth: 1400,
           margin: '0 auto',
           width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         <h1
@@ -104,8 +108,8 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
             margin: 0,
             fontFamily: INTRO_FONT,
             fontWeight: 300,
-            fontSize: 'clamp(40px, 6vw, 84px)',
-            lineHeight: 1.05,
+            fontSize: 'clamp(50px, 7vw, 104px)',
+            lineHeight: 1.04,
             letterSpacing: '0.005em',
             color: '#fff',
             textShadow: '0 4px 24px rgba(0,0,0,0.4)',
@@ -117,12 +121,12 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
         </h1>
         <p
           style={{
-            margin: '20px 0 0',
-            fontSize: 'clamp(16px, 1.8vw, 22px)',
+            margin: 'clamp(16px, 2vh, 28px) 0 0',
+            fontSize: 'clamp(18px, 2.1vw, 28px)',
             fontWeight: 300,
             lineHeight: 1.5,
             color: 'rgba(255,255,255,0.78)',
-            maxWidth: 720,
+            maxWidth: 820,
             transform: visible ? 'translateY(0)' : 'translateY(20px)',
             transition: 'transform 0.8s cubic-bezier(0.22,1,0.36,1) 0.35s',
           }}
@@ -133,10 +137,10 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
         {/* Cards */}
         <div
           style={{
-            marginTop: 'clamp(28px, 4vh, 56px)',
+            marginTop: 'clamp(22px, 3vh, 44px)',
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: 'clamp(14px, 1.8vw, 22px)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 'clamp(14px, 1.8vw, 24px)',
           }}
         >
           {slide.cards.map((card, i) => {
@@ -161,7 +165,7 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
                   color: disabled ? 'rgba(255,255,255,0.4)' : '#fff',
                   cursor: disabled ? 'not-allowed' : 'pointer',
                   display: 'flex', flexDirection: 'column',
-                  gap: 12, minHeight: 200, position: 'relative',
+                  gap: 'clamp(12px, 1.2vw, 18px)', minHeight: 'clamp(200px, 22vh, 260px)', position: 'relative',
                   fontFamily: INTRO_FONT,
                   opacity: visible ? 1 : 0,
                   transform: visible ? 'translateY(0)' : 'translateY(28px)',
@@ -180,12 +184,12 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
               >
                 <div
                   style={{
-                    width: 38, height: 38, borderRadius: '50%',
+                    width: 'clamp(38px, 3.2vw, 52px)', height: 'clamp(38px, 3.2vw, 52px)', borderRadius: '50%',
                     background: disabled
                       ? 'rgba(255,255,255,0.08)'
                       : 'linear-gradient(135deg, #74A884, #6898B8)',
                     color: '#fff',
-                    fontSize: 16, fontWeight: 700,
+                    fontSize: 'clamp(16px, 1.3vw, 20px)', fontWeight: 700,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}
                 >
@@ -196,10 +200,10 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
                   style={{
                     margin: 0,
                     fontFamily: INTRO_FONT,
-                    fontSize: 'clamp(17px, 1.5vw, 21px)',
+                    fontSize: 'clamp(18px, 1.8vw, 25px)',
                     fontWeight: 700,
                     letterSpacing: '0.005em',
-                    lineHeight: 1.25,
+                    lineHeight: 1.22,
                     color: disabled ? 'rgba(255,255,255,0.55)' : '#fff',
                   }}
                 >
@@ -209,7 +213,7 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
                 <p
                   style={{
                     margin: 0,
-                    fontSize: 13, lineHeight: 1.55,
+                    fontSize: 'clamp(14px, 1.1vw, 17px)', lineHeight: 1.55,
                     color: disabled ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.72)',
                     flex: 1,
                   }}
@@ -219,9 +223,9 @@ export default function SlideHub({ slide, onCardClick, onClose }: Props) {
 
                 <div
                   style={{
-                    marginTop: 4,
+                    marginTop: 6,
                     display: 'flex', alignItems: 'center', gap: 8,
-                    fontSize: 11, fontWeight: 700, letterSpacing: '0.12em',
+                    fontSize: 'clamp(12px, 0.9vw, 14px)', fontWeight: 700, letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     color: disabled ? 'rgba(255,255,255,0.32)' : '#74A884',
                   }}
