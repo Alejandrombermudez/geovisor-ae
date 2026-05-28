@@ -924,6 +924,56 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 Métricas
               </button>
             )}
+
+            {/* Leyenda de polígonos por año ─────────────────────────── */}
+            {!compact && (
+              <div style={{
+                marginTop: 18, paddingTop: 14,
+                borderTop: '1px solid rgba(255,255,255,0.08)',
+              }}>
+                <div style={{
+                  color: 'rgba(255,255,255,0.38)', fontSize: 12,
+                  textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6,
+                }}>
+                  Leyenda
+                </div>
+                <div style={{
+                  color: `${METAS_COLOR}DD`, fontSize: 14, fontWeight: 700,
+                  lineHeight: 1.35, marginBottom: 3,
+                }}>
+                  Fase 1 · 2026 – 2030
+                </div>
+                <div style={{
+                  color: 'rgba(255,255,255,0.5)', fontSize: 13, marginBottom: 12,
+                }}>
+                  Piedemonte Andino-Amazónico
+                </div>
+                {[
+                  { label: '2026 – 2027', stroke: '#F59E0B', fill: '#FCD34D' },
+                  { label: '2028',        stroke: '#60A5FA', fill: '#93C5FD' },
+                  { label: '2029',        stroke: '#C084FC', fill: '#DDD6FE' },
+                  { label: '2030',        stroke: '#F472B6', fill: '#FBCFE8' },
+                  { label: '2031 – 2032', stroke: '#FB923C', fill: '#FDBA74' },
+                ].map(({ label, stroke, fill }) => (
+                  <div key={label} style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '6px 0',
+                  }}>
+                    <div style={{
+                      width: 16, height: 16, borderRadius: 4,
+                      background: fill,
+                      border: `1.5px solid ${stroke}`,
+                      flexShrink: 0,
+                    }} />
+                    <span style={{
+                      color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: 600,
+                    }}>
+                      {label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
