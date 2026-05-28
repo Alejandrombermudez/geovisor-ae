@@ -748,17 +748,17 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
     const YEAR_MAX  = 2032
     const YEAR_RANGE = YEAR_MAX - YEAR_MIN
     const sliderPct  = YEAR_RANGE > 0 ? ((metasYear - YEAR_MIN) / YEAR_RANGE) * 100 : 0
-    const METAS_COLOR = '#FAB758'
+    const METAS_COLOR = '#C49A40'
 
     // Info de la capa por año seleccionado (cuántas veredas acumuladas)
     const VEREDAS_POR_AÑO: Record<number, string[]> = {
       2026: ['Delicias', 'Lagunilla'],
-      2027: ['La Raya', 'Buenos Aires'],
-      2028: ['Bodoquero', 'La Turbia Alta', 'Macagual'],
-      2029: ['Bocagrande', 'San Gil', 'Vuelta del Gallo', 'Costa Rica'],
-      2030: ['La Iberia', 'La Turbia Arriba', 'San Pablo', 'Santo Domingo'],
-      2031: ['Alto Venecia', 'Vergel', 'La Astilla'],
-      2032: ['Alto Jordán', 'Santuario', 'Jordán Alto', 'Las Iglesias Bajas'],
+      2027: [],
+      2028: ['La Raya', 'Buenos Aires'],
+      2029: ['Bodoquero', 'La Turbia Alta', 'Macagual'],
+      2030: ['Bocagrande', 'San Gil', 'Vuelta del Gallo', 'Costa Rica', 'La Iberia', 'La Turbia Arriba', 'San Pablo', 'Santo Domingo'],
+      2031: [],
+      2032: [],
     }
     // Acumulado hasta el año seleccionado
     const veredasAcum = METAS_YEARS
@@ -912,7 +912,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 onClick={onOpenMetasMetrics}
                 style={{
                   width: '100%', padding: '14px 12px',
-                  background: `linear-gradient(135deg, ${METAS_COLOR} 0%, #F97316 100%)`,
+                  background: `linear-gradient(135deg, ${METAS_COLOR} 0%, #8B6820 100%)`,
                   border: 'none', borderRadius: 9, color: '#000',
                   fontSize: 19, fontWeight: 800, cursor: 'pointer',
                   letterSpacing: '0.03em',
@@ -1022,7 +1022,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
             style={{
               background: hovered === 'metas' ? 'rgba(250,183,89,0.12)' : 'transparent',
               border: 'none', borderLeft: '4px solid transparent',
-              color: hovered === 'metas' ? '#FAB758' : 'rgba(255,255,255,0.45)',
+              color: hovered === 'metas' ? '#C49A40' : 'rgba(255,255,255,0.45)',
               cursor: 'pointer', display: 'flex', flexDirection: 'column',
               alignItems: 'center', justifyContent: 'center',
               gap: 5, width: '100%', padding: '12px 4px', transition: 'all 0.2s ease',

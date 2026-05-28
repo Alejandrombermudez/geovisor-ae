@@ -80,7 +80,7 @@ function renderVeredasLayer(
       style: (feature) => {
         const anio = (feature as VeredaFeature).properties.anio ?? year
         const isCurrentYear = anio === year
-        const palette = YEAR_COLORS[anio] ?? { stroke: '#FAB758', fill: '#FAB758' }
+        const palette = YEAR_COLORS[anio] ?? { stroke: '#C49A40', fill: '#C49A40' }
         return {
           color:       palette.stroke,
           fillColor:   palette.fill,
@@ -92,7 +92,7 @@ function renderVeredasLayer(
       onEachFeature: (feature, lyr) => {
         const p      = (feature as VeredaFeature).properties
         const area   = p.area_ha != null ? p.area_ha.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : '—'
-        const pal    = YEAR_COLORS[p.anio ?? 0] ?? { stroke: '#FAB758' }
+        const pal    = YEAR_COLORS[p.anio ?? 0] ?? { stroke: '#C49A40' }
         lyr.bindTooltip(
           `<div style="font-family:system-ui;font-size:12px;line-height:1.6">
             <strong style="font-size:13px">${p.nombre_ver}</strong><br/>

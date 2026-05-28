@@ -37,7 +37,7 @@ type ViewMode = 'ambas' | 'ae' | 'fb'
 const YEARS = [2026, 2027, 2028, 2029, 2030, 2031, 2032]
 const AE_COLOR = '#74A884'
 const FB_COLOR = '#6898B8'
-const ACCENT   = '#FAB758'
+const ACCENT   = '#C49A40'
 
 function fmt(n: number | null | undefined): string {
   if (n == null) return '—'
@@ -447,9 +447,11 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
                 <div style={{
                   color: 'rgba(255,255,255,0.4)', fontSize: 15,
                   textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 14,
+                  textAlign: 'center',
                 }}>
                   Avance acumulado hacia meta total
                 </div>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <DualProgressChart
                   aeByYear={ae.por_anio}
                   fbByYear={fb.por_anio}
@@ -458,6 +460,7 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
                   mode={viewMode}
                   selectedYear={selectedYear}
                 />
+                </div>
               </div>
 
               <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 0 22px' }} />
