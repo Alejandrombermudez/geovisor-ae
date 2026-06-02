@@ -143,6 +143,14 @@ export default function GeovisorPage() {
   }, [proyecciones])
 
   const handleOpenMetasFromHub = useCallback(() => {
+    // Aliado con proyecto (ej. Tetra Pak): su card del intro lleva SIEMPRE a su
+    // módulo, nunca a las Metas generales. Evita la carrera del primer login.
+    if (aliado?.proyecto) {
+      handleAliadoViewToggle(true)
+      setOpenAliadoView(true)
+      setTimeout(() => setOpenAliadoView(false), 300)
+      return
+    }
     setOpenMetasView(true)
     setTimeout(() => setOpenMetasView(false), 300)
     // También activar la vista Metas como si viniera del sidebar
@@ -151,7 +159,7 @@ export default function GeovisorPage() {
     setActiveCategory(null)
     setSelectedFamiliaId(null)
     setMetasLayerActive(true)
-  }, [proyecciones])
+  }, [proyecciones, aliado, handleAliadoViewToggle])
 
   const handleCloseMetasMetrics = useCallback(() => {
     setMetasMetricsOpen(false)
