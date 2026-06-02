@@ -53,6 +53,8 @@ export default function GeovisorPage() {
   const [aliadoViewActive,  setAliadoViewActive]  = useState(false)
   /** Panel derecho de Métricas del aliado abierto */
   const [aliadoMetricsOpen, setAliadoMetricsOpen] = useState(false)
+  /** Pestaña inicial del panel del aliado: métricas o monitoreo */
+  const [aliadoMetricsView, setAliadoMetricsView] = useState<'metricas' | 'monitoreo'>('metricas')
   /** true → LeftSidebar abre la vista del aliado (post-login) */
   const [openAliadoView,    setOpenAliadoView]    = useState(false)
 
@@ -125,7 +127,10 @@ export default function GeovisorPage() {
     }
   }, [])
 
-  const handleOpenAliadoMetrics  = useCallback(() => setAliadoMetricsOpen(true),  [])
+  const handleOpenAliadoMetrics  = useCallback((view: 'metricas' | 'monitoreo' = 'metricas') => {
+    setAliadoMetricsView(view)
+    setAliadoMetricsOpen(true)
+  }, [])
   const handleCloseAliadoMetrics = useCallback(() => setAliadoMetricsOpen(false), [])
 
   /** Activa/desactiva la vista Metas: habilita Fase I, oculta capas de familias */
@@ -403,6 +408,7 @@ export default function GeovisorPage() {
       {/* Panel derecho de Métricas del aliado (ej. Tetra Pak) */}
       {aliadoMetricsOpen && aliado?.proyecto && (
         <MetricasAliadoPanel
+          key={aliadoMetricsView}
           proyecto={aliado.proyecto}
           displayName={aliado.displayName}
           brandColor={aliado.brandColor}
@@ -410,6 +416,7 @@ export default function GeovisorPage() {
           width={rightWidth}
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
+          initialView={aliadoMetricsView}
         />
       )}
 

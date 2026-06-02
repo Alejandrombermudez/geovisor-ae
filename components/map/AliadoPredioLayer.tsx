@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { GeoJSON, useMap } from 'react-leaflet'
+import { GeoJSON, ImageOverlay, Pane, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { FeatureCollection, Feature } from 'geojson'
 import type { Layer } from 'leaflet'
@@ -41,9 +41,14 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
   useEffect(() => {
     if (!flyTo || !ley2173) return
     const bounds = L.geoJSON(ley2173).getBounds()
-    if (bounds.isValid()) {
-      map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 17, duration: 1.4 })
-    }
+    if (!bounds.isValid()) return
+    map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 17, duration: 1.4 })
+    // El ImageOverlay (ortofoto) calcula su tamaño al montarse (mapa aún en zoom
+    // lejano) y a veces no recalcula tras el flyTo, quedando en 0×0. Al asentar la
+    // vista forzamos un viewreset para que todos los overlays recalculen su tamaño.
+    const onEnd = () => { map.fire('viewreset'); map.off('moveend', onEnd) }
+    map.on('moveend', onEnd)
+    return () => { map.off('moveend', onEnd) }
   }, [ley2173, flyTo, map])
 
   const isAliado = (f: Feature | undefined) =>
@@ -51,6 +56,18 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
 
   return (
     <>
+      {/* Ortofoto de dron (raster RGB) — pane propio entre tiles (200) y vectores (400),
+          para que quede sobre el satélite nublado pero bajo los polígonos. */}
+      {proyecto.ortho && (
+        <Pane name="aliado-ortho" style={{ zIndex: 250 }}>
+          <ImageOverlay
+            url={proyecto.ortho.url}
+            bounds={proyecto.ortho.bounds}
+            opacity={1}
+          />
+        </Pane>
+      )}
+
       {/* Contorno del predio completo (forma del sitio) */}
       {predio && (
         <GeoJSON
@@ -86,7 +103,7 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
             layer.bindTooltip(
               `<div style="font-family:system-ui;font-size:12px;line-height:1.5">
                 <strong>Predio Escuela Bosque</strong><br/>
-                <span style="color:#9ca3af">${fmtHa(feature.properties?.area)} ha · resto del predio AE</span>
+                <span style="color:#9ca3af">${fmtHa(feature.properties?.area)} ha · resto del predio</span>
               </div>`,
               { sticky: true, direction: 'top' },
             )

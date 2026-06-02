@@ -28,8 +28,8 @@ interface Props {
   onMetasViewToggle?: (open: boolean) => void
   /** Aliado en sesión con proyecto personalizado (ej. Tetra Pak). null = ninguno */
   aliado?: Aliado | null
-  /** Abre el panel derecho de Métricas del aliado */
-  onOpenAliadoMetrics?: () => void
+  /** Abre el panel derecho del aliado en la pestaña indicada */
+  onOpenAliadoMetrics?: (view: 'metricas' | 'monitoreo') => void
   /** Llamado al entrar/salir de la vista del aliado — activa/desactiva su capa en el mapa */
   onAliadoViewToggle?: (open: boolean) => void
   /** Fuerza la apertura de la vista del aliado (post-login, tras el intro) */
@@ -1043,14 +1043,9 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                 <AEImage src={aliado.logoUrl} style={{ width: compact ? 36 : 92, height: 'auto', objectFit: 'contain' }} />
               )}
               {!compact && (
-                <>
-                  <div style={{ color: c, fontSize: 19, fontWeight: 800, letterSpacing: '0.01em', textAlign: 'center' }}>
-                    {aliado.displayName}
-                  </div>
-                  <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11, textAlign: 'center', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                    Aliado · Inversionista
-                  </div>
-                </>
+                <div style={{ color: c, fontSize: 19, fontWeight: 800, letterSpacing: '0.01em', textAlign: 'center' }}>
+                  {aliado.displayName}
+                </div>
               )}
             </div>
 
@@ -1091,7 +1086,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
                 {/* Botón Métricas */}
                 <button
-                  onClick={onOpenAliadoMetrics}
+                  onClick={() => onOpenAliadoMetrics?.('metricas')}
                   style={{
                     width: '100%', padding: '14px 12px',
                     background: `linear-gradient(135deg, ${c} 0%, ${aliado.brandColorDark} 100%)`,
@@ -1105,6 +1100,22 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   Métricas
                 </button>
 
+                {/* Botón Monitoreo */}
+                <button
+                  onClick={() => onOpenAliadoMetrics?.('monitoreo')}
+                  style={{
+                    width: '100%', padding: '13px 12px', marginTop: 8,
+                    background: 'rgba(255,255,255,0.06)',
+                    border: `1.5px solid ${c}66`, borderRadius: 9, color: '#fff',
+                    fontSize: 17, fontWeight: 700, cursor: 'pointer',
+                    letterSpacing: '0.03em', transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = `${c}1E`; e.currentTarget.style.borderColor = c }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${c}66` }}
+                >
+                  Monitoreo
+                </button>
+
                 {/* Leyenda de polígonos */}
                 <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                   <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
@@ -1112,7 +1123,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   </div>
                   {[
                     { label: `Polígonos ${aliado.displayName}`, fill: c, stroke: c },
-                    { label: 'Resto del predio AE', fill: 'rgba(229,231,235,0.12)', stroke: '#E5E7EB' },
+                    { label: 'Resto del predio', fill: 'rgba(229,231,235,0.12)', stroke: '#E5E7EB' },
                     { label: 'Límite del predio', fill: 'transparent', stroke: '#FFFFFF' },
                   ].map(({ label, fill, stroke }) => (
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '6px 0' }}>

@@ -27,6 +27,18 @@ export interface DatosArboles {
 }
 
 /** Proyecto de intervención de un aliado: polígonos + métricas. */
+/** Seguimiento del proceso de restauración (valores null → se muestran como "--"). */
+export interface Monitoreo {
+  /** Número de especies sembradas. */
+  especiesSembradas: number | null
+  /** Tasa de supervivencia (porcentaje). */
+  tasaSupervivencia: number | null
+  /** Fecha del último monitoreo (texto legible, ej. "2026-08"). */
+  fechaMonitoreo: string | null
+  /** Número de parcelas de monitoreo. */
+  parcelasMonitoreo: number | null
+}
+
 export interface AliadoProyecto {
   /** Nombre del predio / proyecto (ej. "Escuela Bosque"). */
   nombre: string
@@ -46,6 +58,15 @@ export interface AliadoProyecto {
   predioTotal: DatosArboles
   /** Datos de la porción asignada al aliado. */
   aliado: DatosArboles
+  /** Seguimiento/monitoreo del proceso (pendiente → "--"). */
+  monitoreo?: Monitoreo
+  /** Ortofoto de dron (raster RGB) como capa base del sitio, bajo los polígonos. */
+  ortho?: {
+    /** URL de la imagen (WebP con alfa, reproyectada a lat/lng). */
+    url: string
+    /** Límites geográficos [[sur, oeste], [norte, este]]. */
+    bounds: [[number, number], [number, number]]
+  }
 }
 
 export interface Aliado {
@@ -89,9 +110,7 @@ const TETRA_PAK: Aliado = {
   proyecto: {
     nombre: 'Escuela Bosque',
     ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
-    descripcion:
-      'Predio de restauración activa donde Tetra Pak financia la intervención ' +
-      'de una porción de los polígonos elegibles bajo la Ley 2173 (Ley del Árbol).',
+    descripcion: 'Proyección área de intervención de Tetra Pak bajo la Ley 2173.',
     predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
     ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
     intervenciValue: 'Tetra Pak',
@@ -108,6 +127,17 @@ const TETRA_PAK: Aliado = {
     // en la columna Intervenci (≈0,9 ha).
     predioTotal: { ha: 4.6, arbPorHa: 330, arboles: 1519 },
     aliado: { ha: 0.9, arbPorHa: 330, arboles: 284.2 },
+    // Pendiente de los primeros monitoreos en campo → se muestran como "--".
+    monitoreo: {
+      especiesSembradas: null,
+      tasaSupervivencia: null,
+      fechaMonitoreo: null,
+      parcelasMonitoreo: null,
+    },
+    ortho: {
+      url: '/tetrapak/ortho-escuelabosque.webp',
+      bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
+    },
   },
 }
 

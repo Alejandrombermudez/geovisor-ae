@@ -1,6 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import type { AliadoProyecto } from '@/lib/aliados'
+
+type Vista = 'metricas' | 'monitoreo'
 
 interface Props {
   proyecto: AliadoProyecto
@@ -10,6 +13,8 @@ interface Props {
   width: number
   onClose: () => void
   isMobile: boolean
+  /** Pestaña inicial al abrir el panel */
+  initialView?: Vista
 }
 
 const AE_COLOR = '#74A884' // Amazonia Emprende (predio completo)
@@ -22,9 +27,10 @@ function fmt(n: number, decimals = 0): string {
 }
 
 export default function MetricasAliadoPanel({
-  proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile,
+  proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile, initialView = 'metricas',
 }: Props) {
-  const { ficha, predioTotal, aliado } = proyecto
+  const { ficha, predioTotal, aliado, monitoreo } = proyecto
+  const [view, setView] = useState<Vista>(initialView)
 
   // Participación del aliado sobre el predio (según árboles estimados)
   const sharePct = predioTotal.arboles > 0
@@ -148,10 +154,39 @@ export default function MetricasAliadoPanel({
         >✕</button>
       </div>
 
+      {/* ── Pestañas: Métricas / Monitoreo ── */}
+      <div style={{
+        flexShrink: 0, padding: '10px 16px',
+        borderBottom: '1px solid rgba(255,255,255,0.07)',
+        display: 'flex', gap: 6,
+      }}>
+        {([['metricas', 'Métricas'], ['monitoreo', 'Monitoreo']] as const).map(([key, label]) => {
+          const active = view === key
+          return (
+            <button
+              key={key}
+              onClick={() => setView(key)}
+              style={{
+                flex: 1, padding: '9px 6px',
+                background: active ? `${brandColor}1E` : 'rgba(255,255,255,0.04)',
+                border: `1.5px solid ${active ? brandColor + '60' : 'rgba(255,255,255,0.09)'}`,
+                borderRadius: 9,
+                color: active ? brandColor : 'rgba(255,255,255,0.45)',
+                fontSize: 16, fontWeight: active ? 700 : 500,
+                cursor: 'pointer', transition: 'all 0.15s', letterSpacing: '0.01em',
+              }}
+            >
+              {label}
+            </button>
+          )
+        })}
+      </div>
+
       {/* ── Body ── */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 20px 32px' }}>
 
-        {/* ── Comparación predio AE vs aliado ── */}
+       {view === 'metricas' && (<>
+        {/* ── Comparación predio vs aliado ── */}
         <div style={{
           color: 'rgba(255,255,255,0.4)', fontSize: 14,
           textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12,
@@ -160,7 +195,7 @@ export default function MetricasAliadoPanel({
         </div>
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
           <DatosCard
-            title="Total predio AE"
+            title="Total predio"
             color={AE_COLOR}
             ha={predioTotal.ha} arbHa={predioTotal.arbPorHa} arboles={predioTotal.arboles}
             highlight={false}
@@ -179,8 +214,8 @@ export default function MetricasAliadoPanel({
           background: `${brandColor}0C`, border: `1px solid ${brandColor}25`, borderRadius: 12,
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-            <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 15 }}>
-              Participación de {displayName} en el predio
+            <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 15, maxWidth: '72%', lineHeight: 1.4 }}>
+              Participación de {displayName}, medida en número de árboles, en el proceso de restauración del predio
             </span>
             <span style={{ color: brandColor, fontSize: 22, fontWeight: 800 }}>
               {fmt(sharePct, 1)}%
@@ -221,23 +256,47 @@ export default function MetricasAliadoPanel({
           <FichaRow label="Gremio de especies" value={ficha.gremioEspecies} />
           <FichaRow label="Densidad" value={`${fmt(ficha.arbPorHa)} árb/ha`} />
         </div>
+       </>)}
 
-        {/* ── Nota ── */}
+       {view === 'monitoreo' && (<>
+        {/* ── Monitoreo (seguimiento del proceso) ── */}
         <div style={{
-          padding: '12px 14px',
-          background: 'rgba(255,255,255,0.04)',
-          border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10,
+          color: brandColor, fontSize: 15, fontWeight: 700,
+          textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4,
         }}>
-          <div style={{
-            color: 'rgba(255,255,255,0.4)', fontSize: 14,
-            textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6,
-          }}>Nota</div>
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 15, lineHeight: 1.65 }}>
-            El predio Escuela Bosque agrupa los polígonos elegibles bajo la Ley 2173.
-            {' '}{displayName} financia la restauración de los polígonos resaltados en el mapa
-            ({fmt(aliado.ha, 1)} ha), con una densidad de {fmt(ficha.arbPorHa)} árboles por hectárea.
-          </div>
+          Monitoreo
         </div>
+        <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 15, marginBottom: 16, lineHeight: 1.5 }}>
+          Seguimiento del proceso de restauración en campo.
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          {[
+            { label: 'Especies sembradas',    value: monitoreo?.especiesSembradas  != null ? fmt(monitoreo.especiesSembradas)        : '--' },
+            { label: 'Tasa de supervivencia', value: monitoreo?.tasaSupervivencia != null ? `${fmt(monitoreo.tasaSupervivencia, 1)}%` : '--' },
+            { label: 'Fecha de monitoreo',    value: monitoreo?.fechaMonitoreo ?? '--' },
+            { label: 'Parcelas de monitoreo', value: monitoreo?.parcelasMonitoreo != null ? fmt(monitoreo.parcelasMonitoreo)         : '--' },
+          ].map(({ label, value }) => (
+            <div key={label} style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.09)',
+              borderRadius: 10, padding: '14px 12px',
+            }}>
+              <div style={{ color: '#fff', fontSize: 23, fontWeight: 800, lineHeight: 1 }}>{value}</div>
+              <div style={{
+                color: 'rgba(255,255,255,0.42)', fontSize: 12, marginTop: 7,
+                textTransform: 'uppercase', letterSpacing: '0.03em', lineHeight: 1.3,
+              }}>{label}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{
+          marginTop: 16, padding: '12px 14px',
+          background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: 10, color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 1.6,
+        }}>
+          Aún no hay datos: estos indicadores se completarán con los primeros monitoreos en campo.
+        </div>
+       </>)}
       </div>
     </div>
   )
