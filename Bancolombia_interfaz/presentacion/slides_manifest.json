@@ -1,0 +1,3589 @@
+{
+  "source": "Bancolombia Intro.pptx",
+  "slide_width_emu": 18288000,
+  "slide_height_emu": 10287000,
+  "slide_width_px": 1920,
+  "slide_height_px": 1080,
+  "aspect_ratio": 1.7778,
+  "n_slides": 5,
+  "slides": [
+    {
+      "index": 1,
+      "layout_name": "Blank",
+      "shapes": [
+        {
+          "name": "Freeform 2",
+          "shape_type": "FREEFORM (5)",
+          "shape_id": 2,
+          "left_emu": 0,
+          "top_emu": 0,
+          "width_emu": 18288000,
+          "height_emu": 10287000,
+          "left_pct": 0.0,
+          "top_pct": 0.0,
+          "width_pct": 100.0,
+          "height_pct": 100.0,
+          "left_px": 0,
+          "top_px": 0,
+          "width_px": 1920,
+          "height_px": 1080,
+          "text": "",
+          "paragraphs": [
+            {
+              "alignment": null,
+              "level": 0,
+              "runs": [],
+              "text": ""
+            }
+          ],
+          "asset_file": "slides_assets/image1.jpeg"
+        },
+        {
+          "name": "Group 3",
+          "shape_type": "GROUP (6)",
+          "shape_id": 3,
+          "left_emu": 556151,
+          "top_emu": 476741,
+          "width_emu": 16918136,
+          "height_emu": 9150557,
+          "left_pct": 3.04,
+          "top_pct": 4.63,
+          "width_pct": 92.51,
+          "height_pct": 88.95,
+          "left_px": 58,
+          "top_px": 50,
+          "width_px": 1776,
+          "height_px": 961,
+          "children": [
+            {
+              "name": "Freeform 4",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 4,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4455806,
+              "height_emu": 2410023,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.36,
+              "height_pct": 23.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 468,
+              "height_px": 253,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 5",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 5,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4455805,
+              "height_emu": 2457648,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.36,
+              "height_pct": 23.89,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 468,
+              "height_px": 258,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 6",
+          "shape_type": "GROUP (6)",
+          "shape_id": 6,
+          "left_emu": 588644,
+          "top_emu": 476741,
+          "width_emu": 16885644,
+          "height_emu": 9150557,
+          "left_pct": 3.22,
+          "top_pct": 4.63,
+          "width_pct": 92.33,
+          "height_pct": 88.95,
+          "left_px": 62,
+          "top_px": 50,
+          "width_px": 1773,
+          "height_px": 961,
+          "children": [
+            {
+              "name": "Freeform 7",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 7,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4447248,
+              "height_emu": 2410023,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.32,
+              "height_pct": 23.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 467,
+              "height_px": 253,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 8",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 8,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4447248,
+              "height_emu": 2457648,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.32,
+              "height_pct": 23.89,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 467,
+              "height_px": 258,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 9",
+          "shape_type": "GROUP (6)",
+          "shape_id": 9,
+          "left_emu": 3544931,
+          "top_emu": 1169846,
+          "width_emu": 10961152,
+          "height_emu": 2191458,
+          "left_pct": 19.38,
+          "top_pct": 11.37,
+          "width_pct": 59.94,
+          "height_pct": 21.3,
+          "left_px": 372,
+          "top_px": 123,
+          "width_px": 1151,
+          "height_px": 230,
+          "children": [
+            {
+              "name": "Freeform 10",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 10,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2886888,
+              "height_emu": 577174,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 15.79,
+              "height_pct": 5.61,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 303,
+              "height_px": 61,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 11",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 11,
+              "left_emu": 0,
+              "top_emu": -85725,
+              "width_emu": 2886888,
+              "height_emu": 662899,
+              "left_pct": 0.0,
+              "top_pct": -0.83,
+              "width_pct": 15.79,
+              "height_pct": 6.44,
+              "left_px": 0,
+              "top_px": -9,
+              "width_px": 303,
+              "height_px": 70,
+              "text": "  ¿Porque la Amazonía?\n La urgencia de frenar la deforestación y el punto de no retorno",
+              "paragraphs": [
+                {
+                  "alignment": "LEFT (1)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "  ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 39.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "¿Porque la Amazonía?",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 39.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "  ¿Porque la Amazonía?"
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": " ",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "La urgencia de frenar la deforestación y el punto de no retorno",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": " La urgencia de frenar la deforestación y el punto de no retorno"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 12",
+          "shape_type": "GROUP (6)",
+          "shape_id": 12,
+          "left_emu": 3544931,
+          "top_emu": 4039312,
+          "width_emu": 10961152,
+          "height_emu": 2191458,
+          "left_pct": 19.38,
+          "top_pct": 39.27,
+          "width_pct": 59.94,
+          "height_pct": 21.3,
+          "left_px": 372,
+          "top_px": 424,
+          "width_px": 1151,
+          "height_px": 230,
+          "children": [
+            {
+              "name": "Freeform 13",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 13,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2886888,
+              "height_emu": 577174,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 15.79,
+              "height_pct": 5.61,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 303,
+              "height_px": 61,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 14",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 14,
+              "left_emu": 0,
+              "top_emu": -85725,
+              "width_emu": 2886888,
+              "height_emu": 662899,
+              "left_pct": 0.0,
+              "top_pct": -0.83,
+              "width_pct": 15.79,
+              "height_pct": 6.44,
+              "left_px": 0,
+              "top_px": -9,
+              "width_px": 303,
+              "height_px": 70,
+              "text": "  El Costo de No Actuar\nRiesgos climáticos, hídricos y financieros asociados a la \ndegradación de la Amazonía. ",
+              "paragraphs": [
+                {
+                  "alignment": "LEFT (1)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "  ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 39.99,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": "El Costo de No Actuar",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 39.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "  El Costo de No Actuar"
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Riesgos climáticos, hídricos y financieros asociados a la ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Riesgos climáticos, hídricos y financieros asociados a la "
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "degradación de la Amazonía. ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "degradación de la Amazonía. "
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 15",
+          "shape_type": "GROUP (6)",
+          "shape_id": 15,
+          "left_emu": 3544931,
+          "top_emu": 7066842,
+          "width_emu": 10961152,
+          "height_emu": 2191458,
+          "left_pct": 19.38,
+          "top_pct": 68.7,
+          "width_pct": 59.94,
+          "height_pct": 21.3,
+          "left_px": 372,
+          "top_px": 742,
+          "width_px": 1151,
+          "height_px": 230,
+          "children": [
+            {
+              "name": "Freeform 16",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 16,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2886888,
+              "height_emu": 577174,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 15.79,
+              "height_pct": 5.61,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 303,
+              "height_px": 61,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 17",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 17,
+              "left_emu": 0,
+              "top_emu": -85725,
+              "width_emu": 2886888,
+              "height_emu": 662899,
+              "left_pct": 0.0,
+              "top_pct": -0.83,
+              "width_pct": 15.79,
+              "height_pct": 6.44,
+              "left_px": 0,
+              "top_px": -9,
+              "width_px": 303,
+              "height_px": 70,
+              "text": "  ¿Cómo lo hacemos?\n   Explora el cronograma de actividades, las estapas del proyecto y los indicadores claves para medir el éxito",
+              "paragraphs": [
+                {
+                  "alignment": "LEFT (1)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "  ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 39.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "¿Cómo lo hacemos?",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 39.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "  ¿Cómo lo hacemos?"
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "   ",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "Explora el cronograma de actividades, las estapas del proyecto y los indicadores claves para medir el éxito",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "   Explora el cronograma de actividades, las estapas del proyecto y los indicadores claves para medir el éxito"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Freeform 18",
+          "shape_type": "FREEFORM (5)",
+          "shape_id": 18,
+          "left_emu": 793622,
+          "top_emu": 831528,
+          "width_emu": 2293678,
+          "height_emu": 676637,
+          "left_pct": 4.34,
+          "top_pct": 8.08,
+          "width_pct": 12.54,
+          "height_pct": 6.58,
+          "left_px": 83,
+          "top_px": 87,
+          "width_px": 241,
+          "height_px": 71,
+          "text": "",
+          "paragraphs": [
+            {
+              "alignment": null,
+              "level": 0,
+              "runs": [],
+              "text": ""
+            }
+          ],
+          "asset_file": "slides_assets/image2.png"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "layout_name": "Blank",
+      "shapes": [
+        {
+          "name": "Freeform 2",
+          "shape_type": "FREEFORM (5)",
+          "shape_id": 2,
+          "left_emu": 0,
+          "top_emu": 0,
+          "width_emu": 18288000,
+          "height_emu": 10287000,
+          "left_pct": 0.0,
+          "top_pct": 0.0,
+          "width_pct": 100.0,
+          "height_pct": 100.0,
+          "left_px": 0,
+          "top_px": 0,
+          "width_px": 1920,
+          "height_px": 1080,
+          "text": "",
+          "paragraphs": [
+            {
+              "alignment": null,
+              "level": 0,
+              "runs": [],
+              "text": ""
+            }
+          ],
+          "asset_file": "slides_assets/image4.png"
+        },
+        {
+          "name": "Group 3",
+          "shape_type": "GROUP (6)",
+          "shape_id": 3,
+          "left_emu": 556151,
+          "top_emu": 476741,
+          "width_emu": 17284816,
+          "height_emu": 9150557,
+          "left_pct": 3.04,
+          "top_pct": 4.63,
+          "width_pct": 94.51,
+          "height_pct": 88.95,
+          "left_px": 58,
+          "top_px": 50,
+          "width_px": 1815,
+          "height_px": 961,
+          "children": [
+            {
+              "name": "Freeform 4",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 4,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4552379,
+              "height_emu": 2410023,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.89,
+              "height_pct": 23.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 478,
+              "height_px": 253,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 5",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 5,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4552379,
+              "height_emu": 2457648,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.89,
+              "height_pct": 23.89,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 478,
+              "height_px": 258,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 6",
+          "shape_type": "GROUP (6)",
+          "shape_id": 6,
+          "left_emu": 588644,
+          "top_emu": 476741,
+          "width_emu": 17252323,
+          "height_emu": 9150557,
+          "left_pct": 3.22,
+          "top_pct": 4.63,
+          "width_pct": 94.34,
+          "height_pct": 88.95,
+          "left_px": 62,
+          "top_px": 50,
+          "width_px": 1811,
+          "height_px": 961,
+          "children": [
+            {
+              "name": "Freeform 7",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 7,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4543822,
+              "height_emu": 2410023,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.85,
+              "height_pct": 23.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 477,
+              "height_px": 253,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 8",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 8,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4543822,
+              "height_emu": 2457648,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.85,
+              "height_pct": 23.89,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 477,
+              "height_px": 258,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 9",
+          "shape_type": "GROUP (6)",
+          "shape_id": 9,
+          "left_emu": 875864,
+          "top_emu": 771218,
+          "width_emu": 16536272,
+          "height_emu": 1060978,
+          "left_pct": 4.79,
+          "top_pct": 7.5,
+          "width_pct": 90.42,
+          "height_pct": 10.31,
+          "left_px": 92,
+          "top_px": 81,
+          "width_px": 1736,
+          "height_px": 111,
+          "children": [
+            {
+              "name": "Freeform 10",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 10,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4355232,
+              "height_emu": 279434,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 23.81,
+              "height_pct": 2.72,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 457,
+              "height_px": 29,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 11",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 11,
+              "left_emu": 0,
+              "top_emu": -57150,
+              "width_emu": 4355232,
+              "height_emu": 336584,
+              "left_pct": 0.0,
+              "top_pct": -0.56,
+              "width_pct": 23.81,
+              "height_pct": 3.27,
+              "left_px": 0,
+              "top_px": -6,
+              "width_px": 457,
+              "height_px": 35,
+              "text": "La Amazonía está al borde del punto de NO RETORNO",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "La Amazonía está al borde del punto de ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "NO RETORNO",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "La Amazonía está al borde del punto de NO RETORNO"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 12",
+          "shape_type": "GROUP (6)",
+          "shape_id": 12,
+          "left_emu": 875864,
+          "top_emu": 2041746,
+          "width_emu": 8570587,
+          "height_emu": 3010274,
+          "left_pct": 4.79,
+          "top_pct": 19.85,
+          "width_pct": 46.86,
+          "height_pct": 29.26,
+          "left_px": 92,
+          "top_px": 214,
+          "width_px": 900,
+          "height_px": 316,
+          "children": [
+            {
+              "name": "Freeform 13",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 13,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2257274,
+              "height_emu": 792829,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 12.34,
+              "height_pct": 7.71,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 237,
+              "height_px": 83,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 14",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 14,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 2257274,
+              "height_emu": 840454,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 12.34,
+              "height_pct": 8.17,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 237,
+              "height_px": 88,
+              "text": "El Panel Científico por la Amazonía confirma que si la deforestación supera el 20% de la cuenca y el calentamiento global excede los 2°C, el colapso sería irreversible: \nEl bosque dejaría de regenerarse",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "El ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "Panel Científico por la Amazonía",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " confirma que si la deforestación supera el ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "20%",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " de la cuenca y el calentamiento global excede los 2°C, el colapso sería ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "irreversible:",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "El Panel Científico por la Amazonía confirma que si la deforestación supera el 20% de la cuenca y el calentamiento global excede los 2°C, el colapso sería irreversible: "
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "El bosque dejaría de regenerarse",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 24.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "El bosque dejaría de regenerarse"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 15",
+          "shape_type": "GROUP (6)",
+          "shape_id": 15,
+          "left_emu": 875864,
+          "top_emu": 5261570,
+          "width_emu": 2980376,
+          "height_emu": 1340282,
+          "left_pct": 4.79,
+          "top_pct": 51.15,
+          "width_pct": 16.3,
+          "height_pct": 13.03,
+          "left_px": 92,
+          "top_px": 552,
+          "width_px": 313,
+          "height_px": 141,
+          "children": [
+            {
+              "name": "Freeform 16",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 16,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 784955,
+              "height_emu": 352996,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 4.29,
+              "height_pct": 3.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 82,
+              "height_px": 37,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 17",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 17,
+              "left_emu": 0,
+              "top_emu": -57150,
+              "width_emu": 784955,
+              "height_emu": 410146,
+              "left_pct": 0.0,
+              "top_pct": -0.56,
+              "width_pct": 4.29,
+              "height_pct": 3.99,
+              "left_px": 0,
+              "top_px": -6,
+              "width_px": 82,
+              "height_px": 43,
+              "text": "47 M\nPersonas en riesgo si la Amazonía colapasa",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "47 M",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "47 M"
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Personas en riesgo si la Amazonía colapasa",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Personas en riesgo si la Amazonía colapasa"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 18",
+          "shape_type": "GROUP (6)",
+          "shape_id": 18,
+          "left_emu": 9739964,
+          "top_emu": 2041746,
+          "width_emu": 7702094,
+          "height_emu": 7216554,
+          "left_pct": 53.26,
+          "top_pct": 19.85,
+          "width_pct": 42.12,
+          "height_pct": 70.15,
+          "left_px": 1023,
+          "top_px": 214,
+          "width_px": 809,
+          "height_px": 758,
+          "asset_file": "slides_assets/image5.png",
+          "children": [
+            {
+              "name": "Freeform 19",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 19,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 6778507,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 37.07,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 712,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image5.png"
+            }
+          ]
+        },
+        {
+          "name": "Group 20",
+          "shape_type": "GROUP (6)",
+          "shape_id": 20,
+          "left_emu": 875864,
+          "top_emu": 6811402,
+          "width_emu": 8570587,
+          "height_emu": 2642527,
+          "left_pct": 4.79,
+          "top_pct": 66.21,
+          "width_pct": 46.86,
+          "height_pct": 25.69,
+          "left_px": 92,
+          "top_px": 715,
+          "width_px": 900,
+          "height_px": 277,
+          "children": [
+            {
+              "name": "Freeform 21",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 21,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2257274,
+              "height_emu": 695974,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 12.34,
+              "height_pct": 6.77,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 237,
+              "height_px": 73,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 22",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 22,
+              "left_emu": 0,
+              "top_emu": -66675,
+              "width_emu": 2257274,
+              "height_emu": 762649,
+              "left_pct": 0.0,
+              "top_pct": -0.65,
+              "width_pct": 12.34,
+              "height_pct": 7.41,
+              "left_px": 0,
+              "top_px": -7,
+              "width_px": 237,
+              "height_px": 80,
+              "text": "Invertir hoy en restauración y adaptación no solo protege biodiversidad: también reduce riesgos económicos futuros. Cada USD $1 invertido en adaptación climática puede generar entre USD $2 y $4 en ahorros y reducción de pérdidas.",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Invertir h",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 25.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "oy",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 25.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " en restauración y adaptación no solo protege biodiversidad: también ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 25.0,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "reduce riesgos económicos futuros.",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 25.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " Cada USD $1 invertido en adaptación climática puede generar entre USD $2 y $4 en ahorros y reducción de pérdidas.",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 25.0,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "Invertir hoy en restauración y adaptación no solo protege biodiversidad: también reduce riesgos económicos futuros. Cada USD $1 invertido en adaptación climática puede generar entre USD $2 y $4 en ahorros y reducción de pérdidas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 23",
+          "shape_type": "GROUP (6)",
+          "shape_id": 23,
+          "left_emu": 3963103,
+          "top_emu": 5261570,
+          "width_emu": 2544769,
+          "height_emu": 1340282,
+          "left_pct": 21.67,
+          "top_pct": 51.15,
+          "width_pct": 13.91,
+          "height_pct": 13.03,
+          "left_px": 416,
+          "top_px": 552,
+          "width_px": 267,
+          "height_px": 141,
+          "children": [
+            {
+              "name": "Freeform 24",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 24,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 670227,
+              "height_emu": 352996,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 3.66,
+              "height_pct": 3.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 70,
+              "height_px": 37,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 25",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 25,
+              "left_emu": 0,
+              "top_emu": -57150,
+              "width_emu": 670227,
+              "height_emu": 410146,
+              "left_pct": 0.0,
+              "top_pct": -0.56,
+              "width_pct": 3.66,
+              "height_pct": 3.99,
+              "left_px": 0,
+              "top_px": -6,
+              "width_px": 70,
+              "height_px": 43,
+              "text": "20–25%\nUmbral de no retorno",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "20–25%",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "20–25%"
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "U",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": "mbral de no retorno",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Umbral de no retorno"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 26",
+          "shape_type": "GROUP (6)",
+          "shape_id": 26,
+          "left_emu": 6614735,
+          "top_emu": 5261570,
+          "width_emu": 2544769,
+          "height_emu": 1340282,
+          "left_pct": 36.17,
+          "top_pct": 51.15,
+          "width_pct": 13.91,
+          "height_pct": 13.03,
+          "left_px": 694,
+          "top_px": 552,
+          "width_px": 267,
+          "height_px": 141,
+          "children": [
+            {
+              "name": "Freeform 27",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 27,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 670227,
+              "height_emu": 352996,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 3.66,
+              "height_pct": 3.43,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 70,
+              "height_px": 37,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 28",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 28,
+              "left_emu": 0,
+              "top_emu": -57150,
+              "width_emu": 670227,
+              "height_emu": 410146,
+              "left_pct": 0.0,
+              "top_pct": -0.56,
+              "width_pct": 3.66,
+              "height_pct": 3.99,
+              "left_px": 0,
+              "top_px": -6,
+              "width_px": 70,
+              "height_px": 43,
+              "text": "17%\nPerdida actual de cobertura boscosa",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "17%",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "17%"
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Perdida actual de cobertura boscosa",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Perdida actual de cobertura boscosa"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TextBox 29",
+          "shape_type": "TEXT_BOX (17)",
+          "shape_id": 29,
+          "left_emu": 0,
+          "top_emu": 9789223,
+          "width_emu": 10530596,
+          "height_emu": 332740,
+          "left_pct": 0.0,
+          "top_pct": 95.16,
+          "width_pct": 57.58,
+          "height_pct": 3.23,
+          "left_px": 0,
+          "top_px": 1028,
+          "width_px": 1106,
+          "height_px": 35,
+          "text": "Fuente: Asobancaria, Banca & Economía, edición 1520.",
+          "paragraphs": [
+            {
+              "alignment": "CENTER (2)",
+              "level": 0,
+              "runs": [
+                {
+                  "text": "Fuente: Asobancaria, Banca & Economía, edición 1520.",
+                  "bold": null,
+                  "italic": null,
+                  "size_pt": 18.99,
+                  "name": "Josefin Sans",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "text": "Fuente: Asobancaria, Banca & Economía, edición 1520."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "layout_name": "Blank",
+      "shapes": [
+        {
+          "name": "Freeform 2",
+          "shape_type": "FREEFORM (5)",
+          "shape_id": 2,
+          "left_emu": 0,
+          "top_emu": 0,
+          "width_emu": 18288000,
+          "height_emu": 10287000,
+          "left_pct": 0.0,
+          "top_pct": 0.0,
+          "width_pct": 100.0,
+          "height_pct": 100.0,
+          "left_px": 0,
+          "top_px": 0,
+          "width_px": 1920,
+          "height_px": 1080,
+          "text": "",
+          "paragraphs": [
+            {
+              "alignment": null,
+              "level": 0,
+              "runs": [],
+              "text": ""
+            }
+          ],
+          "asset_file": "slides_assets/image6.jpeg"
+        },
+        {
+          "name": "Group 3",
+          "shape_type": "GROUP (6)",
+          "shape_id": 3,
+          "left_emu": 556151,
+          "top_emu": 476741,
+          "width_emu": 17284816,
+          "height_emu": 8952850,
+          "left_pct": 3.04,
+          "top_pct": 4.63,
+          "width_pct": 94.51,
+          "height_pct": 87.03,
+          "left_px": 58,
+          "top_px": 50,
+          "width_px": 1815,
+          "height_px": 940,
+          "children": [
+            {
+              "name": "Freeform 4",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 4,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4552379,
+              "height_emu": 2357952,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.89,
+              "height_pct": 22.92,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 478,
+              "height_px": 248,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 5",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 5,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4552379,
+              "height_emu": 2405577,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.89,
+              "height_pct": 23.38,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 478,
+              "height_px": 253,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 6",
+          "shape_type": "GROUP (6)",
+          "shape_id": 6,
+          "left_emu": 588644,
+          "top_emu": 476741,
+          "width_emu": 17252323,
+          "height_emu": 8952850,
+          "left_pct": 3.22,
+          "top_pct": 4.63,
+          "width_pct": 94.34,
+          "height_pct": 87.03,
+          "left_px": 62,
+          "top_px": 50,
+          "width_px": 1811,
+          "height_px": 940,
+          "children": [
+            {
+              "name": "Freeform 7",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 7,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4543822,
+              "height_emu": 2357952,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.85,
+              "height_pct": 22.92,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 477,
+              "height_px": 248,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 8",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 8,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4543822,
+              "height_emu": 2405577,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.85,
+              "height_pct": 23.38,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 477,
+              "height_px": 253,
+              "text": "\n",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 9",
+          "shape_type": "GROUP (6)",
+          "shape_id": 9,
+          "left_emu": 814930,
+          "top_emu": 647393,
+          "width_emu": 16799750,
+          "height_emu": 1060978,
+          "left_pct": 4.46,
+          "top_pct": 6.29,
+          "width_pct": 91.86,
+          "height_pct": 10.31,
+          "left_px": 86,
+          "top_px": 68,
+          "width_px": 1764,
+          "height_px": 111,
+          "children": [
+            {
+              "name": "Freeform 10",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 10,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4424626,
+              "height_emu": 279434,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.19,
+              "height_pct": 2.72,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 465,
+              "height_px": 29,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 11",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 11,
+              "left_emu": 0,
+              "top_emu": -66675,
+              "width_emu": 4424626,
+              "height_emu": 346109,
+              "left_pct": 0.0,
+              "top_pct": -0.65,
+              "width_pct": 24.19,
+              "height_pct": 3.36,
+              "left_px": 0,
+              "top_px": -7,
+              "width_px": 465,
+              "height_px": 36,
+              "text": "Servicios ecosistémicos: la Amazonía sostiene economías y ciudades",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Servicios ecosistémicos:",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " la Amazonía sostiene ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "economías",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " y ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "ciudades",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "Servicios ecosistémicos: la Amazonía sostiene economías y ciudades"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 12",
+          "shape_type": "GROUP (6)",
+          "shape_id": 12,
+          "left_emu": 7932416,
+          "top_emu": 2504559,
+          "width_emu": 9590362,
+          "height_emu": 2782747,
+          "left_pct": 43.37,
+          "top_pct": 24.35,
+          "width_pct": 52.44,
+          "height_pct": 27.05,
+          "left_px": 833,
+          "top_px": 263,
+          "width_px": 1007,
+          "height_px": 292,
+          "children": [
+            {
+              "name": "Freeform 13",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 13,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2525857,
+              "height_emu": 732904,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 13.81,
+              "height_pct": 7.12,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 265,
+              "height_px": 77,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 14",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 14,
+              "left_emu": 0,
+              "top_emu": -66675,
+              "width_emu": 2525857,
+              "height_emu": 799579,
+              "left_pct": 0.0,
+              "top_pct": -0.65,
+              "width_pct": 13.81,
+              "height_pct": 7.77,
+              "left_px": 0,
+              "top_px": -7,
+              "width_px": 265,
+              "height_px": 84,
+              "text": "El 23,7% del agua del páramo viene de la selva amazónica.\nLos ríos voladores que nacen en la amazonía y se mueven hacia Chingaza abastecen de agua a 10 millones de personas en Bogotá.",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "El 23,7% del agua del páramo viene de la selva amazónica.",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "El 23,7% del agua del páramo viene de la selva amazónica."
+                },
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Los ríos voladores que nacen en la amazonía y se mueven hacia Chingaza abastecen de agua a ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "10 millones",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " de personas en Bogotá.",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "Los ríos voladores que nacen en la amazonía y se mueven hacia Chingaza abastecen de agua a 10 millones de personas en Bogotá."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 15",
+          "shape_type": "GROUP (6)",
+          "shape_id": 15,
+          "left_emu": 7932416,
+          "top_emu": 5831050,
+          "width_emu": 9590362,
+          "height_emu": 3149223,
+          "left_pct": 43.37,
+          "top_pct": 56.68,
+          "width_pct": 52.44,
+          "height_pct": 30.61,
+          "left_px": 833,
+          "top_px": 612,
+          "width_px": 1007,
+          "height_px": 331,
+          "children": [
+            {
+              "name": "Freeform 16",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 16,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 2525857,
+              "height_emu": 829425,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 13.81,
+              "height_pct": 8.06,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 265,
+              "height_px": 87,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 17",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 17,
+              "left_emu": 0,
+              "top_emu": -66675,
+              "width_emu": 2525857,
+              "height_emu": 896100,
+              "left_pct": 0.0,
+              "top_pct": -0.65,
+              "width_pct": 13.81,
+              "height_pct": 8.71,
+              "left_px": 0,
+              "top_px": -7,
+              "width_px": 265,
+              "height_px": 94,
+              "text": "Los ríos voladores evidencian que nuestra estabilidad hídrica depende de ecosistemas interconectados. La pérdida de estos sistemas aumenta riesgos operacionales, financieros y de abastecimiento para múltiples sectores económicos.",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Los ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": "ríos voladores",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": " evidencian que nuestra e",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": "stabilidad hídrica",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    },
+                    {
+                      "text": " depende de ecosistemas interconectados. La pérdida de estos sistemas aumenta riesgos operacionales, financieros y de abastecimiento para múltiples sectores económicos.",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 28.99,
+                      "name": "Josefin Sans",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Los ríos voladores evidencian que nuestra estabilidad hídrica depende de ecosistemas interconectados. La pérdida de estos sistemas aumenta riesgos operacionales, financieros y de abastecimiento para múltiples sectores económicos."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Picture 18",
+          "shape_type": "MEDIA (16)",
+          "shape_id": 18,
+          "left_emu": 1028700,
+          "top_emu": 2041746,
+          "width_emu": 6640238,
+          "height_emu": 7109112,
+          "left_pct": 5.62,
+          "top_pct": 19.85,
+          "width_pct": 36.31,
+          "height_pct": 69.11,
+          "left_px": 108,
+          "top_px": 214,
+          "width_px": 697,
+          "height_px": 746,
+          "asset_file": "slides_assets/image7.jpeg"
+        },
+        {
+          "name": "TextBox 19",
+          "shape_type": "TEXT_BOX (17)",
+          "shape_id": 19,
+          "left_emu": 588644,
+          "top_emu": 9506985,
+          "width_emu": 17252323,
+          "height_emu": 666115,
+          "left_pct": 3.22,
+          "top_pct": 92.42,
+          "width_pct": 94.34,
+          "height_pct": 6.48,
+          "left_px": 62,
+          "top_px": 998,
+          "width_px": 1811,
+          "height_px": 70,
+          "text": "Fuente: Escuela Colombiana de Ingeniería Julio Garavito & EAAB, estudio “Evaluación de la disminución de la superficie Amazónica y sus afectaciones sobre el sistema Chingaza” (2024).",
+          "paragraphs": [
+            {
+              "alignment": "LEFT (1)",
+              "level": 0,
+              "runs": [
+                {
+                  "text": "Fuente: ",
+                  "bold": null,
+                  "italic": null,
+                  "size_pt": 18.99,
+                  "name": "Josefin Sans",
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": "Escuela Colombiana de Ingeniería Julio Garavito & EAAB",
+                  "bold": null,
+                  "italic": null,
+                  "size_pt": 18.99,
+                  "name": "Josefin Sans",
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": ", estudio “Evaluación de la disminución de la superficie Amazónica y sus afectaciones sobre el sistema Chingaza” (2024).",
+                  "bold": null,
+                  "italic": null,
+                  "size_pt": 18.99,
+                  "name": "Josefin Sans",
+                  "color": "#FFFFFF"
+                }
+              ],
+              "text": "Fuente: Escuela Colombiana de Ingeniería Julio Garavito & EAAB, estudio “Evaluación de la disminución de la superficie Amazónica y sus afectaciones sobre el sistema Chingaza” (2024)."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "layout_name": "Blank",
+      "shapes": [
+        {
+          "name": "Freeform 2",
+          "shape_type": "FREEFORM (5)",
+          "shape_id": 2,
+          "left_emu": 0,
+          "top_emu": 0,
+          "width_emu": 18288000,
+          "height_emu": 10287000,
+          "left_pct": 0.0,
+          "top_pct": 0.0,
+          "width_pct": 100.0,
+          "height_pct": 100.0,
+          "left_px": 0,
+          "top_px": 0,
+          "width_px": 1920,
+          "height_px": 1080,
+          "text": "",
+          "paragraphs": [
+            {
+              "alignment": null,
+              "level": 0,
+              "runs": [],
+              "text": ""
+            }
+          ],
+          "asset_file": "slides_assets/image8.jpeg"
+        },
+        {
+          "name": "Group 3",
+          "shape_type": "GROUP (6)",
+          "shape_id": 3,
+          "left_emu": 556151,
+          "top_emu": 279021,
+          "width_emu": 17284816,
+          "height_emu": 9630734,
+          "left_pct": 3.04,
+          "top_pct": 2.71,
+          "width_pct": 94.51,
+          "height_pct": 93.62,
+          "left_px": 58,
+          "top_px": 29,
+          "width_px": 1815,
+          "height_px": 1011,
+          "children": [
+            {
+              "name": "Freeform 4",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 4,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4552379,
+              "height_emu": 2536490,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.89,
+              "height_pct": 24.66,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 478,
+              "height_px": 266,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 5",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 5,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4552379,
+              "height_emu": 2584115,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.89,
+              "height_pct": 25.12,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 478,
+              "height_px": 271,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 6",
+          "shape_type": "GROUP (6)",
+          "shape_id": 6,
+          "left_emu": 588644,
+          "top_emu": 279021,
+          "width_emu": 17252323,
+          "height_emu": 9630734,
+          "left_pct": 3.22,
+          "top_pct": 2.71,
+          "width_pct": 94.34,
+          "height_pct": 93.62,
+          "left_px": 62,
+          "top_px": 29,
+          "width_px": 1811,
+          "height_px": 1011,
+          "children": [
+            {
+              "name": "Freeform 7",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 7,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4543822,
+              "height_emu": 2536490,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.85,
+              "height_pct": 24.66,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 477,
+              "height_px": 266,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 8",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 8,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4543822,
+              "height_emu": 2584115,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.85,
+              "height_pct": 25.12,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 477,
+              "height_px": 271,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 9",
+          "shape_type": "GROUP (6)",
+          "shape_id": 9,
+          "left_emu": 930423,
+          "top_emu": 498211,
+          "width_emu": 16536272,
+          "height_emu": 1060978,
+          "left_pct": 5.09,
+          "top_pct": 4.84,
+          "width_pct": 90.42,
+          "height_pct": 10.31,
+          "left_px": 98,
+          "top_px": 52,
+          "width_px": 1736,
+          "height_px": 111,
+          "children": [
+            {
+              "name": "Freeform 10",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 10,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4355232,
+              "height_emu": 279434,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 23.81,
+              "height_pct": 2.72,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 457,
+              "height_px": 29,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 11",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 11,
+              "left_emu": 0,
+              "top_emu": -57150,
+              "width_emu": 4355232,
+              "height_emu": 336584,
+              "left_pct": 0.0,
+              "top_pct": -0.56,
+              "width_pct": 23.81,
+              "height_pct": 3.27,
+              "left_px": 0,
+              "top_px": -6,
+              "width_px": 457,
+              "height_px": 35,
+              "text": "Invertir temprano reduce riesgos futuros asociados a:",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Invertir temprano reduce ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "riesgos futuros",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " asociados",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": " ",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    },
+                    {
+                      "text": "a:",
+                      "bold": null,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "Invertir temprano reduce riesgos futuros asociados a:"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 12",
+          "shape_type": "GROUP (6)",
+          "shape_id": 12,
+          "left_emu": 1028700,
+          "top_emu": 1704403,
+          "width_emu": 7659527,
+          "height_emu": 3974740,
+          "left_pct": 5.62,
+          "top_pct": 16.57,
+          "width_pct": 41.88,
+          "height_pct": 38.64,
+          "left_px": 108,
+          "top_px": 179,
+          "width_px": 804,
+          "height_px": 417,
+          "asset_file": "slides_assets/image9.png",
+          "children": [
+            {
+              "name": "Freeform 13",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 13,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 12238042,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 66.92,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1285,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image9.png"
+            }
+          ]
+        },
+        {
+          "name": "Group 14",
+          "shape_type": "GROUP (6)",
+          "shape_id": 14,
+          "left_emu": 1029050,
+          "top_emu": 5824357,
+          "width_emu": 7659177,
+          "height_emu": 3974391,
+          "left_pct": 5.63,
+          "top_pct": 56.62,
+          "width_pct": 41.88,
+          "height_pct": 38.64,
+          "left_px": 108,
+          "top_px": 611,
+          "width_px": 804,
+          "height_px": 417,
+          "asset_file": "slides_assets/image10.png",
+          "children": [
+            {
+              "name": "Freeform 15",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 15,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 12238560,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 66.92,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1285,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image10.png"
+            }
+          ]
+        },
+        {
+          "name": "Group 16",
+          "shape_type": "GROUP (6)",
+          "shape_id": 16,
+          "left_emu": 8888556,
+          "top_emu": 1704228,
+          "width_emu": 8578139,
+          "height_emu": 3974740,
+          "left_pct": 48.6,
+          "top_pct": 16.57,
+          "width_pct": 46.91,
+          "height_pct": 38.64,
+          "left_px": 933,
+          "top_px": 179,
+          "width_px": 901,
+          "height_px": 417,
+          "asset_file": "slides_assets/image11.png",
+          "children": [
+            {
+              "name": "Freeform 17",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 17,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 13705608,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 74.94,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1439,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image11.png"
+            }
+          ]
+        },
+        {
+          "name": "Group 18",
+          "shape_type": "GROUP (6)",
+          "shape_id": 18,
+          "left_emu": 8888556,
+          "top_emu": 5824007,
+          "width_emu": 8578139,
+          "height_emu": 3974740,
+          "left_pct": 48.6,
+          "top_pct": 56.62,
+          "width_pct": 46.91,
+          "height_pct": 38.64,
+          "left_px": 933,
+          "top_px": 611,
+          "width_px": 901,
+          "height_px": 417,
+          "asset_file": "slides_assets/image12.png",
+          "children": [
+            {
+              "name": "Freeform 19",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 19,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 13705608,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 74.94,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1439,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image12.png"
+            }
+          ]
+        },
+        {
+          "name": "Group 20",
+          "shape_type": "GROUP (6)",
+          "shape_id": 20,
+          "left_emu": 1179567,
+          "top_emu": 1841005,
+          "width_emu": 3630589,
+          "height_emu": 652040,
+          "left_pct": 6.45,
+          "top_pct": 17.9,
+          "width_pct": 19.85,
+          "height_pct": 6.34,
+          "left_px": 124,
+          "top_px": 193,
+          "width_px": 381,
+          "height_px": 68,
+          "children": [
+            {
+              "name": "Freeform 21",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 21,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 956204,
+              "height_emu": 171731,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 5.23,
+              "height_pct": 1.67,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 100,
+              "height_px": 18,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 22",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 22,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 956204,
+              "height_emu": 219356,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 5.23,
+              "height_pct": 2.13,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 100,
+              "height_px": 23,
+              "text": "Crisis hídrica",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Crisis hídrica",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Crisis hídrica"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 23",
+          "shape_type": "GROUP (6)",
+          "shape_id": 23,
+          "left_emu": 1179567,
+          "top_emu": 5964893,
+          "width_emu": 4927174,
+          "height_emu": 800057,
+          "left_pct": 6.45,
+          "top_pct": 57.98,
+          "width_pct": 26.94,
+          "height_pct": 7.78,
+          "left_px": 124,
+          "top_px": 626,
+          "width_px": 517,
+          "height_px": 84,
+          "children": [
+            {
+              "name": "Freeform 24",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 24,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 1297692,
+              "height_emu": 210715,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 7.1,
+              "height_pct": 2.05,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 136,
+              "height_px": 22,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 25",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 25,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 1297692,
+              "height_emu": 258340,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 7.1,
+              "height_pct": 2.51,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 136,
+              "height_px": 27,
+              "text": "Perdida de productividad agropecuaria",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Perdida de productividad agropecuaria",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Perdida de productividad agropecuaria"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 26",
+          "shape_type": "GROUP (6)",
+          "shape_id": 26,
+          "left_emu": 9035407,
+          "top_emu": 1841005,
+          "width_emu": 3382082,
+          "height_emu": 717685,
+          "left_pct": 49.41,
+          "top_pct": 17.9,
+          "width_pct": 18.49,
+          "height_pct": 6.98,
+          "left_px": 949,
+          "top_px": 193,
+          "width_px": 355,
+          "height_px": 75,
+          "children": [
+            {
+              "name": "Freeform 27",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 27,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 890754,
+              "height_emu": 189020,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 4.87,
+              "height_pct": 1.84,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 94,
+              "height_px": 20,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 28",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 28,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 890754,
+              "height_emu": 236645,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 4.87,
+              "height_pct": 2.3,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 94,
+              "height_px": 25,
+              "text": "Eventos climáticos extremos",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Eventos climáticos extremos",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Eventos climáticos extremos"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 29",
+          "shape_type": "GROUP (6)",
+          "shape_id": 29,
+          "left_emu": 9035407,
+          "top_emu": 5964718,
+          "width_emu": 3382082,
+          "height_emu": 800057,
+          "left_pct": 49.41,
+          "top_pct": 57.98,
+          "width_pct": 18.49,
+          "height_pct": 7.78,
+          "left_px": 949,
+          "top_px": 626,
+          "width_px": 355,
+          "height_px": 84,
+          "children": [
+            {
+              "name": "Freeform 30",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 30,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 890754,
+              "height_emu": 210715,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 4.87,
+              "height_pct": 2.05,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 94,
+              "height_px": 22,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 31",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 31,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 890754,
+              "height_emu": 258340,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 4.87,
+              "height_pct": 2.51,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 94,
+              "height_px": 27,
+              "text": "Volatilidad territorial y social",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Volatilidad territorial y social",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Volatilidad territorial y social"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "layout_name": "Blank",
+      "shapes": [
+        {
+          "name": "Freeform 2",
+          "shape_type": "FREEFORM (5)",
+          "shape_id": 2,
+          "left_emu": 0,
+          "top_emu": 0,
+          "width_emu": 18288000,
+          "height_emu": 10287000,
+          "left_pct": 0.0,
+          "top_pct": 0.0,
+          "width_pct": 100.0,
+          "height_pct": 100.0,
+          "left_px": 0,
+          "top_px": 0,
+          "width_px": 1920,
+          "height_px": 1080,
+          "text": "",
+          "paragraphs": [
+            {
+              "alignment": null,
+              "level": 0,
+              "runs": [],
+              "text": ""
+            }
+          ],
+          "asset_file": "slides_assets/image13.jpeg"
+        },
+        {
+          "name": "Group 3",
+          "shape_type": "GROUP (6)",
+          "shape_id": 3,
+          "left_emu": 556151,
+          "top_emu": 279021,
+          "width_emu": 17284816,
+          "height_emu": 9630734,
+          "left_pct": 3.04,
+          "top_pct": 2.71,
+          "width_pct": 94.51,
+          "height_pct": 93.62,
+          "left_px": 58,
+          "top_px": 29,
+          "width_px": 1815,
+          "height_px": 1011,
+          "children": [
+            {
+              "name": "Freeform 4",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 4,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4552379,
+              "height_emu": 2536490,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.89,
+              "height_pct": 24.66,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 478,
+              "height_px": 266,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 5",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 5,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4552379,
+              "height_emu": 2584115,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.89,
+              "height_pct": 25.12,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 478,
+              "height_px": 271,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 6",
+          "shape_type": "GROUP (6)",
+          "shape_id": 6,
+          "left_emu": 588644,
+          "top_emu": 279021,
+          "width_emu": 17252323,
+          "height_emu": 9630734,
+          "left_pct": 3.22,
+          "top_pct": 2.71,
+          "width_pct": 94.34,
+          "height_pct": 93.62,
+          "left_px": 62,
+          "top_px": 29,
+          "width_px": 1811,
+          "height_px": 1011,
+          "children": [
+            {
+              "name": "Freeform 7",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 7,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4543822,
+              "height_emu": 2536490,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 24.85,
+              "height_pct": 24.66,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 477,
+              "height_px": 266,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 8",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 8,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 4543822,
+              "height_emu": 2584115,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 24.85,
+              "height_pct": 25.12,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 477,
+              "height_px": 271,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 9",
+          "shape_type": "GROUP (6)",
+          "shape_id": 9,
+          "left_emu": 930423,
+          "top_emu": 498211,
+          "width_emu": 16536272,
+          "height_emu": 1060978,
+          "left_pct": 5.09,
+          "top_pct": 4.84,
+          "width_pct": 90.42,
+          "height_pct": 10.31,
+          "left_px": 98,
+          "top_px": 52,
+          "width_px": 1736,
+          "height_px": 111,
+          "children": [
+            {
+              "name": "Freeform 10",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 10,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 4355232,
+              "height_emu": 279434,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 23.81,
+              "height_pct": 2.72,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 457,
+              "height_px": 29,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 11",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 11,
+              "left_emu": 0,
+              "top_emu": -57150,
+              "width_emu": 4355232,
+              "height_emu": 336584,
+              "left_pct": 0.0,
+              "top_pct": -0.56,
+              "width_pct": 23.81,
+              "height_pct": 3.27,
+              "left_px": 0,
+              "top_px": -6,
+              "width_px": 457,
+              "height_px": 35,
+              "text": "Oportunidades de Impacto",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Oportunidades de Impacto",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 29.99,
+                      "name": "Josefin Sans Bold",
+                      "color": "#000000"
+                    }
+                  ],
+                  "text": "Oportunidades de Impacto"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 12",
+          "shape_type": "GROUP (6)",
+          "shape_id": 12,
+          "left_emu": 1028700,
+          "top_emu": 1704403,
+          "width_emu": 7659527,
+          "height_emu": 3974740,
+          "left_pct": 5.62,
+          "top_pct": 16.57,
+          "width_pct": 41.88,
+          "height_pct": 38.64,
+          "left_px": 108,
+          "top_px": 179,
+          "width_px": 804,
+          "height_px": 417,
+          "asset_file": "slides_assets/image14.png",
+          "children": [
+            {
+              "name": "Freeform 13",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 13,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 12238042,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 66.92,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1285,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image14.png"
+            }
+          ]
+        },
+        {
+          "name": "Group 14",
+          "shape_type": "GROUP (6)",
+          "shape_id": 14,
+          "left_emu": 1029050,
+          "top_emu": 5824357,
+          "width_emu": 7659177,
+          "height_emu": 3974391,
+          "left_pct": 5.63,
+          "top_pct": 56.62,
+          "width_pct": 41.88,
+          "height_pct": 38.64,
+          "left_px": 108,
+          "top_px": 611,
+          "width_px": 804,
+          "height_px": 417,
+          "asset_file": "slides_assets/image15.jpeg",
+          "children": [
+            {
+              "name": "Freeform 15",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 15,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 12238560,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 66.92,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1285,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image15.jpeg"
+            }
+          ]
+        },
+        {
+          "name": "Group 16",
+          "shape_type": "GROUP (6)",
+          "shape_id": 16,
+          "left_emu": 8888556,
+          "top_emu": 1704228,
+          "width_emu": 8578139,
+          "height_emu": 3974740,
+          "left_pct": 48.6,
+          "top_pct": 16.57,
+          "width_pct": 46.91,
+          "height_pct": 38.64,
+          "left_px": 933,
+          "top_px": 179,
+          "width_px": 901,
+          "height_px": 417,
+          "asset_file": "slides_assets/image16.jpeg",
+          "children": [
+            {
+              "name": "Freeform 17",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 17,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 13705608,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 74.94,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1439,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image16.jpeg"
+            }
+          ]
+        },
+        {
+          "name": "Group 18",
+          "shape_type": "GROUP (6)",
+          "shape_id": 18,
+          "left_emu": 8888556,
+          "top_emu": 5824007,
+          "width_emu": 8578139,
+          "height_emu": 3974740,
+          "left_pct": 48.6,
+          "top_pct": 56.62,
+          "width_pct": 46.91,
+          "height_pct": 38.64,
+          "left_px": 933,
+          "top_px": 611,
+          "width_px": 901,
+          "height_px": 417,
+          "asset_file": "slides_assets/image17.jpeg",
+          "children": [
+            {
+              "name": "Freeform 19",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 19,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 13705608,
+              "height_emu": 6350000,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 74.94,
+              "height_pct": 61.73,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 1439,
+              "height_px": 667,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ],
+              "asset_file": "slides_assets/image17.jpeg"
+            }
+          ]
+        },
+        {
+          "name": "Group 20",
+          "shape_type": "GROUP (6)",
+          "shape_id": 20,
+          "left_emu": 1227874,
+          "top_emu": 5964893,
+          "width_emu": 4220637,
+          "height_emu": 1102844,
+          "left_pct": 6.71,
+          "top_pct": 57.98,
+          "width_pct": 23.08,
+          "height_pct": 10.72,
+          "left_px": 129,
+          "top_px": 626,
+          "width_px": 443,
+          "height_px": 116,
+          "children": [
+            {
+              "name": "Freeform 21",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 21,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 1111608,
+              "height_emu": 290461,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 6.08,
+              "height_pct": 2.82,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 117,
+              "height_px": 30,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 22",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 22,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 1111608,
+              "height_emu": 338086,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 6.08,
+              "height_pct": 3.29,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 117,
+              "height_px": 35,
+              "text": "Liderar, convocar y articular esfuerzos multisectoriales en financiamiento de SbN",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Liderar, convocar y articular esfuerzos multisectoriales en financiamiento de SbN",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Liderar, convocar y articular esfuerzos multisectoriales en financiamiento de SbN"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 23",
+          "shape_type": "GROUP (6)",
+          "shape_id": 23,
+          "left_emu": 1212577,
+          "top_emu": 1841005,
+          "width_emu": 4235935,
+          "height_emu": 1102844,
+          "left_pct": 6.63,
+          "top_pct": 17.9,
+          "width_pct": 23.16,
+          "height_pct": 10.72,
+          "left_px": 127,
+          "top_px": 193,
+          "width_px": 445,
+          "height_px": 116,
+          "children": [
+            {
+              "name": "Freeform 24",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 24,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 1115637,
+              "height_emu": 290461,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 6.1,
+              "height_pct": 2.82,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 117,
+              "height_px": 30,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 25",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 25,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 1115637,
+              "height_emu": 338086,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 6.1,
+              "height_pct": 3.29,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 117,
+              "height_px": 35,
+              "text": "Mejora en la cadena de valor de productos silvopastoriles y agrofoestrales  ",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Mejora en la cadena de valor de productos silvopastoriles y agrofoestrales  ",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Mejora en la cadena de valor de productos silvopastoriles y agrofoestrales  "
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 26",
+          "shape_type": "GROUP (6)",
+          "shape_id": 26,
+          "left_emu": 9035407,
+          "top_emu": 1841005,
+          "width_emu": 3382082,
+          "height_emu": 788519,
+          "left_pct": 49.41,
+          "top_pct": 17.9,
+          "width_pct": 18.49,
+          "height_pct": 7.67,
+          "left_px": 949,
+          "top_px": 193,
+          "width_px": 355,
+          "height_px": 83,
+          "children": [
+            {
+              "name": "Freeform 27",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 27,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 890754,
+              "height_emu": 207676,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 4.87,
+              "height_pct": 2.02,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 94,
+              "height_px": 22,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 28",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 28,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 890754,
+              "height_emu": 255301,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 4.87,
+              "height_pct": 2.48,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 94,
+              "height_px": 27,
+              "text": "Inversión en inovación y biotecnología",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Inversión en inovación y biotecnología",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Inversión en inovación y biotecnología"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Group 29",
+          "shape_type": "GROUP (6)",
+          "shape_id": 29,
+          "left_emu": 9035407,
+          "top_emu": 5964718,
+          "width_emu": 3638367,
+          "height_emu": 800057,
+          "left_pct": 49.41,
+          "top_pct": 57.98,
+          "width_pct": 19.89,
+          "height_pct": 7.78,
+          "left_px": 949,
+          "top_px": 626,
+          "width_px": 382,
+          "height_px": 84,
+          "children": [
+            {
+              "name": "Freeform 30",
+              "shape_type": "FREEFORM (5)",
+              "shape_id": 30,
+              "left_emu": 0,
+              "top_emu": 0,
+              "width_emu": 958253,
+              "height_emu": 210715,
+              "left_pct": 0.0,
+              "top_pct": 0.0,
+              "width_pct": 5.24,
+              "height_pct": 2.05,
+              "left_px": 0,
+              "top_px": 0,
+              "width_px": 101,
+              "height_px": 22,
+              "text": "",
+              "paragraphs": [
+                {
+                  "alignment": null,
+                  "level": 0,
+                  "runs": [],
+                  "text": ""
+                }
+              ]
+            },
+            {
+              "name": "TextBox 31",
+              "shape_type": "TEXT_BOX (17)",
+              "shape_id": 31,
+              "left_emu": 0,
+              "top_emu": -47625,
+              "width_emu": 958253,
+              "height_emu": 258340,
+              "left_pct": 0.0,
+              "top_pct": -0.46,
+              "width_pct": 5.24,
+              "height_pct": 2.51,
+              "left_px": 0,
+              "top_px": -5,
+              "width_px": 101,
+              "height_px": 27,
+              "text": "Desarrollo de bioeconomias y bienestar local",
+              "paragraphs": [
+                {
+                  "alignment": "CENTER (2)",
+                  "level": 0,
+                  "runs": [
+                    {
+                      "text": "Desarrollo de bioeconomias y bienestar local",
+                      "bold": true,
+                      "italic": null,
+                      "size_pt": 18.0,
+                      "name": "Josefin Sans Bold",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "text": "Desarrollo de bioeconomias y bienestar local"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -4,10 +4,12 @@ import { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import type L from 'leaflet'
 import type { SiembraFamilia, RasFamilia, ActiveCategory, VisibleLayers, Proyeccion } from '@/types/geovisor'
+import { getAliadoByDisplayName } from '@/lib/aliados'
 import { useGeovisorData } from '@/hooks/useGeovisorData'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
 import MetasPanel from '@/components/ui/MetasPanel'
+import MetricasAliadoPanel from '@/components/ui/MetricasAliadoPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
@@ -46,9 +48,22 @@ export default function GeovisorPage() {
   // sidebar nunca pasa por welcome — va directo al hub.
   const [introViaLogin, setIntroViaLogin] = useState(false)
 
+  // ── Aliado (proyecto personalizado, ej. Tetra Pak) ──────────────────────
+  /** Capa del aliado activa en el mapa (predio + polígonos) */
+  const [aliadoViewActive,  setAliadoViewActive]  = useState(false)
+  /** Panel derecho de Métricas del aliado abierto */
+  const [aliadoMetricsOpen, setAliadoMetricsOpen] = useState(false)
+  /** true → LeftSidebar abre la vista del aliado (post-login) */
+  const [openAliadoView,    setOpenAliadoView]    = useState(false)
+
+  // Tras cerrar el intro post-login, abrir la vista del aliado (si tiene proyecto)
+  const pendingAliadoOpenRef = useRef(false)
+
   const handleLogin = useCallback((user: string) => {
     setAuthUser(user)
     setShowLogin(false)
+    // Si el aliado tiene proyecto personalizado, abrir su vista al cerrar el intro
+    pendingAliadoOpenRef.current = !!getAliadoByDisplayName(user)?.proyecto
     // Disparar intro animada
     setIntroViaLogin(true)
     setIntroPhase('logo')
@@ -56,11 +71,19 @@ export default function GeovisorPage() {
   const handleLogout = useCallback(() => {
     try { localStorage.removeItem(LS_KEY) } catch { /* noop */ }
     setAuthUser(null)
+    setAliadoViewActive(false)
+    setAliadoMetricsOpen(false)
   }, [])
 
   const handleCloseIntro = useCallback(() => {
     setIntroPhase('idle')
     setIntroViaLogin(false)
+    // Post-login de un aliado: mostrar sus polígonos después del intro
+    if (pendingAliadoOpenRef.current) {
+      pendingAliadoOpenRef.current = false
+      setOpenAliadoView(true)
+      setTimeout(() => setOpenAliadoView(false), 300)
+    }
   }, [])
 
   const handleOpenIntroFromSidebar = useCallback(() => {
@@ -82,6 +105,28 @@ export default function GeovisorPage() {
   const [metasLayerActive,  setMetasLayerActive]  = useState(false)
   /** true → LeftSidebar abre la vista Metas (activado desde intro hub card 3) */
   const [openMetasView,     setOpenMetasView]     = useState(false)
+
+  // Aliado en sesión (deriva del nombre visible). Tetra Pak tiene proyecto.
+  const aliado = useMemo(() => getAliadoByDisplayName(authUser), [authUser])
+  /** Con un aliado especializado en sesión, se oculta todo lo de Bancolombia */
+  const hideBancolombia = aliado?.proyecto != null
+
+  /** Activa/desactiva la vista del aliado: muestra su capa, oculta el resto */
+  const handleAliadoViewToggle = useCallback((open: boolean) => {
+    if (open) {
+      setActiveCategory(null)
+      setSelectedFamiliaId(null)
+      setActiveProyeccionId(null)
+      setMetasLayerActive(false)
+      setAliadoViewActive(true)
+    } else {
+      setAliadoViewActive(false)
+      setAliadoMetricsOpen(false)
+    }
+  }, [])
+
+  const handleOpenAliadoMetrics  = useCallback(() => setAliadoMetricsOpen(true),  [])
+  const handleCloseAliadoMetrics = useCallback(() => setAliadoMetricsOpen(false), [])
 
   /** Activa/desactiva la vista Metas: habilita Fase I, oculta capas de familias */
   const handleMetasViewToggle = useCallback((open: boolean) => {
@@ -165,6 +210,8 @@ export default function GeovisorPage() {
   }), [])
 
   const visibleLayers = useMemo<VisibleLayers>(() => {
+    // Vista del aliado activa → solo se muestra su capa (predio + polígonos)
+    if (aliadoViewActive) return ALL_HIDDEN
     // Cuando la vista de Conectividad está activa, ocultamos todas las capas de familias
     if (activeProyeccionId !== null) return ALL_HIDDEN
     if (activeCategory === 'siembra') {
@@ -183,7 +230,7 @@ export default function GeovisorPage() {
     }
     // Default sin selección: mapa limpio (vista Colombia)
     return ALL_HIDDEN
-  }, [activeCategory, activeProyeccionId, ALL_HIDDEN])
+  }, [activeCategory, activeProyeccionId, aliadoViewActive, ALL_HIDDEN])
 
   // Posición de los botones de zoom
   const zoomBtnRight  = isMobile ? 16 : (activeCategory !== null ? rightWidth + 16 : 16)
@@ -223,6 +270,9 @@ export default function GeovisorPage() {
         activeProyeccionId={activeProyeccionId}
         metasYear={metasLayerActive ? metasYear : null}
         metasMode={metasLayerActive}
+        metasHideFB={hideBancolombia}
+        aliadoProyecto={aliadoViewActive ? (aliado?.proyecto ?? null) : null}
+        aliadoBrandColor={aliado?.brandColor}
       />
 
       <LeftSidebar
@@ -242,6 +292,10 @@ export default function GeovisorPage() {
         onOpenMetasMetrics={() => setMetasMetricsOpen(true)}
         openMetasView={openMetasView}
         onMetasViewToggle={handleMetasViewToggle}
+        aliado={aliado}
+        onOpenAliadoMetrics={handleOpenAliadoMetrics}
+        onAliadoViewToggle={handleAliadoViewToggle}
+        openAliadoView={openAliadoView}
       />
 
       <RightPanel
@@ -333,6 +387,20 @@ export default function GeovisorPage() {
           selectedYear={metasYear}
           width={rightWidth}
           onClose={handleCloseMetasMetrics}
+          isMobile={isMobile}
+          hideBancolombia={hideBancolombia}
+        />
+      )}
+
+      {/* Panel derecho de Métricas del aliado (ej. Tetra Pak) */}
+      {aliadoMetricsOpen && aliado?.proyecto && (
+        <MetricasAliadoPanel
+          proyecto={aliado.proyecto}
+          displayName={aliado.displayName}
+          brandColor={aliado.brandColor}
+          brandColorDark={aliado.brandColorDark}
+          width={rightWidth}
+          onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
         />
       )}

@@ -1,13 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ACCOUNTS, DISPLAY_NAMES } from '@/lib/aliados'
 
-const ACCOUNTS: Record<string, string> = {
-  bancolombia: 'Bancol',
-}
-const DISPLAY_NAMES: Record<string, string> = {
-  bancolombia: 'Bancolombia',
-}
 const LS_KEY      = 'geoae_user'
 const LS_REMEMBER = 'geoae_remember'
 

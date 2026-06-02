@@ -1,0 +1,132 @@
+{
+  "source": "Bancolombia Intro.pptx",
+  "dimensions": { "width": 1920, "height": 1080, "aspect_ratio": "16:9" },
+  "n_slides": 5,
+  "assets_dir": "slides_assets/",
+  "slides": [
+    {
+      "index": 1,
+      "id": "intro",
+      "kind": "hero_cards",
+      "title": "¿Por qué la Amazonía?",
+      "subtitle": "La urgencia de frenar la deforestación y el punto de no retorno",
+      "background": "slides_assets/image1.jpeg",
+      "logo": "slides_assets/image2.png",
+      "cards": [
+        {
+          "title": "¿Por qué la Amazonía?",
+          "body": "La urgencia de frenar la deforestación y el punto de no retorno"
+        },
+        {
+          "title": "El Costo de No Actuar",
+          "body": "Riesgos climáticos, hídricos y financieros asociados a la degradación de la Amazonía."
+        },
+        {
+          "title": "¿Cómo lo hacemos?",
+          "body": "Explora el cronograma de actividades, las etapas del proyecto y los indicadores claves para medir el éxito"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "punto_no_retorno",
+      "kind": "title_stats_with_side_image",
+      "title": "La Amazonía está al borde del punto de NO RETORNO",
+      "intro": "El Panel Científico por la Amazonía confirma que si la deforestación supera el 20% de la cuenca y el calentamiento global excede los 2 °C, el colapso sería irreversible: el bosque dejaría de regenerarse.",
+      "background": "slides_assets/image4.png",
+      "side_image": "slides_assets/image5.png",
+      "stats": [
+        {
+          "value": "47 M",
+          "label": "Personas en riesgo si la Amazonía colapsa"
+        },
+        {
+          "value": "20–25 %",
+          "label": "Umbral de no retorno"
+        },
+        {
+          "value": "17 %",
+          "label": "Pérdida actual de cobertura boscosa"
+        }
+      ],
+      "footnote": "Invertir hoy en restauración y adaptación no solo protege biodiversidad: también reduce riesgos económicos futuros. Cada USD $1 invertido en adaptación climática puede generar entre USD $2 y $4 en ahorros y reducción de pérdidas.",
+      "source": "Asobancaria, Banca & Economía, edición 1520."
+    },
+    {
+      "index": 3,
+      "id": "servicios_ecosistemicos",
+      "kind": "media_left_text_right",
+      "title": "Servicios ecosistémicos: la Amazonía sostiene economías y ciudades",
+      "background": "slides_assets/image6.jpeg",
+      "media": {
+        "type": "video",
+        "poster": "slides_assets/image7.jpeg",
+        "file": "slides_assets/VAHByKusK7g.mp4"
+      },
+      "text_blocks": [
+        "El 23,7 % del agua del páramo viene de la selva amazónica. Los ríos voladores que nacen en la amazonía y se mueven hacia Chingaza abastecen de agua a 10 millones de personas en Bogotá.",
+        "Los ríos voladores evidencian que nuestra estabilidad hídrica depende de ecosistemas interconectados. La pérdida de estos sistemas aumenta riesgos operacionales, financieros y de abastecimiento para múltiples sectores económicos."
+      ],
+      "source": "Escuela Colombiana de Ingeniería Julio Garavito & EAAB — estudio “Evaluación de la disminución de la superficie Amazónica y sus afectaciones sobre el sistema Chingaza” (2024).",
+      "source_url": "https://www.escuelaing.edu.co/es/minisitios/rios-amazonicos/"
+    },
+    {
+      "index": 4,
+      "id": "riesgos_futuros",
+      "kind": "title_plus_2x2_grid",
+      "title": "Invertir temprano reduce riesgos futuros asociados a:",
+      "background": "slides_assets/image8.jpeg",
+      "grid": [
+        {
+          "label": "Crisis hídrica",
+          "image": "slides_assets/image9.png",
+          "position": "top-left"
+        },
+        {
+          "label": "Eventos climáticos extremos",
+          "image": "slides_assets/image11.png",
+          "position": "top-right"
+        },
+        {
+          "label": "Pérdida de productividad agropecuaria",
+          "image": "slides_assets/image10.png",
+          "position": "bottom-left"
+        },
+        {
+          "label": "Volatilidad territorial y social",
+          "image": "slides_assets/image12.png",
+          "position": "bottom-right"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "oportunidades",
+      "kind": "title_plus_2x2_grid",
+      "title": "Oportunidades de Impacto",
+      "background": "slides_assets/image13.jpeg",
+      "grid": [
+        {
+          "label": "Mejora en la cadena de valor de productos silvopastoriles y agroforestales",
+          "image": "slides_assets/image14.png",
+          "position": "top-left"
+        },
+        {
+          "label": "Inversión en innovación y biotecnología",
+          "image": "slides_assets/image16.jpeg",
+          "position": "top-right"
+        },
+        {
+          "label": "Desarrollo de bioeconomías y bienestar local",
+          "image": "slides_assets/image15.jpeg",
+          "position": "bottom-left"
+        },
+        {
+          "label": "Liderar, convocar y articular esfuerzos multisectoriales en financiamiento de SbN",
+          "image": "slides_assets/image17.jpeg",
+          "position": "bottom-right"
+        }
+      ]
+    }
+  ]
+}

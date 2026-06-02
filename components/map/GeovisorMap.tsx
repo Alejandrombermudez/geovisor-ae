@@ -10,7 +10,9 @@ import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
 import ProyeccionLayer from './ProyeccionLayer'
 import StaticLayer from './StaticLayer'
+import AliadoPredioLayer from './AliadoPredioLayer'
 import { STATIC_LAYERS } from '@/lib/constants'
+import type { AliadoProyecto } from '@/lib/aliados'
 import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory, PolygonLayerData, CamaraTrampa, Proyeccion } from '@/types/geovisor'
 
 interface Props {
@@ -25,6 +27,12 @@ interface Props {
   metasYear?: number | null
   /** En modo Metas solo renderizar la proyección activa (no Fase II ni III) */
   metasMode?: boolean
+  /** Oculta los datos de Bancolombia (FB) en los tooltips de veredas */
+  metasHideFB?: boolean
+  /** Proyecto del aliado a renderizar (predio + polígonos). null = oculto */
+  aliadoProyecto?: AliadoProyecto | null
+  /** Color de marca del aliado para resaltar sus polígonos */
+  aliadoBrandColor?: string
 }
 
 // ── Capa de veredas Metas (GeoJSON filtrado por año acumulado) ───────────────
@@ -70,6 +78,7 @@ function renderVeredasLayer(
   layerRef: { current: L.GeoJSON | null },
   layerGroup: L.LayerGroup,
   map: L.Map,
+  hideFB: boolean,
 ) {
   // Limpia capa anterior
   if (layerRef.current) {
@@ -100,13 +109,14 @@ function renderVeredasLayer(
         const p      = (feature as VeredaFeature).properties
         const area   = p.area_ha != null ? p.area_ha.toLocaleString('es-CO', { maximumFractionDigits: 0 }) : '—'
         const pal    = YEAR_COLORS[p.anio ?? 0] ?? { stroke: '#C49A40' }
+        const fbLine = hideFB
+          ? ''
+          : `&nbsp;·&nbsp;<span style="color:#6898B8;font-weight:700">FB ${p.meta_fb.toLocaleString('es-CO')} ha</span>`
         lyr.bindTooltip(
           `<div style="font-family:system-ui;font-size:12px;line-height:1.6">
             <strong style="font-size:13px">${p.nombre_ver}</strong><br/>
             ${p.nomb_mpio} · ${area} ha<br/>
-            <span style="color:#74A884;font-weight:700">AE ${p.meta_ae.toLocaleString('es-CO')} ha</span>
-            &nbsp;·&nbsp;
-            <span style="color:#6898B8;font-weight:700">FB ${p.meta_fb.toLocaleString('es-CO')} ha</span><br/>
+            <span style="color:#74A884;font-weight:700">AE ${p.meta_ae.toLocaleString('es-CO')} ha</span>${fbLine}<br/>
             <span style="color:${pal.stroke};font-weight:600;font-size:10px">● Intervención ${p.anio}</span>
           </div>`,
           { sticky: true },
@@ -129,7 +139,7 @@ function renderVeredasLayer(
   }
 }
 
-function MetasVeredasLayer({ year }: { year: number }) {
+function MetasVeredasLayer({ year, hideFB }: { year: number; hideFB: boolean }) {
   const map    = useMap()
   const lgRef  = useState(() => L.layerGroup())[0]   // estable durante toda la vida del componente
   const geoRef = useRef<L.GeoJSON | null>(null)       // persiste entre renders para poder limpiar la capa anterior
@@ -144,7 +154,7 @@ function MetasVeredasLayer({ year }: { year: number }) {
   useEffect(() => {
     let alive = true
     if (_veredasCache) {
-      renderVeredasLayer(_veredasCache, year, geoRef, lgRef, map)
+      renderVeredasLayer(_veredasCache, year, geoRef, lgRef, map, hideFB)
       return
     }
     fetch('/metas/veredas.geojson')
@@ -152,12 +162,12 @@ function MetasVeredasLayer({ year }: { year: number }) {
       .then((geojson: { features: VeredaFeature[] }) => {
         if (!alive) return
         _veredasCache = geojson.features
-        renderVeredasLayer(_veredasCache, year, geoRef, lgRef, map)
+        renderVeredasLayer(_veredasCache, year, geoRef, lgRef, map, hideFB)
       })
       .catch(e => console.warn('[MetasVeredasLayer]', e))
     return () => { alive = false }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year])
+  }, [year, hideFB])
 
   return null
 }
@@ -186,7 +196,7 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
   return null
 }
 
-export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null, metasYear = null, metasMode = false }: Props) {
+export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null, metasYear = null, metasMode = false, metasHideFB = false, aliadoProyecto = null, aliadoBrandColor = '#0A5BA8' }: Props) {
   // When a family is selected, only show its layers; otherwise show everything
   const polyFilter = (item: PolygonLayerData) =>
     !selectedFamiliaId || item.familia.id === selectedFamiliaId
@@ -282,7 +292,12 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
       <FlyToFamilia familiaId={selectedFamiliaId} layerData={layerData} />
 
       {/* ── Capa de veredas Metas (Fase 1, filtrada por año) ────────── */}
-      {metasYear != null && <MetasVeredasLayer year={metasYear} />}
+      {metasYear != null && <MetasVeredasLayer year={metasYear} hideFB={metasHideFB} />}
+
+      {/* ── Capa del aliado: predio + polígonos de intervención ─────── */}
+      {aliadoProyecto && (
+        <AliadoPredioLayer proyecto={aliadoProyecto} brandColor={aliadoBrandColor} />
+      )}
 
       {/* ── Capas estáticas de referencia (Cordillera + Chiribiquete) ─ */}
       {activeProyeccionId && STATIC_LAYERS.map(cfg => (

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import type { ActiveCategory, Proyeccion } from '@/types/geovisor'
+import type { Aliado } from '@/lib/aliados'
 import AuthButton from '@/components/ui/AuthButton'
 
 interface Props {
@@ -25,6 +26,14 @@ interface Props {
   openMetasView?: boolean
   /** Llamado cuando se entra/sale de la vista Metas — para activar/desactivar Fase 1 en el mapa */
   onMetasViewToggle?: (open: boolean) => void
+  /** Aliado en sesión con proyecto personalizado (ej. Tetra Pak). null = ninguno */
+  aliado?: Aliado | null
+  /** Abre el panel derecho de Métricas del aliado */
+  onOpenAliadoMetrics?: () => void
+  /** Llamado al entrar/salir de la vista del aliado — activa/desactiva su capa en el mapa */
+  onAliadoViewToggle?: (open: boolean) => void
+  /** Fuerza la apertura de la vista del aliado (post-login, tras el intro) */
+  openAliadoView?: boolean
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -137,10 +146,10 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onAliadoViewToggle, openAliadoView = false }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
-  const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas'>('main')
+  const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas' | 'aliado'>('main')
   const [hovered,   setHovered]   = useState<string | null>(null)
   const [logoError, setLogoError] = useState(false)
 
@@ -206,6 +215,17 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
     onMetasViewToggle?.(true)
   }, [presets, metasYear, onMetasYearChange, onMetasViewToggle])
 
+  const openAliado = useCallback(() => {
+    setView('aliado')
+    setSidebarW(presets[2])
+    onAliadoViewToggle?.(true)
+  }, [presets, onAliadoViewToggle])
+
+  // Abrir la vista del aliado si el padre lo solicita (post-login, tras el intro)
+  useEffect(() => {
+    if (openAliadoView) openAliado()
+  }, [openAliadoView, openAliado])
+
   // Cuando el sidebar se abre en la vista Metas y el usuario ya estaba en esa vista,
   // también debemos notificar al padre si aún no se notificó
 
@@ -226,11 +246,13 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
   const backToMain = useCallback(() => {
     // Si volvemos desde la vista Metas, notificar al padre para desactivar Fase 1
-    if (view === 'metas') onMetasViewToggle?.(false)
+    if (view === 'metas')  onMetasViewToggle?.(false)
+    // Si volvemos desde la vista del aliado, desactivar su capa en el mapa
+    if (view === 'aliado') onAliadoViewToggle?.(false)
     setView('main')
     setActivePhaseFallback(null)
     onSelectProyeccion?.(null)
-  }, [view, onSelectProyeccion, onMetasViewToggle])
+  }, [view, onSelectProyeccion, onMetasViewToggle, onAliadoViewToggle])
 
   const startDrag = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
@@ -983,6 +1005,133 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
     )
   }
 
+  // ── Vista "Aliado" (proyecto personalizado, ej. Tetra Pak) ────────────────
+  if (view === 'aliado' && aliado?.proyecto) {
+    const compact = !showLabels
+    const proy    = aliado.proyecto
+    const c       = aliado.brandColor
+
+    return (
+      <div style={sidebarBase}>
+        {/* Botón volver */}
+        <button onClick={backToMain} onMouseEnter={() => setHovered('back')} onMouseLeave={() => setHovered(null)}
+          style={{
+            width: '100%', background: hovered === 'back' ? 'rgba(255,255,255,0.07)' : 'transparent',
+            border: 'none', borderLeft: '4px solid transparent',
+            color: 'rgba(255,255,255,0.6)', cursor: 'pointer',
+            display: 'flex', alignItems: 'center',
+            justifyContent: compact ? 'center' : 'flex-start',
+            gap: 8, padding: compact ? '12px 4px' : '11px 14px',
+            fontSize: 12, fontWeight: 600, flexShrink: 0, transition: 'all 0.15s ease',
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
+            <path d="M9 2.5L4.5 7 9 11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {!compact && <span>Volver</span>}
+        </button>
+
+        <div style={{ width: '80%', height: 1, background: 'rgba(255,255,255,0.08)', margin: '2px 0 10px', flexShrink: 0 }} />
+
+        {/* Contenido scrollable */}
+        <div className="geo-about-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
+          <div style={{ padding: compact ? '0 4px 16px' : '0 12px 16px' }}>
+
+            {/* Logo / nombre del aliado */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+              {proy && aliado.logoUrl && (
+                <AEImage src={aliado.logoUrl} style={{ width: compact ? 36 : 92, height: 'auto', objectFit: 'contain' }} />
+              )}
+              {!compact && (
+                <>
+                  <div style={{ color: c, fontSize: 19, fontWeight: 800, letterSpacing: '0.01em', textAlign: 'center' }}>
+                    {aliado.displayName}
+                  </div>
+                  <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 11, textAlign: 'center', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                    Aliado · Inversionista
+                  </div>
+                </>
+              )}
+            </div>
+
+            {!compact && (
+              <>
+                {/* Proyecto */}
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ color: '#fff', fontSize: 20, fontWeight: 800, lineHeight: 1.2, marginBottom: 3 }}>
+                    {proy.nombre}
+                  </div>
+                  <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 13, lineHeight: 1.4 }}>
+                    {proy.ubicacion}
+                  </div>
+                </div>
+
+                {/* KPI: árboles + ha del aliado */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+                  <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
+                    <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
+                      {proy.aliado.arboles.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                    </div>
+                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>árboles</div>
+                  </div>
+                  <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
+                    <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
+                      {proy.aliado.ha.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                    </div>
+                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>hectáreas</div>
+                  </div>
+                </div>
+
+                {/* Descripción */}
+                <div style={{ padding: '10px 12px', marginBottom: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 9 }}>
+                  <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: 12, lineHeight: 1.6 }}>
+                    {proy.descripcion}
+                  </div>
+                </div>
+
+                {/* Botón Métricas */}
+                <button
+                  onClick={onOpenAliadoMetrics}
+                  style={{
+                    width: '100%', padding: '14px 12px',
+                    background: `linear-gradient(135deg, ${c} 0%, ${aliado.brandColorDark} 100%)`,
+                    border: 'none', borderRadius: 9, color: '#fff',
+                    fontSize: 18, fontWeight: 800, cursor: 'pointer',
+                    letterSpacing: '0.03em', transition: 'opacity 0.15s ease',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                  onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                >
+                  Métricas
+                </button>
+
+                {/* Leyenda de polígonos */}
+                <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+                  <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
+                    Leyenda
+                  </div>
+                  {[
+                    { label: `Polígonos ${aliado.displayName}`, fill: c, stroke: c },
+                    { label: 'Resto del predio AE', fill: 'rgba(229,231,235,0.12)', stroke: '#E5E7EB' },
+                    { label: 'Límite del predio', fill: 'transparent', stroke: '#FFFFFF' },
+                  ].map(({ label, fill, stroke }) => (
+                    <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '6px 0' }}>
+                      <div style={{ width: 18, height: 18, borderRadius: 4, background: fill, border: `1.5px solid ${stroke}`, flexShrink: 0 }} />
+                      <span style={{ color: 'rgba(255,255,255,0.72)', fontSize: 14, fontWeight: 600 }}>{label}</span>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <SizeControl />
+        <DragHandle />
+      </div>
+    )
+  }
+
   // ── Vista principal ───────────────────────────────────────────────────────
   return (
     <div style={sidebarBase}>
@@ -1007,6 +1156,37 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
       {/* Categorías + Proyecciones — scrollable si la pantalla es muy corta */}
       <div style={{ flex: 1, overflowY: 'auto', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, minHeight: 0 }}>
+
+        {/* Botón del aliado (proyecto personalizado) — solo si hay aliado con proyecto */}
+        {aliado?.proyecto && (
+          <>
+            <button
+              onClick={openAliado}
+              onMouseEnter={() => setHovered('aliado')} onMouseLeave={() => setHovered(null)}
+              title={showLabels ? undefined : aliado.proyecto.nombre}
+              style={{
+                background: hovered === 'aliado'
+                  ? `radial-gradient(ellipse at left, ${aliado.brandColor}28 0%, transparent 70%)`
+                  : `radial-gradient(ellipse at left, ${aliado.brandColor}14 0%, transparent 70%)`,
+                border: 'none', borderLeft: `4px solid ${aliado.brandColor}`,
+                boxShadow: `inset 0 0 18px ${aliado.brandColor}10`,
+                color: aliado.brandColor,
+                cursor: 'pointer', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center',
+                gap: 5, width: '100%', padding: '14px 4px', transition: 'all 0.2s ease',
+              }}
+            >
+              <span style={{ fontSize: iconSize + 2, lineHeight: 1, filter: `drop-shadow(0 0 8px ${aliado.brandColor})` }}>🌳</span>
+              {showLabels && (
+                <span style={{ fontSize: sidebarW > 160 ? 12 : 11, fontWeight: 700, lineHeight: 1.2, letterSpacing: '0.04em', textTransform: 'uppercase', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                  {aliado.proyecto.nombre}
+                </span>
+              )}
+            </button>
+            <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '6px auto 4px' }} />
+          </>
+        )}
+
         {ITEMS.map(({ key, label, icon, color }) => {
           const isActive  = activeCategory === key
           const isHovered = hovered === key

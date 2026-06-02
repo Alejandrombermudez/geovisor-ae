@@ -1,18 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-
-const ACCOUNTS: Record<string, string> = {
-  bancolombia: 'Bancolombia_AE_2026',
-}
-
-const DISPLAY_NAMES: Record<string, string> = {
-  bancolombia: 'Bancolombia',
-}
-
-const AVATAR_COLORS: Record<string, string> = {
-  bancolombia: '#FFB800',
-}
+import { ACCOUNTS, DISPLAY_NAMES, AVATAR_COLORS } from '@/lib/aliados'
 
 const LS_KEY = 'geoae_user'
 

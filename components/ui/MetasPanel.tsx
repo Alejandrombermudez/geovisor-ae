@@ -30,6 +30,8 @@ interface Props {
   width: number
   onClose: () => void
   isMobile: boolean
+  /** Oculta todo lo de Bancolombia (toggle, sección y nota) — para aliados especializados */
+  hideBancolombia?: boolean
 }
 
 type ViewMode = 'ambas' | 'ae' | 'fb'
@@ -320,13 +322,16 @@ function EntitySection({
 
 // ── Componente principal ─────────────────────────────────────────────────────
 
-export default function MetasPanel({ selectedYear, width, onClose, isMobile }: Props) {
+export default function MetasPanel({ selectedYear, width, onClose, isMobile, hideBancolombia = false }: Props) {
   const [stats,    setStats]    = useState<MetasStats | null>(null)
-  const [viewMode, setViewMode] = useState<ViewMode>('ambas')
+  const [viewMode, setViewMode] = useState<ViewMode>(hideBancolombia ? 'ae' : 'ambas')
 
   useEffect(() => {
     fetch('/metas/stats.json').then(r => r.json()).then(setStats).catch(() => null)
   }, [])
+
+  // Con Bancolombia oculto, la vista siempre es AE (sin toggle ni comparación FB)
+  const effectiveMode: ViewMode = hideBancolombia ? 'ae' : viewMode
 
   const panelStyle: React.CSSProperties = isMobile
     ? {
@@ -395,6 +400,7 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
       </div>
 
       {/* ── Toggle AE / Bancolombia / Ambas ── */}
+      {!hideBancolombia && (
       <div style={{
         flexShrink: 0,
         padding: '10px 16px',
@@ -425,6 +431,7 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
           )
         })}
       </div>
+      )}
 
       {/* ── Body ── */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 20px 32px' }}>
@@ -457,7 +464,7 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
                   fbByYear={fb.por_anio}
                   aeTotal={stats.meta_total_ae}
                   fbTotal={stats.meta_total_fb}
-                  mode={viewMode}
+                  mode={effectiveMode}
                   selectedYear={selectedYear}
                 />
                 </div>
@@ -466,7 +473,7 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
               <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '4px 0 22px' }} />
 
               {/* ── Sección Amazonia Emprende ── */}
-              {(viewMode === 'ae' || viewMode === 'ambas') && (
+              {(effectiveMode === 'ae' || effectiveMode === 'ambas') && (
                 <>
                   <EntitySection
                     label="Amazonia Emprende"
@@ -478,14 +485,14 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
                     year={selectedYear}
                     yearInicio={stats.anio_inicio}
                   />
-                  {viewMode === 'ambas' && (
+                  {effectiveMode === 'ambas' && (
                     <div style={{ height: 1, background: 'rgba(255,255,255,0.08)', margin: '22px 0' }} />
                   )}
                 </>
               )}
 
               {/* ── Sección Fundación Bancolombia ── */}
-              {(viewMode === 'fb' || viewMode === 'ambas') && (
+              {!hideBancolombia && (effectiveMode === 'fb' || effectiveMode === 'ambas') && (
                 <EntitySection
                   label="Fundación Bancolombia"
                   color={FB_COLOR}
@@ -510,8 +517,8 @@ export default function MetasPanel({ selectedYear, width, onClose, isMobile }: P
                 }}>Nota</div>
                 <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: 17, lineHeight: 1.65 }}>
                   Valores proyectados a {selectedYear}. El acumulado suma todos los años desde {stats.anio_inicio}.
-                  Bancolombia inicia actividades en {stats.anio_inicio + 1}.
-                  El gráfico muestra el porcentaje alcanzado de cada meta total.
+                  {!hideBancolombia && ` Bancolombia inicia actividades en ${stats.anio_inicio + 1}.`}
+                  {' '}El gráfico muestra el porcentaje alcanzado de cada meta total.
                 </div>
               </div>
             </>

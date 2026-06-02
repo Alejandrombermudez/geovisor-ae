@@ -37,7 +37,20 @@
       "Bash(taskkill //PID 27848 //F)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(pandoc \"Formato de evaluación_Areas de siembra.docx\" -t plain)",
+      "Bash(python -c ' *)",
+      "Read(//d//**)",
+      "Bash(npm create *)",
+      "Bash(cp \"D:/App-familias-res/lomerio.webp\" \"D:/familias-res/public/ref-images/lomerio.webp\")",
+      "Bash(cp \"D:/App-familias-res/montaña.webp\" \"D:/familias-res/public/ref-images/montana.webp\")",
+      "Bash(cp \"D:/App-familias-res/plano.webp\" \"D:/familias-res/public/ref-images/plano.webp\")",
+      "Bash(cp \"D:/App-familias-res/suelo-arcilloso.jpg.jpeg\" \"D:/familias-res/public/ref-images/suelo-arcilloso.jpeg\")",
+      "Bash(cp \"D:/App-familias-res/suelo-arenoso.jpg.jpeg\" \"D:/familias-res/public/ref-images/suelo-arenoso.jpeg\")",
+      "Bash(node -e ' *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5174/)",
+      "Bash(cd /tmp)",
+      "Bash(python \"C:\\\\Users\\\\PC\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-sessions\\\\skills-plugin\\\\61e300d8-e48b-416d-aff2-54e5a20cb9e7\\\\e365e145-11e9-4e2b-a01b-e0a8a0787e63\\\\skills\\\\docx\\\\scripts\\\\office\\\\unpack.py\" \"D:\\\\App-familias-res\\\\Formato de evaluación_Areas de siembra.docx\" unpacked/)"
     ]
   }
 }
