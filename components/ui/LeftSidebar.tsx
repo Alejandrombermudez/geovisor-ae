@@ -1061,21 +1061,33 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   </div>
                 </div>
 
-                {/* KPI: árboles + ha del aliado */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
-                  <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
-                    <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
-                      {proy.aliado.arboles.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                {/* KPI / resumen según el tipo de proyecto */}
+                {proy.tipo === 'escuela_bosque' && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+                    <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
+                      <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
+                        {proy.aliado.arboles.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                      </div>
+                      <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>árboles</div>
                     </div>
-                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>árboles</div>
-                  </div>
-                  <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
-                    <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
-                      {proy.aliado.ha.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                    <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
+                      <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
+                        {proy.aliado.ha.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                      </div>
+                      <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>hectáreas</div>
                     </div>
-                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>hectáreas</div>
                   </div>
-                </div>
+                )}
+                {proy.tipo === 'capas' && (
+                  <div style={{ display: 'grid', gridTemplateColumns: `repeat(${proy.capas.length}, 1fr)`, gap: 8, marginBottom: 12 }}>
+                    {proy.capas.map(capa => (
+                      <div key={capa.id} style={{ background: `${capa.color}1A`, border: `1px solid ${capa.color}55`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
+                        <div style={{ color: capa.color, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>{capa.stats[0]?.value}</div>
+                        <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4, lineHeight: 1.25 }}>{capa.estado ?? 'predios'}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Descripción */}
                 <div style={{ padding: '10px 12px', marginBottom: 14, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 9 }}>
@@ -1100,28 +1112,30 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   Métricas
                 </button>
 
-                {/* Botón Monitoreo */}
-                <button
-                  onClick={() => onOpenAliadoMetrics?.('monitoreo')}
-                  style={{
-                    width: '100%', padding: '13px 12px', marginTop: 8,
-                    background: 'rgba(255,255,255,0.06)',
-                    border: `1.5px solid ${c}66`, borderRadius: 9, color: '#fff',
-                    fontSize: 17, fontWeight: 700, cursor: 'pointer',
-                    letterSpacing: '0.03em', transition: 'all 0.15s ease',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = `${c}1E`; e.currentTarget.style.borderColor = c }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${c}66` }}
-                >
-                  Monitoreo
-                </button>
+                {/* Botón Monitoreo (solo Escuela Bosque) */}
+                {proy.tipo === 'escuela_bosque' && (
+                  <button
+                    onClick={() => onOpenAliadoMetrics?.('monitoreo')}
+                    style={{
+                      width: '100%', padding: '13px 12px', marginTop: 8,
+                      background: 'rgba(255,255,255,0.06)',
+                      border: `1.5px solid ${c}66`, borderRadius: 9, color: '#fff',
+                      fontSize: 17, fontWeight: 700, cursor: 'pointer',
+                      letterSpacing: '0.03em', transition: 'all 0.15s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = `${c}1E`; e.currentTarget.style.borderColor = c }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${c}66` }}
+                  >
+                    Monitoreo
+                  </button>
+                )}
 
                 {/* Leyenda de polígonos */}
                 <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
                   <div style={{ color: 'rgba(255,255,255,0.42)', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 10 }}>
                     Leyenda
                   </div>
-                  {[
+                  {proy.tipo === 'escuela_bosque' && [
                     { label: `Polígonos ${aliado.displayName}`, fill: c, stroke: c },
                     { label: 'Resto del predio', fill: 'rgba(229,231,235,0.12)', stroke: '#E5E7EB' },
                     { label: 'Límite del predio', fill: 'transparent', stroke: '#FFFFFF' },
@@ -1129,6 +1143,12 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '6px 0' }}>
                       <div style={{ width: 18, height: 18, borderRadius: 4, background: fill, border: `1.5px solid ${stroke}`, flexShrink: 0 }} />
                       <span style={{ color: 'rgba(255,255,255,0.72)', fontSize: 14, fontWeight: 600 }}>{label}</span>
+                    </div>
+                  ))}
+                  {proy.tipo === 'capas' && proy.capas.map(capa => (
+                    <div key={capa.id} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '6px 0' }}>
+                      <div style={{ width: 18, height: 18, borderRadius: 4, background: capa.dashed ? 'transparent' : `${capa.color}66`, border: `1.5px ${capa.dashed ? 'dashed' : 'solid'} ${capa.color}`, flexShrink: 0 }} />
+                      <span style={{ color: 'rgba(255,255,255,0.72)', fontSize: 14, fontWeight: 600 }}>{capa.nombre}</span>
                     </div>
                   ))}
                 </div>

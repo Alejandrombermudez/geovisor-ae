@@ -6,10 +6,10 @@ import L from 'leaflet'
 import type { FeatureCollection, Feature } from 'geojson'
 import type { Layer } from 'leaflet'
 import { fetchAndParseShapefile } from '@/lib/shapefileUtils'
-import type { AliadoProyecto } from '@/lib/aliados'
+import type { ProyectoEscuelaBosque } from '@/lib/aliados'
 
 interface Props {
-  proyecto: AliadoProyecto
+  proyecto: ProyectoEscuelaBosque
   brandColor: string
   /** Si true, vuela a los polígonos al cargar. */
   flyTo?: boolean

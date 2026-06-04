@@ -39,13 +39,19 @@ export interface Monitoreo {
   parcelasMonitoreo: number | null
 }
 
-export interface AliadoProyecto {
-  /** Nombre del predio / proyecto (ej. "Escuela Bosque"). */
+/** Campos comunes a cualquier proyecto de aliado. */
+interface ProyectoBase {
+  /** Nombre del proyecto (ej. "Escuela Bosque"). */
   nombre: string
   /** Ubicación legible (ej. "Piedemonte Andino-Amazónico · Caquetá"). */
   ubicacion: string
   /** Descripción corta para la vista del aliado. */
   descripcion: string
+}
+
+/** Proyecto tipo "Escuela Bosque" (Tetra Pak): predio + polígonos Ley 2173 + árboles. */
+export interface ProyectoEscuelaBosque extends ProyectoBase {
+  tipo: 'escuela_bosque'
   /** ZIP del shapefile con la forma del predio completo. */
   predioZipUrl: string
   /** ZIP del shapefile con los polígonos Ley 2173 (posibles a intervenir). */
@@ -69,9 +75,46 @@ export interface AliadoProyecto {
   }
 }
 
+/** Una métrica simple (etiqueta + valor) que se muestra para una capa. */
+export interface CapaStat {
+  label: string
+  value: string
+}
+
+/** Una capa de polígonos del aliado (ej. "Predios analizados"). */
+export interface AliadoCapa {
+  id: string
+  /** Nombre de la capa (ej. "Predios analizados"). */
+  nombre: string
+  /** Etiqueta corta de estado (ej. "Analizados", "Potenciales"). */
+  estado?: string
+  /** ZIP del shapefile de la capa. */
+  zipUrl: string
+  /** Color de marca de la capa (relleno + borde). */
+  color: string
+  /** ¿Dibujar con borde punteado (capas "potenciales")? */
+  dashed?: boolean
+  /** Propiedad del shapefile usada como título del tooltip (ej. "Propietari", "NAME"). */
+  nombreField?: string
+  /** Propiedad del shapefile con el área en hectáreas (ej. "AREA_PRED_", "Ár Fin ha"). */
+  areaField?: string
+  /** Métricas a mostrar en el panel para esta capa. */
+  stats: CapaStat[]
+}
+
+/** Proyecto tipo "capas" (ej. G.AVAL): varias capas de predios/fincas con métricas. */
+export interface ProyectoCapas extends ProyectoBase {
+  tipo: 'capas'
+  capas: AliadoCapa[]
+}
+
+export type AliadoProyecto = ProyectoEscuelaBosque | ProyectoCapas
+
 export interface Aliado {
-  /** Clave de login (en minúsculas, como la teclea el usuario). */
+  /** Clave de login principal (en minúsculas, como la teclea el usuario). */
   key: string
+  /** Variantes adicionales aceptadas en el login (en minúsculas). */
+  loginAliases?: string[]
   /** Contraseña (client-side, visible en el bundle). */
   password: string
   /** Nombre visible / display. */
@@ -108,6 +151,7 @@ const TETRA_PAK: Aliado = {
   avatarColor: '#0A5BA8',
   logoUrl: '/tetrapak/logo-tetrapak.png',
   proyecto: {
+    tipo: 'escuela_bosque',
     nombre: 'Escuela Bosque',
     ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
     descripcion: 'Proyección área de intervención de Tetra Pak bajo la Ley 2173.',
@@ -141,27 +185,80 @@ const TETRA_PAK: Aliado = {
   },
 }
 
-export const ALIADOS: Aliado[] = [BANCOLOMBIA, TETRA_PAK]
+const GRUPO_AVAL: Aliado = {
+  key: 'g. aval',
+  loginAliases: ['g.aval', 'gaval', 'grupo aval'],
+  password: 'GAVAL_AE_2026',
+  displayName: 'Grupo AVAL',
+  brandColor: '#0E9384',
+  brandColorDark: '#0A6E63',
+  avatarColor: '#0E9384',
+  proyecto: {
+    tipo: 'capas',
+    nombre: 'Predios Caquetá',
+    ubicacion: 'Florencia y alrededores · Caquetá',
+    descripcion: 'Análisis de predios y fincas potenciales para el Grupo Aval en el Caquetá.',
+    capas: [
+      {
+        id: 'predios',
+        nombre: 'Predios analizados',
+        estado: 'Analizados',
+        zipUrl: '/gaval/predios.zip',
+        color: '#2DBE8C',
+        nombreField: 'Propietari',
+        areaField: 'AREA_PRED_',
+        stats: [
+          { label: 'Predios analizados',      value: '43' },
+          { label: 'Hectáreas estimadas',     value: '200 ha' },
+          { label: 'Propietarios vinculados', value: '27' },
+        ],
+      },
+      {
+        id: 'fincas',
+        nombre: 'Fincas Lácteos del Hogar',
+        estado: 'Potenciales',
+        zipUrl: '/gaval/fincas-lacteos.zip',
+        color: '#E0A34E',
+        dashed: true,
+        nombreField: 'NAME',
+        areaField: 'Ár Fin ha',
+        stats: [
+          { label: 'Predios potenciales',     value: '66' },
+          { label: 'Hectáreas estimadas',     value: '180 ha' },
+          { label: 'Propietarios vinculados', value: '0' },
+        ],
+      },
+    ],
+  },
+}
+
+export const ALIADOS: Aliado[] = [BANCOLOMBIA, TETRA_PAK, GRUPO_AVAL]
 
 // ── Mapas derivados (consumidos por LoginScreen / AuthButton) ──────────────────
 
+/** Todas las claves de login de un aliado (principal + alias). */
+function loginKeys(a: Aliado): string[] {
+  return [a.key, ...(a.loginAliases ?? [])]
+}
+
 export const ACCOUNTS: Record<string, string> = Object.fromEntries(
-  ALIADOS.map(a => [a.key, a.password]),
+  ALIADOS.flatMap(a => loginKeys(a).map(k => [k, a.password] as const)),
 )
 
 export const DISPLAY_NAMES: Record<string, string> = Object.fromEntries(
-  ALIADOS.map(a => [a.key, a.displayName]),
+  ALIADOS.flatMap(a => loginKeys(a).map(k => [k, a.displayName] as const)),
 )
 
 export const AVATAR_COLORS: Record<string, string> = Object.fromEntries(
-  ALIADOS.map(a => [a.key, a.avatarColor]),
+  ALIADOS.flatMap(a => loginKeys(a).map(k => [k, a.avatarColor] as const)),
 )
 
 // ── Lookups ────────────────────────────────────────────────────────────────────
 
 export function getAliadoByKey(key: string | null | undefined): Aliado | null {
   if (!key) return null
-  return ALIADOS.find(a => a.key === key.trim().toLowerCase()) ?? null
+  const k = key.trim().toLowerCase()
+  return ALIADOS.find(a => a.key === k || (a.loginAliases ?? []).includes(k)) ?? null
 }
 
 export function getAliadoByDisplayName(name: string | null | undefined): Aliado | null {

@@ -11,6 +11,7 @@ import CameraLayer from './CameraLayer'
 import ProyeccionLayer from './ProyeccionLayer'
 import StaticLayer from './StaticLayer'
 import AliadoPredioLayer from './AliadoPredioLayer'
+import AliadoCapasLayer from './AliadoCapasLayer'
 import { STATIC_LAYERS } from '@/lib/constants'
 import type { AliadoProyecto } from '@/lib/aliados'
 import type { GeovisorLayerData, VisibleLayers, SiembraFamilia, RasFamilia, ActiveCategory, PolygonLayerData, CamaraTrampa, Proyeccion } from '@/types/geovisor'
@@ -294,9 +295,12 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
       {/* ── Capa de veredas Metas (Fase 1, filtrada por año) ────────── */}
       {metasYear != null && <MetasVeredasLayer year={metasYear} hideFB={metasHideFB} />}
 
-      {/* ── Capa del aliado: predio + polígonos de intervención ─────── */}
-      {aliadoProyecto && (
+      {/* ── Capa del aliado: predio/polígonos según el tipo de proyecto ─ */}
+      {aliadoProyecto?.tipo === 'escuela_bosque' && (
         <AliadoPredioLayer proyecto={aliadoProyecto} brandColor={aliadoBrandColor} />
+      )}
+      {aliadoProyecto?.tipo === 'capas' && (
+        <AliadoCapasLayer proyecto={aliadoProyecto} />
       )}
 
       {/* ── Capas estáticas de referencia (Cordillera + Chiribiquete) ─ */}

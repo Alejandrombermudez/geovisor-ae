@@ -10,6 +10,7 @@ import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
 import MetasPanel from '@/components/ui/MetasPanel'
 import MetricasAliadoPanel from '@/components/ui/MetricasAliadoPanel'
+import MetricasCapasPanel from '@/components/ui/MetricasCapasPanel'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
@@ -405,8 +406,8 @@ export default function GeovisorPage() {
         />
       )}
 
-      {/* Panel derecho de Métricas del aliado (ej. Tetra Pak) */}
-      {aliadoMetricsOpen && aliado?.proyecto && (
+      {/* Panel derecho de Métricas del aliado — según el tipo de proyecto */}
+      {aliadoMetricsOpen && aliado?.proyecto?.tipo === 'escuela_bosque' && (
         <MetricasAliadoPanel
           key={aliadoMetricsView}
           proyecto={aliado.proyecto}
@@ -417,6 +418,17 @@ export default function GeovisorPage() {
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
           initialView={aliadoMetricsView}
+        />
+      )}
+      {aliadoMetricsOpen && aliado?.proyecto?.tipo === 'capas' && (
+        <MetricasCapasPanel
+          proyecto={aliado.proyecto}
+          displayName={aliado.displayName}
+          brandColor={aliado.brandColor}
+          brandColorDark={aliado.brandColorDark}
+          width={rightWidth}
+          onClose={handleCloseAliadoMetrics}
+          isMobile={isMobile}
         />
       )}
 

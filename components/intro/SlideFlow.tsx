@@ -7,6 +7,7 @@ import {
   type Slide2,
   type Slide3,
   type SlideGrid,
+  type SlideRisks,
 } from '@/lib/intro-slides'
 
 interface Props {
@@ -27,6 +28,8 @@ function blockCount(slide: AnySlide): number {
       return 2 + slide.text_blocks.length // título + media + N textos
     case 'title_plus_2x2_grid':
       return 1 + slide.grid.length // título + 4 quadrantes
+    case 'title_plus_risk_list':
+      return 1 + slide.risks.length // título + N riesgos (la fuente aparece con el último)
     default:
       return 1
   }
@@ -114,16 +117,21 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
     //    scroll suave para que el bloque nuevo entre al viewport ("2 en 1").
     if (reveal < total) {
       setReveal(r => r + 1)
-      // Tras el render, comprobar si el bloque nuevo se quedó fuera y bajar.
-      requestAnimationFrame(() => {
+      // Tras renderizar el bloque nuevo, bajar SOLO si quedó cortado por debajo,
+      // y lo mínimo para que se vea completo (sin saltar al fondo ni ocultar lo
+      // que se acaba de revelar). Doble rAF para esperar a que el layout se asiente.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         const m = mainRef.current
         if (!m) return
-        const remaining = m.scrollHeight - m.scrollTop - m.clientHeight
-        if (remaining > 8) {
-          // Bajar lo justo para verlo (máx 40% del viewport, mín lo necesario)
-          smoothScrollBy(m, Math.min(remaining, m.clientHeight * 0.4))
-        }
-      })
+        const shown = m.querySelectorAll<HTMLElement>('.geo-reveal[data-shown="1"]')
+        const nuevo = shown[shown.length - 1]
+        if (!nuevo) return
+        const HINT_RESERVE = 96 // espacio inferior reservado para la barra de "Siguiente"
+        const mTop = m.getBoundingClientRect().top
+        const elBottom = nuevo.getBoundingClientRect().bottom - mTop // px desde el tope visible
+        const limite = m.clientHeight - HINT_RESERVE
+        if (elBottom > limite) smoothScrollBy(m, elBottom - limite + 12)
+      }))
       return
     }
     // 2. Si todo revelado pero hay contenido por debajo → bajar la vista
@@ -301,6 +309,9 @@ export default function SlideFlow({ slides, onFinish, onClose }: Props) {
         {current.kind === 'title_plus_2x2_grid' && (
           <RenderGridSlide slide={current} reveal={reveal} />
         )}
+        {current.kind === 'title_plus_risk_list' && (
+          <RenderRisksSlide slide={current} reveal={reveal} />
+        )}
       </main>
 
       {/* Hint / Next */}
@@ -382,6 +393,8 @@ function Reveal({
 }: { shown: boolean; delay?: number; fill?: boolean; children: React.ReactNode }) {
   return (
     <div
+      className="geo-reveal"
+      data-shown={shown ? '1' : '0'}
       style={{
         opacity: shown ? 1 : 0,
         transform: shown ? 'translateY(0)' : 'translateY(18px)',
@@ -722,6 +735,99 @@ function RenderGridSlide({ slide, reveal }: { slide: SlideGrid; reveal: number }
           </Reveal>
         ))}
       </div>
+    </div>
+  )
+}
+
+function RenderRisksSlide({ slide, reveal }: { slide: SlideRisks; reveal: number }) {
+  const ACCENT = '#E0A34E' // ámbar — señala riesgo/advertencia
+  const total = slide.risks.length
+  return (
+    <div style={{ maxWidth: 900, margin: '0 auto', width: '100%' }}>
+      <Reveal shown={reveal >= 1}>
+        <SectionTitle>{slide.title}</SectionTitle>
+        <p
+          style={{
+            margin: 'clamp(12px, 1.3vw, 20px) 0 0',
+            fontSize: 'clamp(16px, 1.4vw, 21px)',
+            fontWeight: 300, lineHeight: 1.5,
+            color: 'rgba(255,255,255,0.7)',
+            maxWidth: '60ch',
+          }}
+        >
+          Riesgos climáticos, hídricos y financieros de seguir degradando la Amazonía.
+        </p>
+      </Reveal>
+
+      <div
+        style={{
+          marginTop: 'clamp(18px, 2.2vh, 32px)',
+          display: 'flex', flexDirection: 'column',
+          gap: 'clamp(11px, 1.1vw, 16px)',
+        }}
+      >
+        {slide.risks.map((r, i) => (
+          <Reveal key={i} shown={reveal >= 2 + i} delay={i * 60}>
+            <div
+              style={{
+                display: 'flex',
+                gap: 'clamp(14px, 1.4vw, 22px)',
+                alignItems: 'flex-start',
+                padding: 'clamp(15px, 1.4vw, 23px) clamp(17px, 1.6vw, 28px)',
+                background: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.16)',
+                borderRadius: 16,
+                backdropFilter: 'blur(16px) saturate(150%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(150%)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.22)',
+              }}
+            >
+              <div
+                style={{
+                  flexShrink: 0,
+                  width: 'clamp(46px, 3.5vw, 58px)',
+                  height: 'clamp(46px, 3.5vw, 58px)',
+                  borderRadius: '50%',
+                  background: `${ACCENT}26`,
+                  border: `1.5px solid ${ACCENT}73`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 'clamp(22px, 1.9vw, 28px)',
+                  boxShadow: `0 0 0 5px ${ACCENT}0F`,
+                }}
+              >
+                {r.icon}
+              </div>
+              <div style={{ minWidth: 0 }}>
+                <h3
+                  style={{
+                    margin: 0,
+                    fontFamily: INTRO_FONT,
+                    fontSize: 'clamp(17px, 1.5vw, 23px)',
+                    fontWeight: 700, letterSpacing: '0.01em',
+                    color: '#fff', lineHeight: 1.25,
+                  }}
+                >
+                  {r.heading}
+                </h3>
+                <p
+                  style={{
+                    margin: 'clamp(5px, 0.5vw, 8px) 0 0',
+                    fontSize: 'clamp(14px, 1.15vw, 18px)',
+                    fontWeight: 300, lineHeight: 1.55,
+                    color: 'rgba(255,255,255,0.82)',
+                  }}
+                >
+                  {r.body}
+                </p>
+              </div>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal shown={reveal >= 1 + total} delay={120}>
+        <Source>Fuentes: {slide.source}</Source>
+      </Reveal>
     </div>
   )
 }

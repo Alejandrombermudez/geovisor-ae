@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import type { AliadoProyecto } from '@/lib/aliados'
+import type { ProyectoEscuelaBosque } from '@/lib/aliados'
 
 type Vista = 'metricas' | 'monitoreo'
 
 interface Props {
-  proyecto: AliadoProyecto
+  proyecto: ProyectoEscuelaBosque
   displayName: string
   brandColor: string
   brandColorDark: string

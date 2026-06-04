@@ -6,6 +6,7 @@ export type SlideKind =
   | 'title_stats_with_side_image'
   | 'media_left_text_right'
   | 'title_plus_2x2_grid'
+  | 'title_plus_risk_list'
 
 export interface HeroCardData {
   id: string
@@ -57,7 +58,22 @@ export interface SlideGrid {
   grid: { label: string; image: string; position: string }[]
 }
 
-export type AnySlide = Slide1 | Slide2 | Slide3 | SlideGrid
+export interface RiskItem {
+  icon: string
+  heading: string
+  body: string
+}
+
+export interface SlideRisks {
+  id: string
+  kind: 'title_plus_risk_list'
+  title: string
+  background: string
+  risks: RiskItem[]
+  source: string
+}
+
+export type AnySlide = Slide1 | Slide2 | Slide3 | SlideGrid | SlideRisks
 
 export interface SlidesPayload {
   source: string
@@ -66,7 +82,7 @@ export interface SlidesPayload {
     '1': Slide1
     '2': Slide2
     '3': Slide3
-    '4': SlideGrid
+    '4': SlideRisks
     '5': SlideGrid
   }
 }
