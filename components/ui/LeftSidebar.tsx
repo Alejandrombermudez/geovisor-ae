@@ -1041,16 +1041,15 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         <div className="geo-about-scroll" style={{ flex: 1, overflowY: 'auto', width: '100%', minHeight: 0 }}>
           <div style={{ padding: compact ? '0 4px 16px' : '0 12px 16px' }}>
 
-            {/* Logo / nombre del aliado */}
+            {/* Logo del aliado (o su nombre si no hay logo) */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-              {proy && aliado.logoUrl && (
-                <AEImage src={aliado.logoUrl} style={{ width: compact ? 36 : 92, height: 'auto', objectFit: 'contain' }} />
-              )}
-              {!compact && (
+              {aliado.logoUrl ? (
+                <AEImage src={aliado.logoUrl} style={{ width: compact ? 44 : 150, height: 'auto', objectFit: 'contain' }} />
+              ) : !compact ? (
                 <div style={{ color: c, fontSize: 19, fontWeight: 800, letterSpacing: '0.01em', textAlign: 'center' }}>
                   {aliado.displayName}
                 </div>
-              )}
+              ) : null}
             </div>
 
             {!compact && (

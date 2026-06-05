@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { ACCOUNTS, DISPLAY_NAMES, AVATAR_COLORS } from '@/lib/aliados'
+import { ACCOUNTS, DISPLAY_NAMES, AVATAR_COLORS, getAliadoByDisplayName } from '@/lib/aliados'
 
 const LS_KEY = 'geoae_user'
 
@@ -94,7 +94,26 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
   // ── Helpers de avatar ────────────────────────────────────────────
   const userKey   = Object.keys(DISPLAY_NAMES).find(k => DISPLAY_NAMES[k] === user) ?? ''
   const avatarColor = AVATAR_COLORS[userKey] ?? '#74A884'
+  const logoUrl   = getAliadoByDisplayName(user)?.logoUrl
   const compact   = !showLabels
+
+  /** Avatar: logo del aliado si lo tiene, si no la inicial sobre el color de marca. */
+  const renderAvatar = (size: number, fontSize: number, extraStyle?: React.CSSProperties) => (
+    <div style={{
+      width: size, height: size, borderRadius: '50%',
+      background: logoUrl ? '#fff' : `linear-gradient(135deg, ${avatarColor} 0%, ${avatarColor}99 100%)`,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize, fontWeight: 800, color: '#000',
+      flexShrink: 0, overflow: 'hidden',
+      ...extraStyle,
+    }}>
+      {logoUrl
+        // eslint-disable-next-line @next/next/no-img-element
+        ? <img src={logoUrl} alt={user ?? ''} onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '2px 1px' }} />
+        : (user?.charAt(0).toUpperCase() ?? '')}
+    </div>
+  )
 
   // ── Modal (siempre position:fixed) ───────────────────────────────
   const modal = showModal && (
@@ -351,17 +370,11 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
                 transition: 'all 0.2s ease',
               }}
             >
-              {/* Avatar circular */}
-              <div style={{
-                width: avatarSize, height: avatarSize, borderRadius: '50%',
-                background: `linear-gradient(135deg, ${avatarColor} 0%, ${avatarColor}99 100%)`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: Math.round(avatarSize * 0.42), fontWeight: 800, color: '#000',
-                flexShrink: 0, boxShadow: showMenu || hovered ? `0 0 10px ${avatarColor}55` : 'none',
+              {/* Avatar circular (logo del aliado o inicial) */}
+              {renderAvatar(avatarSize, Math.round(avatarSize * 0.42), {
+                boxShadow: showMenu || hovered ? `0 0 10px ${avatarColor}55` : 'none',
                 transition: 'box-shadow 0.2s ease',
-              }}>
-                {user.charAt(0).toUpperCase()}
-              </div>
+              })}
               {!compact && (
                 <span style={{
                   fontSize: sidebarW > 160 ? 11 : 10,
@@ -440,9 +453,7 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
           <button style={btnBase} onClick={() => setShowMenu(v => !v)}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(30,30,35,0.92)' }}
             onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(12,12,14,0.82)' }}>
-            <div style={{ width: 22, height: 22, borderRadius: '50%', background: `linear-gradient(135deg, ${avatarColor}, ${avatarColor}99)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 800, color: '#000', flexShrink: 0 }}>
-              {user.charAt(0)}
-            </div>
+            {renderAvatar(22, 10)}
             <span>{user}</span>
             <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{ marginLeft: 2, opacity: 0.6, transform: showMenu ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }}>
               <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />

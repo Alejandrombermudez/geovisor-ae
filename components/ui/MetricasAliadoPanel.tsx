@@ -15,6 +15,7 @@ interface Props {
   isMobile: boolean
   /** Pestaña inicial al abrir el panel */
   initialView?: Vista
+  logoUrl?: string
 }
 
 const AE_COLOR = '#74A884' // Amazonia Emprende (predio completo)
@@ -27,7 +28,7 @@ function fmt(n: number, decimals = 0): string {
 }
 
 export default function MetricasAliadoPanel({
-  proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile, initialView = 'metricas',
+  proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile, initialView = 'metricas', logoUrl,
 }: Props) {
   const { ficha, predioTotal, aliado, monitoreo } = proyecto
   const [view, setView] = useState<Vista>(initialView)
@@ -134,6 +135,14 @@ export default function MetricasAliadoPanel({
         background: `linear-gradient(135deg, ${brandColor}22 0%, transparent 70%)`,
       }}>
         <div>
+          {logoUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={logoUrl} alt={displayName}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+              style={{ height: 30, width: 'auto', objectFit: 'contain', display: 'block', marginBottom: 10 }}
+            />
+          )}
           <div style={{
             color: brandColor, fontSize: 15, fontWeight: 700,
             textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 5,

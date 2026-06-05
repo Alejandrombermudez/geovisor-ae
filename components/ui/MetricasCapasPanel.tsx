@@ -10,10 +10,11 @@ interface Props {
   width: number
   onClose: () => void
   isMobile: boolean
+  logoUrl?: string
 }
 
 export default function MetricasCapasPanel({
-  proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile,
+  proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile, logoUrl,
 }: Props) {
   const panelStyle: React.CSSProperties = isMobile
     ? {
@@ -100,6 +101,14 @@ export default function MetricasCapasPanel({
         background: `linear-gradient(135deg, ${brandColor}22 0%, transparent 70%)`,
       }}>
         <div>
+          {logoUrl && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={logoUrl} alt={displayName}
+              onError={e => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
+              style={{ height: 30, width: 'auto', objectFit: 'contain', display: 'block', marginBottom: 10 }}
+            />
+          )}
           <div style={{
             color: brandColor, fontSize: 15, fontWeight: 700,
             textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 5,

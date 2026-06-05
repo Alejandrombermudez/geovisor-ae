@@ -441,6 +441,7 @@ export default function GeovisorPage() {
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
           initialView={aliadoMetricsView}
+          logoUrl={aliado.logoUrl}
         />
       )}
       {aliadoMetricsOpen && !aliadoDemoActive && aliado?.proyecto?.tipo === 'capas' && (
@@ -452,6 +453,7 @@ export default function GeovisorPage() {
           width={rightWidth}
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
+          logoUrl={aliado.logoUrl}
         />
       )}
       {/* Demo del aliado (Escuela Bosque rebrandeado "G. AVAL (Demo)") */}
@@ -466,6 +468,7 @@ export default function GeovisorPage() {
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
           initialView={aliadoMetricsView}
+          logoUrl={aliado.logoUrl}
         />
       )}
 

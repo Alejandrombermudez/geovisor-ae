@@ -160,7 +160,6 @@ const TETRA_PAK: Aliado = {
   brandColor: '#0A5BA8',
   brandColorDark: '#063E73',
   avatarColor: '#0A5BA8',
-  logoUrl: '/tetrapak/logo-tetrapak.png',
   proyecto: {
     tipo: 'escuela_bosque',
     nombre: 'Escuela Bosque',
@@ -204,6 +203,7 @@ const GRUPO_AVAL: Aliado = {
   brandColor: '#0E9384',
   brandColorDark: '#0A6E63',
   avatarColor: '#0E9384',
+  logoUrl: '/gaval/logo-aval.png',
   presentacion: {
     titulo: 'Plan de Siembra Grupo AVAL',
     basePath: '/gaval/plan-siembra',
