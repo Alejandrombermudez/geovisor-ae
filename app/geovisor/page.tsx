@@ -58,6 +58,8 @@ export default function GeovisorPage() {
   const [aliadoMetricsView, setAliadoMetricsView] = useState<'metricas' | 'monitoreo'>('metricas')
   /** true → LeftSidebar abre la vista del aliado (post-login) */
   const [openAliadoView,    setOpenAliadoView]    = useState(false)
+  /** En un aliado tipo 'capas' con demo: muestra el demo (Escuela Bosque) en vez de las capas */
+  const [aliadoDemoActive,  setAliadoDemoActive]  = useState(false)
 
   // Tras cerrar el intro post-login, abrir la vista del aliado (si tiene proyecto)
   const pendingAliadoOpenRef = useRef(false)
@@ -76,6 +78,7 @@ export default function GeovisorPage() {
     setAuthUser(null)
     setAliadoViewActive(false)
     setAliadoMetricsOpen(false)
+    setAliadoDemoActive(false)
   }, [])
 
   const handleCloseIntro = useCallback(() => {
@@ -114,6 +117,12 @@ export default function GeovisorPage() {
   /** Con un aliado especializado en sesión, se oculta todo lo de Bancolombia */
   const hideBancolombia = aliado?.proyecto != null
 
+  /** El demo (Escuela Bosque) de un aliado tipo 'capas', si está activo */
+  const aliadoDemo =
+    aliado?.proyecto?.tipo === 'capas' && aliadoDemoActive ? (aliado.proyecto.demo ?? null) : null
+  /** Proyecto que se dibuja en el mapa: el demo si está activo, si no el del aliado */
+  const aliadoMapProyecto = !aliadoViewActive ? null : (aliadoDemo ?? aliado?.proyecto ?? null)
+
   /** Activa/desactiva la vista del aliado: muestra su capa, oculta el resto */
   const handleAliadoViewToggle = useCallback((open: boolean) => {
     if (open) {
@@ -125,11 +134,20 @@ export default function GeovisorPage() {
     } else {
       setAliadoViewActive(false)
       setAliadoMetricsOpen(false)
+      setAliadoDemoActive(false)
     }
   }, [])
 
   const handleOpenAliadoMetrics  = useCallback((view: 'metricas' | 'monitoreo' = 'metricas') => {
+    setAliadoDemoActive(false)
     setAliadoMetricsView(view)
+    setAliadoMetricsOpen(true)
+  }, [])
+
+  /** Abre el demo (Escuela Bosque rebrandeado) de un aliado tipo 'capas' */
+  const handleOpenAliadoDemo = useCallback(() => {
+    setAliadoDemoActive(true)
+    setAliadoMetricsView('metricas')
     setAliadoMetricsOpen(true)
   }, [])
   const handleCloseAliadoMetrics = useCallback(() => setAliadoMetricsOpen(false), [])
@@ -285,7 +303,7 @@ export default function GeovisorPage() {
         metasYear={metasLayerActive ? metasYear : null}
         metasMode={metasLayerActive}
         metasHideFB={hideBancolombia}
-        aliadoProyecto={aliadoViewActive ? (aliado?.proyecto ?? null) : null}
+        aliadoProyecto={aliadoMapProyecto}
         aliadoBrandColor={aliado?.brandColor}
       />
 
@@ -308,6 +326,7 @@ export default function GeovisorPage() {
         onMetasViewToggle={handleMetasViewToggle}
         aliado={aliado}
         onOpenAliadoMetrics={handleOpenAliadoMetrics}
+        onOpenAliadoDemo={handleOpenAliadoDemo}
         onAliadoViewToggle={handleAliadoViewToggle}
         openAliadoView={openAliadoView}
       />
@@ -420,7 +439,7 @@ export default function GeovisorPage() {
           initialView={aliadoMetricsView}
         />
       )}
-      {aliadoMetricsOpen && aliado?.proyecto?.tipo === 'capas' && (
+      {aliadoMetricsOpen && !aliadoDemoActive && aliado?.proyecto?.tipo === 'capas' && (
         <MetricasCapasPanel
           proyecto={aliado.proyecto}
           displayName={aliado.displayName}
@@ -429,6 +448,20 @@ export default function GeovisorPage() {
           width={rightWidth}
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
+        />
+      )}
+      {/* Demo del aliado (Escuela Bosque rebrandeado "G. AVAL (Demo)") */}
+      {aliadoMetricsOpen && aliadoDemo && aliado && (
+        <MetricasAliadoPanel
+          key={`demo-${aliadoMetricsView}`}
+          proyecto={aliadoDemo}
+          displayName="G. AVAL (Demo)"
+          brandColor={aliado.brandColor}
+          brandColorDark={aliado.brandColorDark}
+          width={rightWidth}
+          onClose={handleCloseAliadoMetrics}
+          isMobile={isMobile}
+          initialView={aliadoMetricsView}
         />
       )}
 

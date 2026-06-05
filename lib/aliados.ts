@@ -58,6 +58,8 @@ export interface ProyectoEscuelaBosque extends ProyectoBase {
   ley2173ZipUrl: string
   /** Valor de la columna `Intervenci` que marca los polígonos del aliado. */
   intervenciValue: string
+  /** Etiqueta a mostrar en el tooltip de los polígonos (si difiere del valor de filtro). */
+  intervenciLabel?: string
   /** Ficha de la estrategia de restauración. */
   ficha: RestauracionFicha
   /** Datos del predio completo (todos los polígonos Ley 2173). */
@@ -106,6 +108,8 @@ export interface AliadoCapa {
 export interface ProyectoCapas extends ProyectoBase {
   tipo: 'capas'
   capas: AliadoCapa[]
+  /** Demo opcional reutilizando un proyecto Escuela Bosque (ortofoto + estadísticas), rebrandeado. */
+  demo?: ProyectoEscuelaBosque
 }
 
 export type AliadoProyecto = ProyectoEscuelaBosque | ProyectoCapas
@@ -201,21 +205,22 @@ const GRUPO_AVAL: Aliado = {
     capas: [
       {
         id: 'predios',
-        nombre: 'Predios analizados',
-        estado: 'Analizados',
+        nombre: 'Predios vinculados',
+        estado: 'Vinculados',
         zipUrl: '/gaval/predios.zip',
         color: '#2DBE8C',
         nombreField: 'Propietari',
         areaField: 'AREA_PRED_',
         stats: [
-          { label: 'Predios analizados',      value: '43' },
-          { label: 'Hectáreas estimadas',     value: '200 ha' },
-          { label: 'Propietarios vinculados', value: '27' },
+          { label: 'Predios vinculados',      value: '43' },
+          { label: 'Hectáreas estimadas',     value: '350 ha' },
+          { label: 'Árboles/ha',              value: '350' },
+          { label: 'Propietarios vinculados', value: '35' },
         ],
       },
       {
         id: 'fincas',
-        nombre: 'Fincas Lácteos del Hogar',
+        nombre: 'Fincas potenciales',
         estado: 'Potenciales',
         zipUrl: '/gaval/fincas-lacteos.zip',
         color: '#E0A34E',
@@ -229,6 +234,39 @@ const GRUPO_AVAL: Aliado = {
         ],
       },
     ],
+    // Demo: reutiliza la ortofoto y las estadísticas de Escuela Bosque (las mismas
+    // de Tetra Pak) pero rebrandeadas "G. AVAL (Demo)" para este inicio de sesión.
+    demo: {
+      tipo: 'escuela_bosque',
+      nombre: 'Predio demostrativo',
+      ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
+      descripcion: 'Demostración: proyección de área de intervención bajo la Ley 2173.',
+      predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
+      ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
+      intervenciValue: 'Tetra Pak',       // valor de filtro en el shapefile (no se muestra)
+      intervenciLabel: 'G. AVAL (Demo)',  // lo que ve el usuario en el tooltip
+      ficha: {
+        cobertura: 'Rastrojo bajo (<4 m)',
+        condicion: 'No tiene espacios grandes sin vegetación',
+        tipoRestauracion: 'Activa',
+        estrategia: 'Cercado · Nucleación de especies',
+        gremioEspecies: 'Intermedias / Esciófitas',
+        arbPorHa: 330,
+      },
+      predioTotal: { ha: 4.6, arbPorHa: 330, arboles: 1519 },
+      aliado: { ha: 0.9, arbPorHa: 330, arboles: 284.2 },
+      // Números de prueba (demostración) — no son datos reales de campo.
+      monitoreo: {
+        especiesSembradas: 22,
+        tasaSupervivencia: 88.7,
+        fechaMonitoreo: 'Mayo 2026',
+        parcelasMonitoreo: 5,
+      },
+      ortho: {
+        url: '/tetrapak/ortho-escuelabosque.webp',
+        bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
+      },
+    },
   },
 }
 

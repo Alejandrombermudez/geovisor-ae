@@ -127,7 +127,7 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
           onEachFeature={(feature: Feature, layer: Layer) => {
             layer.bindTooltip(
               `<div style="font-family:system-ui;font-size:12px;line-height:1.55">
-                <strong style="color:${brandColor}">● ${proyecto.intervenciValue}</strong><br/>
+                <strong style="color:${brandColor}">● ${proyecto.intervenciLabel ?? proyecto.intervenciValue}</strong><br/>
                 <span style="color:#e5e7eb">${fmtHa(feature.properties?.area)} ha · restauración activa</span>
               </div>`,
               { sticky: true, direction: 'top' },

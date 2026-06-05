@@ -32,6 +32,12 @@ export default function MetricasAliadoPanel({
   const { ficha, predioTotal, aliado, monitoreo } = proyecto
   const [view, setView] = useState<Vista>(initialView)
 
+  // ¿El monitoreo ya tiene cifras (demo)? Si no, sigue en "--" (pendiente real).
+  const monitoreoConDatos = !!monitoreo && [
+    monitoreo.especiesSembradas, monitoreo.tasaSupervivencia,
+    monitoreo.fechaMonitoreo, monitoreo.parcelasMonitoreo,
+  ].some(v => v != null)
+
   // Participación del aliado sobre el predio (según árboles estimados)
   const sharePct = predioTotal.arboles > 0
     ? (aliado.arboles / predioTotal.arboles) * 100
@@ -294,7 +300,9 @@ export default function MetricasAliadoPanel({
           background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: 10, color: 'rgba(255,255,255,0.5)', fontSize: 14, lineHeight: 1.6,
         }}>
-          Aún no hay datos: estos indicadores se completarán con los primeros monitoreos en campo.
+          {monitoreoConDatos
+            ? 'Datos de prueba (demostración). Las cifras definitivas se cargan con los monitoreos en campo.'
+            : 'Aún no hay datos: estos indicadores se completarán con los primeros monitoreos en campo.'}
         </div>
        </>)}
       </div>

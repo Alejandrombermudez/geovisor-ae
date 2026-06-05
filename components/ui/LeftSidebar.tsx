@@ -30,6 +30,8 @@ interface Props {
   aliado?: Aliado | null
   /** Abre el panel derecho del aliado en la pestaña indicada */
   onOpenAliadoMetrics?: (view: 'metricas' | 'monitoreo') => void
+  /** Abre el demo (Escuela Bosque rebrandeado) de un aliado tipo 'capas' */
+  onOpenAliadoDemo?: () => void
   /** Llamado al entrar/salir de la vista del aliado — activa/desactiva su capa en el mapa */
   onAliadoViewToggle?: (open: boolean) => void
   /** Fuerza la apertura de la vista del aliado (post-login, tras el intro) */
@@ -146,7 +148,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onAliadoViewToggle, openAliadoView = false }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onOpenAliadoDemo, onAliadoViewToggle, openAliadoView = false }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas' | 'aliado'>('main')
@@ -1127,6 +1129,24 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${c}66` }}
                   >
                     Monitoreo
+                  </button>
+                )}
+
+                {/* Botón Demo (solo capas con demo) — abre la ortofoto + estadísticas */}
+                {proy.tipo === 'capas' && proy.demo && (
+                  <button
+                    onClick={() => onOpenAliadoDemo?.()}
+                    style={{
+                      width: '100%', padding: '13px 12px', marginTop: 8,
+                      background: 'rgba(255,255,255,0.06)',
+                      border: `1.5px solid ${c}66`, borderRadius: 9, color: '#fff',
+                      fontSize: 17, fontWeight: 700, cursor: 'pointer',
+                      letterSpacing: '0.03em', transition: 'all 0.15s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = `${c}1E`; e.currentTarget.style.borderColor = c }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${c}66` }}
+                  >
+                    Demo
                   </button>
                 )}
 

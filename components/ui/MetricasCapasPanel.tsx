@@ -64,7 +64,11 @@ export default function MetricasCapasPanel({
       </div>
 
       {/* Estadísticas */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 9 }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: `repeat(${capa.stats.length === 4 ? 2 : Math.min(capa.stats.length, 3)}, 1fr)`,
+        gap: 9,
+      }}>
         {capa.stats.map(s => (
           <div key={s.label} style={{
             background: `${capa.color}14`,
