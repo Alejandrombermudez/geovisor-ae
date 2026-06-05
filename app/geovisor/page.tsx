@@ -11,6 +11,7 @@ import RightPanel from '@/components/ui/RightPanel'
 import MetasPanel from '@/components/ui/MetasPanel'
 import MetricasAliadoPanel from '@/components/ui/MetricasAliadoPanel'
 import MetricasCapasPanel from '@/components/ui/MetricasCapasPanel'
+import PresentacionViewer from '@/components/ui/PresentacionViewer'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
@@ -60,6 +61,8 @@ export default function GeovisorPage() {
   const [openAliadoView,    setOpenAliadoView]    = useState(false)
   /** En un aliado tipo 'capas' con demo: muestra el demo (Escuela Bosque) en vez de las capas */
   const [aliadoDemoActive,  setAliadoDemoActive]  = useState(false)
+  /** Visor de la presentación (PDF) del aliado abierto */
+  const [presentacionOpen,  setPresentacionOpen]  = useState(false)
 
   // Tras cerrar el intro post-login, abrir la vista del aliado (si tiene proyecto)
   const pendingAliadoOpenRef = useRef(false)
@@ -319,6 +322,7 @@ export default function GeovisorPage() {
         onLogout={handleLogout}
         onRequestLogin={() => setShowLogin(true)}
         onOpenIntro={handleOpenIntroFromSidebar}
+        onOpenPresentacion={() => setPresentacionOpen(true)}
         metasYear={metasYear}
         onMetasYearChange={(y) => { setMetasYear(y); setMetasLayerActive(true) }}
         onOpenMetasMetrics={() => setMetasMetricsOpen(true)}
@@ -462,6 +466,17 @@ export default function GeovisorPage() {
           onClose={handleCloseAliadoMetrics}
           isMobile={isMobile}
           initialView={aliadoMetricsView}
+        />
+      )}
+
+      {/* Visor de presentación del aliado (PDF rasterizado a imágenes) */}
+      {presentacionOpen && aliado?.presentacion && (
+        <PresentacionViewer
+          titulo={aliado.presentacion.titulo}
+          basePath={aliado.presentacion.basePath}
+          paginas={aliado.presentacion.paginas}
+          accent={aliado.brandColor}
+          onClose={() => setPresentacionOpen(false)}
         />
       )}
 

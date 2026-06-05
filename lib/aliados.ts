@@ -133,6 +133,13 @@ export interface Aliado {
   logoUrl?: string
   /** Proyecto de intervención (si el aliado tiene una vista personalizada). */
   proyecto?: AliadoProyecto
+  /** Presentación (PDF rasterizado a imágenes) que el aliado puede mostrar en el geovisor. */
+  presentacion?: {
+    titulo: string
+    /** Carpeta base de las páginas: `${basePath}/page-NN.webp`. */
+    basePath: string
+    paginas: number
+  }
 }
 
 // ── Aliados ───────────────────────────────────────────────────────────────────
@@ -197,6 +204,11 @@ const GRUPO_AVAL: Aliado = {
   brandColor: '#0E9384',
   brandColorDark: '#0A6E63',
   avatarColor: '#0E9384',
+  presentacion: {
+    titulo: 'Plan de Siembra Grupo AVAL',
+    basePath: '/gaval/plan-siembra',
+    paginas: 6,
+  },
   proyecto: {
     tipo: 'capas',
     nombre: 'Predios Caquetá',

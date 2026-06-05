@@ -17,6 +17,8 @@ interface Props {
   onLogout?: () => void
   onRequestLogin?: () => void
   onOpenIntro?: () => void
+  /** Abre el visor de la presentación del aliado (PDF) */
+  onOpenPresentacion?: () => void
   /** Año seleccionado en la vista Metas (notificado al padre para el mapa) */
   metasYear?: number
   onMetasYearChange?: (year: number) => void
@@ -148,7 +150,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onOpenAliadoDemo, onAliadoViewToggle, openAliadoView = false }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onOpenAliadoDemo, onAliadoViewToggle, openAliadoView = false, onOpenPresentacion }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas' | 'aliado'>('main')
@@ -1324,6 +1326,33 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
 
       {/* Sección inferior fija */}
       <div style={{ flexShrink: 0, width: '100%' }}>
+        {/* Botón presentación del aliado (PDF) — arriba de "Acerca del proyecto" y "Amazonia Emprende" */}
+        {aliado?.presentacion && (
+          <button
+            onClick={onOpenPresentacion}
+            onMouseEnter={() => setHovered('presentacion')} onMouseLeave={() => setHovered(null)}
+            title={showLabels ? undefined : aliado.presentacion.titulo}
+            style={{
+              width: '100%',
+              background: hovered === 'presentacion' ? `${aliado.brandColor}1E` : `${aliado.brandColor}0D`,
+              border: 'none', borderLeft: `4px solid ${aliado.brandColor}`,
+              borderTop: '1px solid rgba(255,255,255,0.06)',
+              color: hovered === 'presentacion' ? aliado.brandColor : `${aliado.brandColor}CC`,
+              cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 4, padding: '12px 4px',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <span style={{ fontSize: showLabels ? 19 : 21, lineHeight: 1 }}>📑</span>
+            {showLabels && (
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'inherit', textAlign: 'center', lineHeight: 1.3 }}>
+                Plan de Siembra<br />Grupo AVAL
+              </span>
+            )}
+          </button>
+        )}
+
         {/* Botón "Acerca del proyecto" — visible SOLO cuando el usuario está autenticado */}
         {onOpenIntro && authUser && (
           <button
