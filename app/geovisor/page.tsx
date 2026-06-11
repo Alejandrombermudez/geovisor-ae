@@ -15,6 +15,8 @@ import PresentacionViewer from '@/components/ui/PresentacionViewer'
 import LoadingOverlay from '@/components/ui/LoadingOverlay'
 import LayerLoadingIndicator from '@/components/ui/LayerLoadingIndicator'
 import MapLegend from '@/components/map/MapLegend'
+import BasemapSwitcher from '@/components/map/BasemapSwitcher'
+import { DEFAULT_BASEMAP_ID } from '@/lib/constants'
 import LoginScreen from '@/components/ui/LoginScreen'
 import IntroOverlay, { type IntroPhase } from '@/components/intro/IntroOverlay'
 
@@ -106,6 +108,8 @@ export default function GeovisorPage() {
   const [selectedFamiliaId,  setSelectedFamiliaId]  = useState<string | null>(null)
   const [proyecciones,       setProyecciones]       = useState<Proyeccion[]>([])
   const [activeProyeccionId, setActiveProyeccionId] = useState<string | null>(null)
+  // Basemap activo del mapa (satélite / satélite+referencias / mapa)
+  const [basemapId,          setBasemapId]          = useState<string>(DEFAULT_BASEMAP_ID)
 
   // ── Metas ──────────────────────────────────────────────────────────────
   const [metasYear,         setMetasYear]         = useState(2026)
@@ -308,6 +312,7 @@ export default function GeovisorPage() {
         metasHideFB={hideBancolombia}
         aliadoProyecto={aliadoMapProyecto}
         aliadoBrandColor={aliado?.brandColor}
+        basemapId={basemapId}
       />
 
       <LeftSidebar
@@ -356,6 +361,16 @@ export default function GeovisorPage() {
           activeProyeccionId={activeProyeccionId}
         />
       )}
+
+      {/* ── Selector de mapa base (encima de los botones de zoom) ──── */}
+      <BasemapSwitcher
+        value={basemapId}
+        onChange={setBasemapId}
+        isMobile={isMobile}
+        right={zoomBtnRight}
+        bottom={zoomBtnBottom + zoomBtnSize * 2 + 3 + 8}
+        size={zoomBtnSize}
+      />
 
       {/* ── Botones de zoom del mapa ───────────────────────────────── */}
       <div

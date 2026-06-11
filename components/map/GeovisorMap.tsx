@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { MAP_CENTER, MAP_ZOOM, ESRI_SATELLITE_URL, ESRI_SATELLITE_ATTRIBUTION, LAYER_COLORS } from '@/lib/constants'
+import { MAP_CENTER, MAP_ZOOM, BASEMAPS, DEFAULT_BASEMAP_ID, LAYER_COLORS } from '@/lib/constants'
 import PolygonLayer from './PolygonLayer'
 import ArbolesLayer from './ArbolesLayer'
 import CameraLayer from './CameraLayer'
@@ -34,6 +34,8 @@ interface Props {
   aliadoProyecto?: AliadoProyecto | null
   /** Color de marca del aliado para resaltar sus polígonos */
   aliadoBrandColor?: string
+  /** id del basemap activo (ver BASEMAPS en lib/constants) */
+  basemapId?: string
 }
 
 // ── Capa de veredas Metas (GeoJSON filtrado por año acumulado) ───────────────
@@ -197,13 +199,16 @@ function FlyToFamilia({ familiaId, layerData }: { familiaId: string | null; laye
   return null
 }
 
-export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null, metasYear = null, metasMode = false, metasHideFB = false, aliadoProyecto = null, aliadoBrandColor = '#0A5BA8' }: Props) {
+export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaId, onMapInit, onFamiliaClick, proyecciones = [], activeProyeccionId = null, metasYear = null, metasMode = false, metasHideFB = false, aliadoProyecto = null, aliadoBrandColor = '#0A5BA8', basemapId = DEFAULT_BASEMAP_ID }: Props) {
   // When a family is selected, only show its layers; otherwise show everything
   const polyFilter = (item: PolygonLayerData) =>
     !selectedFamiliaId || item.familia.id === selectedFamiliaId
 
   const camFilter = (cam: CamaraTrampa) =>
     !selectedFamiliaId || cam.familia_id === selectedFamiliaId
+
+  // Basemap activo (+ overlays de referencia opcionales)
+  const basemap = BASEMAPS.find((b) => b.id === basemapId) ?? BASEMAPS[0]
 
   return (
     <MapContainer
@@ -214,11 +219,22 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
       style={{ height: '100%', width: '100%' }}
       className="z-0"
     >
+      {/* ── Basemap activo: capa base + overlays de referencia ───────
+            key fuerza el remonte al cambiar de basemap (reordena tiles) */}
       <TileLayer
-        url={ESRI_SATELLITE_URL}
-        attribution={ESRI_SATELLITE_ATTRIBUTION}
-        maxZoom={19}
+        key={basemap.id}
+        url={basemap.url}
+        attribution={basemap.attribution}
+        maxZoom={basemap.maxZoom}
       />
+      {basemap.overlays?.map((ov, i) => (
+        <TileLayer
+          key={`${basemap.id}-ov-${i}`}
+          url={ov.url}
+          maxZoom={basemap.maxZoom}
+          maxNativeZoom={ov.maxNativeZoom}
+        />
+      ))}
 
       {/* ── Registro del map ref ──────────────────────────────────── */}
       <MapInitializer onMapInit={onMapInit} />
