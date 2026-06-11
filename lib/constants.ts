@@ -64,7 +64,7 @@ export const BASEMAPS: BasemapDef[] = [
   },
 ]
 
-export const DEFAULT_BASEMAP_ID = BASEMAPS[0].id
+export const DEFAULT_BASEMAP_ID = 'satelite-ref'
 
 // Vista por defecto: Colombia completa
 export const MAP_CENTER: [number, number] = [4.0, -73.0]
