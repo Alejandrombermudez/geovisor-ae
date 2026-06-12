@@ -124,9 +124,9 @@ export default function GeovisorPage() {
   /** Con un aliado especializado en sesión, se oculta todo lo de Bancolombia */
   const hideBancolombia = aliado?.proyecto != null
 
-  /** El demo (Escuela Bosque) de un aliado tipo 'capas', si está activo */
-  const aliadoDemo =
-    aliado?.proyecto?.tipo === 'capas' && aliadoDemoActive ? (aliado.proyecto.demo ?? null) : null
+  /** El demo (Escuela Bosque rebrandeado) del aliado, si está activo. Funciona aunque
+   *  el aliado no tenga proyecto propio (ej. Bancolombia). */
+  const aliadoDemo = aliadoDemoActive ? (aliado?.demo ?? null) : null
   /** Proyecto que se dibuja en el mapa: el demo si está activo, si no el del aliado */
   const aliadoMapProyecto = !aliadoViewActive ? null : (aliadoDemo ?? aliado?.proyecto ?? null)
 
@@ -151,13 +151,30 @@ export default function GeovisorPage() {
     setAliadoMetricsOpen(true)
   }, [])
 
-  /** Abre el demo (Escuela Bosque rebrandeado) de un aliado tipo 'capas' */
+  /** Abre el demo (Escuela Bosque rebrandeado) del aliado: su ortomosaico + estadísticas.
+   *  Limpia las demás capas y activa la vista del aliado para que el demo se dibuje solo
+   *  (necesario p. ej. para Bancolombia, que lo abre desde la vista Metas). */
   const handleOpenAliadoDemo = useCallback(() => {
+    setActiveCategory(null)
+    setSelectedFamiliaId(null)
+    setActiveProyeccionId(null)
+    setMetasLayerActive(false)
+    setAliadoViewActive(true)
     setAliadoDemoActive(true)
     setAliadoMetricsView('metricas')
     setAliadoMetricsOpen(true)
   }, [])
-  const handleCloseAliadoMetrics = useCallback(() => setAliadoMetricsOpen(false), [])
+  const handleCloseAliadoMetrics = useCallback(() => {
+    setAliadoMetricsOpen(false)
+    // Aliado sin proyecto propio (ej. Bancolombia): al cerrar el panel del demo también
+    // se sale del modo demo y se restaura su vista de Metas (no tiene una vista de aliado
+    // con botón "Volver" como Tetra Pak / Grupo Aval).
+    if (aliadoDemoActive && !aliado?.proyecto) {
+      setAliadoDemoActive(false)
+      setAliadoViewActive(false)
+      setMetasLayerActive(true)
+    }
+  }, [aliadoDemoActive, aliado])
 
   /** Activa/desactiva la vista Metas: habilita Fase I, oculta capas de familias */
   const handleMetasViewToggle = useCallback((open: boolean) => {
@@ -471,12 +488,12 @@ export default function GeovisorPage() {
           logoUrl={aliado.logoUrl}
         />
       )}
-      {/* Demo del aliado (Escuela Bosque rebrandeado "G. AVAL (Demo)") */}
+      {/* Demo del aliado (Escuela Bosque rebrandeado, ej. "G. AVAL (Demo)" / "Bancolombia (Demo)") */}
       {aliadoMetricsOpen && aliadoDemo && aliado && (
         <MetricasAliadoPanel
           key={`demo-${aliadoMetricsView}`}
           proyecto={aliadoDemo}
-          displayName="G. AVAL (Demo)"
+          displayName={aliadoDemo.intervenciLabel ?? `${aliado.displayName} (Demo)`}
           brandColor={aliado.brandColor}
           brandColorDark={aliado.brandColorDark}
           width={rightWidth}

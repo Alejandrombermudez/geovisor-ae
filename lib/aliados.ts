@@ -108,8 +108,6 @@ export interface AliadoCapa {
 export interface ProyectoCapas extends ProyectoBase {
   tipo: 'capas'
   capas: AliadoCapa[]
-  /** Demo opcional reutilizando un proyecto Escuela Bosque (ortofoto + estadísticas), rebrandeado. */
-  demo?: ProyectoEscuelaBosque
 }
 
 export type AliadoProyecto = ProyectoEscuelaBosque | ProyectoCapas
@@ -133,6 +131,9 @@ export interface Aliado {
   logoUrl?: string
   /** Proyecto de intervención (si el aliado tiene una vista personalizada). */
   proyecto?: AliadoProyecto
+  /** Demo opcional: predio "Escuela Bosque" (ortofoto + estadísticas) rebrandeado para
+   *  este aliado. Accesible aunque el aliado no tenga proyecto propio (ej. Bancolombia). */
+  demo?: ProyectoEscuelaBosque
   /** Presentación (PDF rasterizado a imágenes) que el aliado puede mostrar en el geovisor. */
   presentacion?: {
     titulo: string
@@ -151,6 +152,39 @@ const BANCOLOMBIA: Aliado = {
   brandColor: '#6898B8',
   brandColorDark: '#3F6B8A',
   avatarColor: '#FFB800',
+  // Demo: reutiliza la ortofoto y las estadísticas de Escuela Bosque (las mismas
+  // de Tetra Pak) pero rebrandeadas "Bancolombia (Demo)" para este inicio de sesión.
+  demo: {
+    tipo: 'escuela_bosque',
+    nombre: 'Predio demostrativo',
+    ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
+    descripcion: 'Demostración: proyección de área de intervención bajo la Ley 2173.',
+    predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
+    ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
+    intervenciValue: 'Tetra Pak',          // valor de filtro en el shapefile (no se muestra)
+    intervenciLabel: 'Bancolombia (Demo)', // lo que ve el usuario en el tooltip
+    ficha: {
+      cobertura: 'Rastrojo bajo (<4 m)',
+      condicion: 'No tiene espacios grandes sin vegetación',
+      tipoRestauracion: 'Activa',
+      estrategia: 'Cercado · Nucleación de especies',
+      gremioEspecies: 'Intermedias / Esciófitas',
+      arbPorHa: 330,
+    },
+    predioTotal: { ha: 4.6, arbPorHa: 330, arboles: 1519 },
+    aliado: { ha: 0.9, arbPorHa: 330, arboles: 284.2 },
+    // Números de prueba (demostración) — no son datos reales de campo.
+    monitoreo: {
+      especiesSembradas: 22,
+      tasaSupervivencia: 88.7,
+      fechaMonitoreo: 'Mayo 2026',
+      parcelasMonitoreo: 5,
+    },
+    ortho: {
+      url: '/tetrapak/ortho-escuelabosque.webp',
+      bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
+    },
+  },
 }
 
 const TETRA_PAK: Aliado = {
@@ -209,6 +243,39 @@ const GRUPO_AVAL: Aliado = {
     basePath: '/gaval/plan-siembra',
     paginas: 6,
   },
+  // Demo: reutiliza la ortofoto y las estadísticas de Escuela Bosque (las mismas
+  // de Tetra Pak) pero rebrandeadas "G. AVAL (Demo)" para este inicio de sesión.
+  demo: {
+    tipo: 'escuela_bosque',
+    nombre: 'Predio demostrativo',
+    ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
+    descripcion: 'Demostración: proyección de área de intervención bajo la Ley 2173.',
+    predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
+    ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
+    intervenciValue: 'Tetra Pak',       // valor de filtro en el shapefile (no se muestra)
+    intervenciLabel: 'G. AVAL (Demo)',  // lo que ve el usuario en el tooltip
+    ficha: {
+      cobertura: 'Rastrojo bajo (<4 m)',
+      condicion: 'No tiene espacios grandes sin vegetación',
+      tipoRestauracion: 'Activa',
+      estrategia: 'Cercado · Nucleación de especies',
+      gremioEspecies: 'Intermedias / Esciófitas',
+      arbPorHa: 330,
+    },
+    predioTotal: { ha: 4.6, arbPorHa: 330, arboles: 1519 },
+    aliado: { ha: 0.9, arbPorHa: 330, arboles: 284.2 },
+    // Números de prueba (demostración) — no son datos reales de campo.
+    monitoreo: {
+      especiesSembradas: 22,
+      tasaSupervivencia: 88.7,
+      fechaMonitoreo: 'Mayo 2026',
+      parcelasMonitoreo: 5,
+    },
+    ortho: {
+      url: '/tetrapak/ortho-escuelabosque.webp',
+      bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
+    },
+  },
   proyecto: {
     tipo: 'capas',
     nombre: 'Predios Caquetá',
@@ -246,39 +313,6 @@ const GRUPO_AVAL: Aliado = {
         ],
       },
     ],
-    // Demo: reutiliza la ortofoto y las estadísticas de Escuela Bosque (las mismas
-    // de Tetra Pak) pero rebrandeadas "G. AVAL (Demo)" para este inicio de sesión.
-    demo: {
-      tipo: 'escuela_bosque',
-      nombre: 'Predio demostrativo',
-      ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
-      descripcion: 'Demostración: proyección de área de intervención bajo la Ley 2173.',
-      predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
-      ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
-      intervenciValue: 'Tetra Pak',       // valor de filtro en el shapefile (no se muestra)
-      intervenciLabel: 'G. AVAL (Demo)',  // lo que ve el usuario en el tooltip
-      ficha: {
-        cobertura: 'Rastrojo bajo (<4 m)',
-        condicion: 'No tiene espacios grandes sin vegetación',
-        tipoRestauracion: 'Activa',
-        estrategia: 'Cercado · Nucleación de especies',
-        gremioEspecies: 'Intermedias / Esciófitas',
-        arbPorHa: 330,
-      },
-      predioTotal: { ha: 4.6, arbPorHa: 330, arboles: 1519 },
-      aliado: { ha: 0.9, arbPorHa: 330, arboles: 284.2 },
-      // Números de prueba (demostración) — no son datos reales de campo.
-      monitoreo: {
-        especiesSembradas: 22,
-        tasaSupervivencia: 88.7,
-        fechaMonitoreo: 'Mayo 2026',
-        parcelasMonitoreo: 5,
-      },
-      ortho: {
-        url: '/tetrapak/ortho-escuelabosque.webp',
-        bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
-      },
-    },
   },
 }
 

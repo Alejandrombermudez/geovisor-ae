@@ -951,6 +951,25 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
               </button>
             )}
 
+            {/* Botón Demo — aliado con demo pero sin proyecto propio (ej. Bancolombia):
+                lleva al ortomosaico (Escuela Bosque) + estadísticas de demostración */}
+            {!compact && aliado?.demo && !aliado.proyecto && (
+              <button
+                onClick={() => onOpenAliadoDemo?.()}
+                style={{
+                  width: '100%', padding: '13px 12px', marginTop: 8,
+                  background: 'rgba(255,255,255,0.06)',
+                  border: `1.5px solid ${aliado.brandColor}66`, borderRadius: 9, color: '#fff',
+                  fontSize: 17, fontWeight: 700, cursor: 'pointer',
+                  letterSpacing: '0.03em', transition: 'all 0.15s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = `${aliado.brandColor}1E`; e.currentTarget.style.borderColor = aliado.brandColor }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${aliado.brandColor}66` }}
+              >
+                Demo
+              </button>
+            )}
+
             {/* Leyenda de polígonos por año ─────────────────────────── */}
             {!compact && (
               <div style={{
@@ -1133,8 +1152,8 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                   </button>
                 )}
 
-                {/* Botón Demo (solo capas con demo) — abre la ortofoto + estadísticas */}
-                {proy.tipo === 'capas' && proy.demo && (
+                {/* Botón Demo (aliado con demo) — abre la ortofoto + estadísticas */}
+                {aliado.demo && (
                   <button
                     onClick={() => onOpenAliadoDemo?.()}
                     style={{
