@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import type { ProyectoEscuelaBosque } from '@/lib/aliados'
 
-type Vista = 'metricas' | 'monitoreo'
+type Vista = 'metricas' | 'monitoreo' | 'reportes'
 
 interface Props {
   proyecto: ProyectoEscuelaBosque
@@ -30,8 +30,15 @@ function fmt(n: number, decimals = 0): string {
 export default function MetricasAliadoPanel({
   proyecto, displayName, brandColor, brandColorDark, width, onClose, isMobile, initialView = 'metricas', logoUrl,
 }: Props) {
-  const { ficha, predioTotal, aliado, monitoreo } = proyecto
+  const { ficha, predioTotal, aliado, monitoreo, reportes } = proyecto
   const [view, setView] = useState<Vista>(initialView)
+
+  const tieneReportes = !!reportes && reportes.length > 0
+  const tabs: [Vista, string][] = [
+    ['metricas', 'Métricas'],
+    ['monitoreo', 'Monitoreo'],
+    ...(tieneReportes ? ([['reportes', 'Reportes']] as [Vista, string][]) : []),
+  ]
 
   // ¿El monitoreo ya tiene cifras (demo)? Si no, sigue en "--" (pendiente real).
   const monitoreoConDatos = !!monitoreo && [
@@ -175,7 +182,7 @@ export default function MetricasAliadoPanel({
         borderBottom: '1px solid rgba(255,255,255,0.07)',
         display: 'flex', gap: 6,
       }}>
-        {([['metricas', 'Métricas'], ['monitoreo', 'Monitoreo']] as const).map(([key, label]) => {
+        {tabs.map(([key, label]) => {
           const active = view === key
           return (
             <button
@@ -312,6 +319,96 @@ export default function MetricasAliadoPanel({
           {monitoreoConDatos
             ? 'Datos de prueba (demostración). Las cifras definitivas se cargan con los monitoreos en campo.'
             : 'Aún no hay datos: estos indicadores se completarán con los primeros monitoreos en campo.'}
+        </div>
+       </>)}
+
+       {view === 'reportes' && (<>
+        {/* ── Reportes (documentos del aliado) ── */}
+        <div style={{
+          color: brandColor, fontSize: 15, fontWeight: 700,
+          textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4,
+        }}>
+          Reportes
+        </div>
+        <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: 15, marginBottom: 14, lineHeight: 1.5 }}>
+          Documentos del proyecto disponibles para descargar o visualizar.
+        </div>
+
+        {/* Aviso de demostración */}
+        <div style={{
+          marginBottom: 16, padding: '11px 14px',
+          background: `${brandColor}12`, border: `1px solid ${brandColor}33`,
+          borderRadius: 10, color: 'rgba(255,255,255,0.7)', fontSize: 13.5, lineHeight: 1.55,
+        }}>
+          🔒 <strong style={{ color: 'rgba(255,255,255,0.9)' }}>Demostración.</strong> Estos
+          documentos son de ejemplo; en producción se cargarían los informes reales del aliado.
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {(reportes ?? []).map((rep, i) => (
+            <div key={i} style={{
+              background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(255,255,255,0.09)',
+              borderRadius: 12, padding: '16px 16px',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 12 }}>
+                <span style={{ fontSize: 26, lineHeight: 1, flexShrink: 0 }}>📄</span>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ color: '#fff', fontSize: 18, fontWeight: 700, lineHeight: 1.25 }}>
+                    {rep.titulo}
+                  </div>
+                  {rep.formato && (
+                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12.5, marginTop: 3 }}>
+                      {rep.formato}
+                    </div>
+                  )}
+                </div>
+              </div>
+              {rep.descripcion && (
+                <div style={{ color: 'rgba(255,255,255,0.55)', fontSize: 14, lineHeight: 1.55, marginBottom: 14 }}>
+                  {rep.descripcion}
+                </div>
+              )}
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                {rep.visualizarUrl && (
+                  <a
+                    href={rep.visualizarUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      flex: 1, minWidth: 130, textAlign: 'center',
+                      padding: '11px 14px', borderRadius: 9,
+                      background: `linear-gradient(135deg, ${brandColor} 0%, ${brandColorDark} 100%)`,
+                      color: '#fff', textDecoration: 'none',
+                      fontSize: 15, fontWeight: 700, letterSpacing: '0.02em',
+                      transition: 'opacity 0.15s ease',
+                    }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+                  >
+                    Visualizar
+                  </a>
+                )}
+                <a
+                  href={rep.archivoUrl}
+                  download
+                  style={{
+                    flex: 1, minWidth: 130, textAlign: 'center',
+                    padding: '11px 14px', borderRadius: 9,
+                    background: 'rgba(255,255,255,0.06)',
+                    border: `1.5px solid ${brandColor}66`,
+                    color: '#fff', textDecoration: 'none',
+                    fontSize: 15, fontWeight: 700, letterSpacing: '0.02em',
+                    transition: 'all 0.15s ease',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = `${brandColor}1E`; e.currentTarget.style.borderColor = brandColor }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = `${brandColor}66` }}
+                >
+                  Descargar
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
        </>)}
       </div>

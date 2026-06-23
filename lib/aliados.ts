@@ -68,6 +68,8 @@ export interface ProyectoEscuelaBosque extends ProyectoBase {
   aliado: DatosArboles
   /** Seguimiento/monitoreo del proceso (pendiente → "--"). */
   monitoreo?: Monitoreo
+  /** Reportes/documentos del aliado (descargar / visualizar) — pestaña "Reportes" (demo). */
+  reportes?: ReporteDoc[]
   /** Ortofoto de dron (raster RGB) como capa base del sitio, bajo los polígonos. */
   ortho?: {
     /** URL de la imagen (WebP con alfa, reproyectada a lat/lng). */
@@ -75,6 +77,20 @@ export interface ProyectoEscuelaBosque extends ProyectoBase {
     /** Límites geográficos [[sur, oeste], [norte, este]]. */
     bounds: [[number, number], [number, number]]
   }
+}
+
+/** Documento descargable / visualizable de un aliado (demo de "Reportes"). */
+export interface ReporteDoc {
+  /** Título del documento (ej. "Informe 2024"). */
+  titulo: string
+  /** Descripción corta. */
+  descripcion?: string
+  /** Archivo original para descargar (ej. .docx en /public). */
+  archivoUrl: string
+  /** Etiqueta de formato/peso (ej. "Word · 20 MB"). */
+  formato?: string
+  /** Versión visualizable en el navegador (ej. PDF). Si falta, solo se ofrece descarga. */
+  visualizarUrl?: string
 }
 
 /** Una métrica simple (etiqueta + valor) que se muestra para una capa. */
@@ -180,6 +196,63 @@ const BANCOLOMBIA: Aliado = {
       fechaMonitoreo: 'Mayo 2026',
       parcelasMonitoreo: 5,
     },
+    ortho: {
+      url: '/tetrapak/ortho-escuelabosque.webp',
+      bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
+    },
+  },
+}
+
+const CITIBANK: Aliado = {
+  key: 'citibank',
+  password: 'CB_AE_2026',
+  displayName: 'Citibank',
+  brandColor: '#2E7BC4',
+  brandColorDark: '#0A4C8A',
+  avatarColor: '#003B70',
+  logoUrl: '/citibank/cibibank.webp',
+  // Demo: reutiliza la ortofoto y la estrategia de Escuela Bosque (igual que el resto
+  // de aliados) pero rebrandeada "Citibank (Demo)". El único dato propio de Citibank
+  // es su aporte: 3.000 árboles (el predio total se ajusta para que la participación
+  // sea coherente). Todo lo demás son cifras de demostración.
+  demo: {
+    tipo: 'escuela_bosque',
+    nombre: 'Predio demostrativo',
+    ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
+    descripcion: 'Demostración: proyección de área de intervención bajo la Ley 2173.',
+    predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
+    ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
+    intervenciValue: 'Tetra Pak',        // valor de filtro en el shapefile (no se muestra)
+    intervenciLabel: 'Citibank (Demo)',  // lo que ve el usuario en el tooltip
+    ficha: {
+      cobertura: 'Rastrojo bajo (<4 m)',
+      condicion: 'No tiene espacios grandes sin vegetación',
+      tipoRestauracion: 'Activa',
+      estrategia: 'Cercado · Nucleación de especies',
+      gremioEspecies: 'Intermedias / Esciófitas',
+      arbPorHa: 330,
+    },
+    // Dato real de Citibank: 3.000 árboles. El predio total se fija mayor para que la
+    // comparación/participación tenga sentido (cifras de demostración).
+    predioTotal: { ha: 24.2, arbPorHa: 330, arboles: 8000 },
+    aliado:      { ha: 9.1,  arbPorHa: 330, arboles: 3000 },
+    // Números de prueba (demostración) — no son datos reales de campo.
+    monitoreo: {
+      especiesSembradas: 22,
+      tasaSupervivencia: 88.7,
+      fechaMonitoreo: 'Mayo 2026',
+      parcelasMonitoreo: 5,
+    },
+    // Reportes (demo): documento descargable (.docx) + visualizable en el navegador (.pdf).
+    reportes: [
+      {
+        titulo: 'Informe 2024',
+        descripcion: 'Informe anual de avance del proyecto de restauración.',
+        archivoUrl: '/citibank/Informe_2024.docx',
+        formato: 'Word · 20 MB',
+        visualizarUrl: '/citibank/Informe_2024.pdf',
+      },
+    ],
     ortho: {
       url: '/tetrapak/ortho-escuelabosque.webp',
       bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
@@ -316,7 +389,7 @@ const GRUPO_AVAL: Aliado = {
   },
 }
 
-export const ALIADOS: Aliado[] = [BANCOLOMBIA, TETRA_PAK, GRUPO_AVAL]
+export const ALIADOS: Aliado[] = [BANCOLOMBIA, CITIBANK, TETRA_PAK, GRUPO_AVAL]
 
 // ── Mapas derivados (consumidos por LoginScreen / AuthButton) ──────────────────
 
