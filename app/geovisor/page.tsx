@@ -19,6 +19,8 @@ import BasemapSwitcher from '@/components/map/BasemapSwitcher'
 import { DEFAULT_BASEMAP_ID } from '@/lib/constants'
 import LoginScreen from '@/components/ui/LoginScreen'
 import IntroOverlay, { type IntroPhase } from '@/components/intro/IntroOverlay'
+import HelpPrompt from '@/components/ui/HelpPrompt'
+import HelpTour, { type TourStep } from '@/components/ui/HelpTour'
 
 const GeovisorMap = dynamic(
   () => import('@/components/map/GeovisorMap'),
@@ -30,7 +32,23 @@ const GeovisorMap = dynamic(
 
 const RIGHT_RATIO = 0.35
 
-const LS_KEY = 'geoae_user'
+const LS_KEY      = 'geoae_user'
+const LS_HELP_OFF = 'geoae_help_dismissed'
+
+// Pasos del recorrido guiado (spotlight). Cada paso apunta a un control vía data-tour;
+// los pasos cuyo elemento no exista en pantalla se omiten automáticamente.
+const TOUR_STEPS: TourStep[] = [
+  { selector: '[data-tour="aliado"]',       titulo: 'Tu proyecto',          texto: 'Accede al proyecto de tu organización: predios, métricas y monitoreo.' },
+  { selector: '[data-tour="restauracion"]', titulo: 'Restauración',         texto: 'Capa de restauración: predios y árboles en proceso de recuperación del bosque.' },
+  { selector: '[data-tour="conservacion"]', titulo: 'Conservación',         texto: 'Áreas bajo esquemas de conservación dentro del programa.' },
+  { selector: '[data-tour="conectividad"]', titulo: 'Conectividad',         texto: 'El Plan Andino-Amazónico del Caquetá, organizado por fases.' },
+  { selector: '[data-tour="metas"]',        titulo: 'Metas',                texto: 'Avance de las metas de restauración año por año (2026–2032). Aquí también está la vista Demo.' },
+  { selector: '[data-tour="basemap"]',      titulo: 'Mapa base',            texto: 'Cambia el fondo del mapa: satélite, satélite con referencias o mapa.' },
+  { selector: '[data-tour="zoom"]',         titulo: 'Acercar y alejar',     texto: 'Usa estos botones (o la rueda del ratón) para acercar o alejar el mapa.' },
+  { selector: '[data-tour="acerca"]',       titulo: 'Acerca del proyecto',  texto: 'Vuelve a ver la presentación y la información del proyecto cuando quieras.' },
+  { selector: '[data-tour="sesion"]',       titulo: 'Tu sesión',            texto: 'Tu usuario activo. Desde aquí puedes cerrar sesión.' },
+  { selector: '[data-tour="ayuda"]',        titulo: 'Ayuda',                texto: '¿Necesitas repasar? Puedes reabrir esta guía cuando quieras desde aquí.' },
+]
 
 export default function GeovisorPage() {
   // ── Auth ────────────────────────────────────────────────────────────────
@@ -65,6 +83,14 @@ export default function GeovisorPage() {
   const [aliadoDemoActive,  setAliadoDemoActive]  = useState(false)
   /** Visor de la presentación (PDF) del aliado abierto */
   const [presentacionOpen,  setPresentacionOpen]  = useState(false)
+
+  // ── Ayuda (recorrido guiado) ─────────────────────────────────────────────
+  /** Aviso inicial que ofrece el recorrido */
+  const [showHelpPrompt, setShowHelpPrompt] = useState(false)
+  /** Recorrido guiado (spotlight) activo */
+  const [tourActive,     setTourActive]     = useState(false)
+  /** El aviso ya se ofreció automáticamente en esta carga (no re-ofrecer) */
+  const helpAutoShownRef = useRef(false)
 
   // Tras cerrar el intro post-login, abrir la vista del aliado (si tiene proyecto)
   const pendingAliadoOpenRef = useRef(false)
@@ -102,6 +128,17 @@ export default function GeovisorPage() {
     setIntroViaLogin(false)
     setIntroPhase('hub')
   }, [])
+
+  // ── Ayuda (recorrido guiado) ──────────────────────────────────────────────
+  /** Botón "Ayuda": inicia el recorrido directamente. */
+  const handleOpenHelp     = useCallback(() => { setShowHelpPrompt(false); setTourActive(true) }, [])
+  const handleHelpYes      = useCallback(() => { setShowHelpPrompt(false); setTourActive(true) }, [])
+  const handleHelpLater    = useCallback(() => { setShowHelpPrompt(false) }, [])
+  const handleHelpNever    = useCallback(() => {
+    setShowHelpPrompt(false)
+    try { localStorage.setItem(LS_HELP_OFF, '1') } catch { /* noop */ }
+  }, [])
+  const handleCloseTour    = useCallback(() => { setTourActive(false) }, [])
 
   const { data, siembraFamilias, rasFamilias, loadingLayers, error } = useGeovisorData()
   const [activeCategory,     setActiveCategory]     = useState<ActiveCategory>(null)
@@ -219,6 +256,20 @@ export default function GeovisorPage() {
       .then((d: Proyeccion[]) => setProyecciones(d))
       .catch(err => console.warn('[proyecciones] Error al cargar:', err))
   }, [])
+
+  // Ofrecer el recorrido guiado al entrar (tras el intro post-login, o al recargar con
+  // sesión recordada). Solo una vez por carga y salvo "No volver a mostrar".
+  useEffect(() => {
+    if (helpAutoShownRef.current) return
+    if (!authChecked || !authUser) return
+    if (introPhase !== 'idle') return        // esperar a que termine el intro
+    let off = false
+    try { off = localStorage.getItem(LS_HELP_OFF) === '1' } catch { /* noop */ }
+    if (off) return
+    helpAutoShownRef.current = true
+    const t = setTimeout(() => setShowHelpPrompt(true), 500)
+    return () => clearTimeout(t)
+  }, [authChecked, authUser, introPhase])
 
   // LeftSidebar manages its own size internally and notifies us via onWidthChange.
   // Initial value 96 matches SIZES[1] (medium) in LeftSidebar.
@@ -355,6 +406,7 @@ export default function GeovisorPage() {
         onOpenAliadoDemo={handleOpenAliadoDemo}
         onAliadoViewToggle={handleAliadoViewToggle}
         openAliadoView={openAliadoView}
+        onOpenHelp={handleOpenHelp}
       />
 
       <RightPanel
@@ -391,6 +443,7 @@ export default function GeovisorPage() {
 
       {/* ── Botones de zoom del mapa ───────────────────────────────── */}
       <div
+        data-tour="zoom"
         style={{
           position: 'fixed',
           bottom: zoomBtnBottom,
@@ -528,6 +581,25 @@ export default function GeovisorPage() {
           showWelcomeOnReturn={introViaLogin}
           onClose={handleCloseIntro}
           onOpenMetas={handleOpenMetasFromHub}
+        />
+      )}
+
+      {/* Aviso de ayuda — ofrece el recorrido guiado al entrar */}
+      {showHelpPrompt && !tourActive && (
+        <HelpPrompt
+          accent={aliado?.brandColor ?? '#14b8a6'}
+          onYes={handleHelpYes}
+          onLater={handleHelpLater}
+          onNever={handleHelpNever}
+        />
+      )}
+
+      {/* Recorrido guiado (spotlight) */}
+      {tourActive && (
+        <HelpTour
+          steps={TOUR_STEPS}
+          accent={aliado?.brandColor ?? '#14b8a6'}
+          onClose={handleCloseTour}
         />
       )}
     </div>

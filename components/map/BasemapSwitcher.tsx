@@ -54,6 +54,7 @@ export default function BasemapSwitcher({ value, onChange, isMobile, right, bott
   return (
     <div
       ref={rootRef}
+      data-tour="basemap"
       style={{
         position: 'fixed',
         right,

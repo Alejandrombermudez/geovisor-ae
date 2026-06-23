@@ -304,7 +304,7 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
 
         {user ? (
           // ── Logged-in: avatar + nombre + menú ─────────────────────
-          <div ref={menuRef} style={{ position: 'relative', width: '100%' }}>
+          <div ref={menuRef} data-tour="sesion" style={{ position: 'relative', width: '100%' }}>
             {/* Menú desplegable (aparece ENCIMA del botón) */}
             {showMenu && (
               <div style={{
@@ -392,6 +392,7 @@ export default function AuthButton({ embedded = false, showLabels = true, sideba
         ) : (
           // ── Not logged-in: botón de acceso ────────────────────────
           <button
+            data-tour="sesion"
             onClick={onRequestLogin ?? openModal}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}

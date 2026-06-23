@@ -38,6 +38,8 @@ interface Props {
   onAliadoViewToggle?: (open: boolean) => void
   /** Fuerza la apertura de la vista del aliado (post-login, tras el intro) */
   openAliadoView?: boolean
+  /** Inicia el recorrido guiado (botón "Ayuda") */
+  onOpenHelp?: () => void
 }
 
 const ITEMS: { key: 'siembra' | 'ras'; label: string; icon: string; color: string }[] = [
@@ -150,7 +152,7 @@ function getPhaseStatus(yi: number | null, yf: number | null): { label: string; 
 
 // ── Componente principal ──────────────────────────────────────────────────────
 
-export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onOpenAliadoDemo, onAliadoViewToggle, openAliadoView = false, onOpenPresentacion }: Props) {
+export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthChange, isMobile, proyecciones = [], activeProyeccionId = null, onSelectProyeccion, authUser, onLogout, onRequestLogin, onOpenIntro, metasYear: metasYearProp = 2026, onMetasYearChange, onOpenMetasMetrics, openMetasView = false, onMetasViewToggle, aliado = null, onOpenAliadoMetrics, onOpenAliadoDemo, onAliadoViewToggle, openAliadoView = false, onOpenPresentacion, onOpenHelp }: Props) {
   const [screenW,   setScreenW]   = useState(0)
   const [sidebarW,  setSidebarW]  = useState(140)
   const [view,      setView]      = useState<'main' | 'about' | 'proyecciones' | 'metas' | 'aliado'>('main')
@@ -292,7 +294,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         {ITEMS.map(({ key, label, icon, color }) => {
           const isActive = activeCategory === key
           return (
-            <button key={key} onClick={() => onSelectCategory(isActive ? null : key)} style={{
+            <button key={key} data-tour={key === 'siembra' ? 'restauracion' : 'conservacion'} onClick={() => onSelectCategory(isActive ? null : key)} style={{
               flex: 1, height: '100%', minHeight: 56, background: isActive ? `${color}12` : 'transparent',
               border: 'none', borderTop: isActive ? `2px solid ${color}` : '2px solid transparent',
               color: isActive ? color : 'rgba(255,255,255,0.45)',
@@ -1232,6 +1234,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         {aliado?.proyecto && (
           <>
             <button
+              data-tour="aliado"
               onClick={openAliado}
               onMouseEnter={() => setHovered('aliado')} onMouseLeave={() => setHovered(null)}
               title={showLabels ? undefined : aliado.proyecto.nombre}
@@ -1263,6 +1266,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           const isHovered = hovered === key
           return (
             <button key={key}
+              data-tour={key === 'siembra' ? 'restauracion' : 'conservacion'}
               onClick={() => onSelectCategory(isActive ? null : key)}
               onMouseEnter={() => setHovered(key)} onMouseLeave={() => setHovered(null)}
               title={showLabels ? undefined : label}
@@ -1291,6 +1295,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           <>
             <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '6px auto 4px' }} />
             <button
+              data-tour="conectividad"
               onClick={openProyecciones}
               onMouseEnter={() => setHovered('proyecciones')} onMouseLeave={() => setHovered(null)}
               title={showLabels ? undefined : 'Conectividad · Plan Andino-Amazónico'}
@@ -1317,6 +1322,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
         <>
           <div style={{ width: '70%', height: 1, background: 'rgba(255,255,255,0.06)', margin: '4px auto 2px' }} />
           <button
+            data-tour="metas"
             onClick={openMetas}
             onMouseEnter={() => setHovered('metas')} onMouseLeave={() => setHovered(null)}
             title={showLabels ? undefined : 'Metas de restauración · Fase 1'}
@@ -1371,9 +1377,42 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
           </button>
         )}
 
+        {/* Botón "Ayuda" — abre el recorrido guiado del visor */}
+        {onOpenHelp && (
+          <button
+            data-tour="ayuda"
+            onClick={onOpenHelp}
+            onMouseEnter={() => setHovered('help')} onMouseLeave={() => setHovered(null)}
+            title={showLabels ? undefined : 'Ayuda · Recorrido guiado'}
+            style={{
+              width: '100%', background: hovered === 'help' ? 'rgba(20,184,166,0.14)' : 'transparent',
+              border: 'none', borderLeft: '4px solid transparent',
+              borderTop: '1px solid rgba(255,255,255,0.06)',
+              color: hovered === 'help' ? 'rgba(45,212,191,0.95)' : 'rgba(255,255,255,0.42)',
+              cursor: 'pointer', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              gap: 3, padding: '11px 4px',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            <svg width={showLabels ? 18 : 20} height={showLabels ? 18 : 20} viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            {showLabels && (
+              <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'inherit', textAlign: 'center', lineHeight: 1.3 }}>
+                Ayuda
+              </span>
+            )}
+          </button>
+        )}
+
         {/* Botón "Acerca del proyecto" — visible SOLO cuando el usuario está autenticado */}
         {onOpenIntro && authUser && (
           <button
+            data-tour="acerca"
             onClick={onOpenIntro}
             onMouseEnter={() => setHovered('intro')} onMouseLeave={() => setHovered(null)}
             title={showLabels ? undefined : 'Acerca del proyecto'}
