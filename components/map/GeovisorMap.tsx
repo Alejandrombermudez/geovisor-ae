@@ -7,6 +7,7 @@ import 'leaflet/dist/leaflet.css'
 import { MAP_CENTER, MAP_ZOOM, BASEMAPS, DEFAULT_BASEMAP_ID, LAYER_COLORS } from '@/lib/constants'
 import PolygonLayer from './PolygonLayer'
 import ArbolesLayer from './ArbolesLayer'
+import ArbolesSemillerosLayer from './ArbolesSemillerosLayer'
 import CameraLayer from './CameraLayer'
 import ProyeccionLayer from './ProyeccionLayer'
 import StaticLayer from './StaticLayer'
@@ -294,11 +295,22 @@ export default function GeovisorMap({ layerData, visibleLayers, selectedFamiliaI
         />
       )}
 
+      {/* Árboles RAS: si hay datos reales por árbol (ras.arboles_semilleros) se usan;
+          si no (antes de migrar), cae al shapefile de puntos. */}
       {visibleLayers.rasArboles && (
-        <ArbolesLayer
-          layers={layerData.rasArboles.filter(polyFilter)}
-          color={LAYER_COLORS.rasArboles}
-        />
+        layerData.rasArbolesSemilleros.length > 0 ? (
+          <ArbolesSemillerosLayer
+            arboles={layerData.rasArbolesSemilleros.filter(
+              (a) => !selectedFamiliaId || a.familia_id === selectedFamiliaId
+            )}
+            color={LAYER_COLORS.rasArboles}
+          />
+        ) : (
+          <ArbolesLayer
+            layers={layerData.rasArboles.filter(polyFilter)}
+            color={LAYER_COLORS.rasArboles}
+          />
+        )
       )}
 
       {/* ── Zoom inicial: vista por defecto Colombia (MAP_CENTER / MAP_ZOOM en constants) ───

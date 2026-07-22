@@ -81,6 +81,22 @@ export interface PolygonLayerData {
   familia: SiembraFamilia | RasFamilia
 }
 
+/** Árbol semillero individual (tabla ras.arboles_semilleros), para puntos en el mapa. */
+export interface RasArbolSemillero {
+  id: string
+  codigo: string
+  familia_id: string | null
+  predio: string | null
+  nombre_comun: string | null
+  nombre_cientifico: string | null
+  familia_botanica: string | null
+  dap_cm: number | null
+  altura_total_m: number | null
+  foto_url: string | null
+  latitud: number | null
+  longitud: number | null
+}
+
 export interface VisibleLayers {
   siembraFincas: boolean
   restauracion: boolean
@@ -99,6 +115,8 @@ export interface GeovisorLayerData {
   rasFincas: PolygonLayerData[]
   conservacion: PolygonLayerData[]
   rasArboles: PolygonLayerData[]
+  /** Árboles semilleros desde ras.arboles_semilleros (puntos con ficha real) */
+  rasArbolesSemilleros: RasArbolSemillero[]
   camarasSiembra: CamaraTrampa[]
   camarasConservacion: CamaraTrampa[]
 }

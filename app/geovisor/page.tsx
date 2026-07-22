@@ -6,6 +6,7 @@ import type L from 'leaflet'
 import type { SiembraFamilia, RasFamilia, ActiveCategory, VisibleLayers, Proyeccion } from '@/types/geovisor'
 import { getAliadoByDisplayName } from '@/lib/aliados'
 import { useGeovisorData } from '@/hooks/useGeovisorData'
+import GeovisorSwitcher from '@/components/ui/GeovisorSwitcher'
 import LeftSidebar from '@/components/ui/LeftSidebar'
 import RightPanel from '@/components/ui/RightPanel'
 import MetasPanel from '@/components/ui/MetasPanel'
@@ -367,6 +368,7 @@ export default function GeovisorPage() {
 
   return (
     <div style={{ height: '100dvh', width: '100vw', position: 'relative', overflow: 'hidden' }}>
+      <GeovisorSwitcher />
       <GeovisorMap
         layerData={data}
         visibleLayers={visibleLayers}

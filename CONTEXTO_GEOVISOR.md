@@ -3,6 +3,12 @@
 > Este documento está escrito para que un nuevo chat de Claude pueda retomar
 > la integración del geovisor sin necesidad de explorar el proyecto desde cero.
 > Leer completo antes de escribir código.
+>
+> **⚠️ Desactualizado (parcial) — 2026-07-16:** la sección 3 describe `nombre_propietario`, `municipio`,
+> `vereda`, `nombre_finca`, `latitud`, `longitud` como columnas de `siembra.familias`. Ya no lo son
+> (`migration_campo_core.sql`, 2026-07-07) — esos datos viven en `core.aliados`/`core.predios` y el código
+> real (`lib/queries.ts`) los resuelve con un JOIN aparte. Ver [`CLAUDE.md`](CLAUDE.md) para el patrón
+> vigente. El resto de este documento (RAS, flujo de shapefiles, buckets, mapa base) sigue vigente.
 
 ---
 

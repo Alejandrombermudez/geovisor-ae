@@ -8,6 +8,7 @@ import type {
   SiembraFamilia,
   RasFamilia,
   CamaraTrampa,
+  RasArbolSemillero,
 } from '@/types/geovisor'
 
 const EMPTY_DATA: GeovisorLayerData = {
@@ -17,6 +18,7 @@ const EMPTY_DATA: GeovisorLayerData = {
   rasFincas: [],
   conservacion: [],
   rasArboles: [],
+  rasArbolesSemilleros: [],
   camarasSiembra: [],
   camarasConservacion: [],
 }
@@ -35,6 +37,7 @@ interface ApiResponse {
   rasFamilias: RasFamilia[]
   camarasSiembra: CamaraTrampa[]
   camarasConservacion: CamaraTrampa[]
+  rasArbolesSemilleros?: RasArbolSemillero[]
   errors?: string[]
 }
 
@@ -76,6 +79,7 @@ export function useGeovisorData(): GeovisorDataState {
           rasFamilias: rf = [],
           camarasSiembra = [],
           camarasConservacion = [],
+          rasArbolesSemilleros = [],
           errors: apiErrors,
         } = json
 
@@ -88,8 +92,8 @@ export function useGeovisorData(): GeovisorDataState {
           setError(`No se pudieron cargar: ${apiErrors.join(', ')}. Verifica la configuración de Supabase.`)
         }
 
-        // Camera data is ready immediately
-        setData((prev) => ({ ...prev, camarasSiembra, camarasConservacion }))
+        // Camera data + árboles semilleros (DB, no shapefile) están listos de inmediato
+        setData((prev) => ({ ...prev, camarasSiembra, camarasConservacion, rasArbolesSemilleros }))
         doneLayer('camarasSiembra')
         doneLayer('camarasConservacion')
 

@@ -70,3 +70,32 @@ body {
     -webkit-overflow-scrolling: touch;
   }
 }
+
+/* ── Geovisor v2 (propuesta, tema claro) ───────────────────────── */
+
+/* Entrada suave de los paneles del dashboard */
+@keyframes gv2-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.gv2-rise {
+  animation: gv2-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .gv2-rise { animation: none; }
+}
+
+/* Scrollbar fino para paneles claros */
+.gv2-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 35, 25, 0.18) transparent;
+}
+.gv2-scroll::-webkit-scrollbar { width: 5px; }
+.gv2-scroll::-webkit-scrollbar-track { background: transparent; }
+.gv2-scroll::-webkit-scrollbar-thumb {
+  background: rgba(20, 35, 25, 0.16);
+  border-radius: 5px;
+}
+.gv2-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(20, 35, 25, 0.3);
+}
