@@ -389,7 +389,19 @@ const GRUPO_AVAL: Aliado = {
   },
 }
 
-export const ALIADOS: Aliado[] = [BANCOLOMBIA, CITIBANK, TETRA_PAK, GRUPO_AVAL]
+// Cuenta de prueba/demostración — acceso estándar al geovisor (sin proyecto propio).
+// Usuario: USUARIO_PRUEBA · Contraseña: DEMO.2026 (el login pasa el usuario a minúsculas).
+const USUARIO_PRUEBA: Aliado = {
+  key: 'usuario_prueba',
+  loginAliases: ['usuarioprueba', 'demo'],
+  password: 'DEMO.2026',
+  displayName: 'Usuario de prueba',
+  brandColor: '#0d7377',
+  brandColorDark: '#0a5a5d',
+  avatarColor: '#0d7377',
+}
+
+export const ALIADOS: Aliado[] = [BANCOLOMBIA, CITIBANK, TETRA_PAK, GRUPO_AVAL, USUARIO_PRUEBA]
 
 // ── Mapas derivados (consumidos por LoginScreen / AuthButton) ──────────────────
 
