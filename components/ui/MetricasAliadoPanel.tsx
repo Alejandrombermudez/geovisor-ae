@@ -47,7 +47,7 @@ export default function MetricasAliadoPanel({
   ].some(v => v != null)
 
   // Participación del aliado sobre el predio (según árboles estimados)
-  const sharePct = predioTotal.arboles > 0
+  const sharePct = predioTotal && predioTotal.arboles > 0
     ? (aliado.arboles / predioTotal.arboles) * 100
     : 0
 
@@ -120,7 +120,9 @@ export default function MetricasAliadoPanel({
       </div>
       <div style={{ display: 'flex', gap: 16, marginTop: 14 }}>
         <div>
-          <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 18, fontWeight: 700 }}>{fmt(ha, 1)}</div>
+          <div style={{ color: 'rgba(255,255,255,0.85)', fontSize: 18, fontWeight: 700 }}>
+            {ha.toLocaleString('es-CO', { maximumFractionDigits: 2 })}
+          </div>
           <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>hectáreas</div>
         </div>
         <div>
@@ -208,20 +210,22 @@ export default function MetricasAliadoPanel({
       <div style={{ flex: 1, overflowY: 'auto', padding: '18px 20px 32px' }}>
 
        {view === 'metricas' && (<>
-        {/* ── Comparación predio vs aliado ── */}
+        {/* ── Comparación predio vs aliado (sin datos del predio: solo la zona del aliado) ── */}
         <div style={{
           color: 'rgba(255,255,255,0.4)', fontSize: 14,
           textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 12,
         }}>
-          Árboles estimados · comparación
+          {predioTotal ? 'Árboles estimados · comparación' : 'Zona de siembra'}
         </div>
         <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
-          <DatosCard
-            title="Total predio"
-            color={AE_COLOR}
-            ha={predioTotal.ha} arbHa={predioTotal.arbPorHa} arboles={predioTotal.arboles}
-            highlight={false}
-          />
+          {predioTotal && (
+            <DatosCard
+              title="Total predio"
+              color={AE_COLOR}
+              ha={predioTotal.ha} arbHa={predioTotal.arbPorHa} arboles={predioTotal.arboles}
+              highlight={false}
+            />
+          )}
           <DatosCard
             title={displayName}
             color={brandColor}
@@ -231,53 +235,57 @@ export default function MetricasAliadoPanel({
         </div>
 
         {/* ── Participación (barra apilada) ── */}
-        <div style={{
-          padding: '16px', marginBottom: 20,
-          background: `${brandColor}0C`, border: `1px solid ${brandColor}25`, borderRadius: 12,
-        }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-            <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 15, maxWidth: '72%', lineHeight: 1.4 }}>
-              Participación de {displayName}, medida en número de árboles, en el proceso de restauración del predio
-            </span>
-            <span style={{ color: brandColor, fontSize: 22, fontWeight: 800 }}>
-              {fmt(sharePct, 1)}%
-            </span>
-          </div>
+        {predioTotal && (
           <div style={{
-            display: 'flex', height: 16, borderRadius: 6, overflow: 'hidden',
-            background: 'rgba(255,255,255,0.06)',
+            padding: '16px', marginBottom: 20,
+            background: `${brandColor}0C`, border: `1px solid ${brandColor}25`, borderRadius: 12,
           }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
+              <span style={{ color: 'rgba(255,255,255,0.55)', fontSize: 15, maxWidth: '72%', lineHeight: 1.4 }}>
+                Participación de {displayName}, medida en número de árboles, en el proceso de restauración del predio
+              </span>
+              <span style={{ color: brandColor, fontSize: 22, fontWeight: 800 }}>
+                {fmt(sharePct, 1)}%
+              </span>
+            </div>
             <div style={{
-              width: `${sharePct}%`,
-              background: `linear-gradient(90deg, ${brandColor}, ${brandColorDark})`,
-            }} />
-            <div style={{ flex: 1, background: `${AE_COLOR}40` }} />
+              display: 'flex', height: 16, borderRadius: 6, overflow: 'hidden',
+              background: 'rgba(255,255,255,0.06)',
+            }}>
+              <div style={{
+                width: `${sharePct}%`,
+                background: `linear-gradient(90deg, ${brandColor}, ${brandColorDark})`,
+              }} />
+              <div style={{ flex: 1, background: `${AE_COLOR}40` }} />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+              <span style={{ color: brandColor, fontSize: 13, fontWeight: 700 }}>
+                {fmt(aliado.arboles, 1)} árboles · {fmt(aliado.ha, 1)} ha
+              </span>
+              <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
+                de {fmt(predioTotal.arboles)} árboles · {fmt(predioTotal.ha, 1)} ha
+              </span>
+            </div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ color: brandColor, fontSize: 13, fontWeight: 700 }}>
-              {fmt(aliado.arboles, 1)} árboles · {fmt(aliado.ha, 1)} ha
-            </span>
-            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13 }}>
-              de {fmt(predioTotal.arboles)} árboles · {fmt(predioTotal.ha, 1)} ha
-            </span>
-          </div>
-        </div>
+        )}
 
         {/* ── Ficha de restauración ── */}
-        <div style={{
-          color: 'rgba(255,255,255,0.4)', fontSize: 14,
-          textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4,
-        }}>
-          Estrategia de restauración
-        </div>
-        <div style={{ marginBottom: 22 }}>
-          <FichaRow label="Cobertura" value={ficha.cobertura} />
-          <FichaRow label="Condición" value={ficha.condicion} />
-          <FichaRow label="Tipo de restauración" value={ficha.tipoRestauracion} />
-          <FichaRow label="Estrategia" value={ficha.estrategia} />
-          <FichaRow label="Gremio de especies" value={ficha.gremioEspecies} />
-          <FichaRow label="Densidad" value={`${fmt(ficha.arbPorHa)} árb/ha`} />
-        </div>
+        {ficha && (<>
+          <div style={{
+            color: 'rgba(255,255,255,0.4)', fontSize: 14,
+            textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: 4,
+          }}>
+            Estrategia de restauración
+          </div>
+          <div style={{ marginBottom: 22 }}>
+            <FichaRow label="Cobertura" value={ficha.cobertura} />
+            <FichaRow label="Condición" value={ficha.condicion} />
+            <FichaRow label="Tipo de restauración" value={ficha.tipoRestauracion} />
+            <FichaRow label="Estrategia" value={ficha.estrategia} />
+            <FichaRow label="Gremio de especies" value={ficha.gremioEspecies} />
+            <FichaRow label="Densidad" value={`${fmt(ficha.arbPorHa)} árb/ha`} />
+          </div>
+        </>)}
        </>)}
 
        {view === 'monitoreo' && (<>

@@ -1096,7 +1096,7 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                     </div>
                     <div style={{ background: `${c}1A`, border: `1px solid ${c}44`, borderRadius: 9, padding: '12px 8px', textAlign: 'center' }}>
                       <div style={{ color: c, fontSize: 20, fontWeight: 800, lineHeight: 1 }}>
-                        {proy.aliado.ha.toLocaleString('es-CO', { maximumFractionDigits: 1 })}
+                        {proy.aliado.ha.toLocaleString('es-CO', { maximumFractionDigits: 2 })}
                       </div>
                       <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 4 }}>hectáreas</div>
                     </div>
@@ -1178,10 +1178,10 @@ export default function LeftSidebar({ activeCategory, onSelectCategory, onWidthC
                     Leyenda
                   </div>
                   {proy.tipo === 'escuela_bosque' && [
-                    { label: `Polígonos ${aliado.displayName}`, fill: c, stroke: c },
-                    { label: 'Resto del predio', fill: 'rgba(229,231,235,0.12)', stroke: '#E5E7EB' },
-                    { label: 'Límite del predio', fill: 'transparent', stroke: '#FFFFFF' },
-                  ].map(({ label, fill, stroke }) => (
+                    { label: `Polígonos ${aliado.displayName}`, fill: c, stroke: c, show: true },
+                    { label: 'Resto del predio', fill: 'rgba(229,231,235,0.12)', stroke: '#E5E7EB', show: !!proy.intervenciValue },
+                    { label: 'Límite del predio', fill: 'transparent', stroke: '#FFFFFF', show: !!proy.predioZipUrl },
+                  ].filter(l => l.show).map(({ label, fill, stroke }) => (
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '6px 0' }}>
                       <div style={{ width: 18, height: 18, borderRadius: 4, background: fill, border: `1.5px solid ${stroke}`, flexShrink: 0 }} />
                       <span style={{ color: 'rgba(255,255,255,0.72)', fontSize: 14, fontWeight: 600 }}>{label}</span>

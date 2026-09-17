@@ -49,21 +49,26 @@ interface ProyectoBase {
   descripcion: string
 }
 
-/** Proyecto tipo "Escuela Bosque" (Tetra Pak): predio + polígonos Ley 2173 + árboles. */
+/** Proyecto tipo "Escuela Bosque": polígonos Ley 2173 + árboles. Nació con el predio Escuela
+ *  Bosque (los demos lo usan completo); predio, filtro por aliado, ficha y ortofoto son
+ *  opcionales para zonas que aún no los tienen (ej. Tetra Pak en La Guajira). */
 export interface ProyectoEscuelaBosque extends ProyectoBase {
   tipo: 'escuela_bosque'
   /** ZIP del shapefile con la forma del predio completo. */
-  predioZipUrl: string
+  predioZipUrl?: string
   /** ZIP del shapefile con los polígonos Ley 2173 (posibles a intervenir). */
   ley2173ZipUrl: string
-  /** Valor de la columna `Intervenci` que marca los polígonos del aliado. */
-  intervenciValue: string
-  /** Etiqueta a mostrar en el tooltip de los polígonos (si difiere del valor de filtro). */
+  /** Valor de la columna `Intervenci` que marca los polígonos del aliado.
+   *  Sin él, todos los polígonos del ZIP son del aliado. */
+  intervenciValue?: string
+  /** Etiqueta de los polígonos del aliado en el tooltip (si falta, `intervenciValue`). */
   intervenciLabel?: string
-  /** Ficha de la estrategia de restauración. */
-  ficha: RestauracionFicha
-  /** Datos del predio completo (todos los polígonos Ley 2173). */
-  predioTotal: DatosArboles
+  /** Propiedad del shapefile con el área en hectáreas (por defecto `area`). */
+  areaField?: string
+  /** Ficha de la estrategia de restauración (sin ella, no se muestra). */
+  ficha?: RestauracionFicha
+  /** Datos del predio completo (todos los polígonos Ley 2173). Sin ellos, no hay comparación. */
+  predioTotal?: DatosArboles
   /** Datos de la porción asignada al aliado. */
   aliado: DatosArboles
   /** Seguimiento/monitoreo del proceso (pendiente → "--"). */
@@ -267,37 +272,27 @@ const TETRA_PAK: Aliado = {
   brandColor: '#0A5BA8',
   brandColorDark: '#063E73',
   avatarColor: '#0A5BA8',
+  // Zona real de siembra: shapefile "Ley del arbol-Ingenieros" del equipo SIG (un polígono en el
+  // predio La Guajira, vereda Delicias, Morelia). Reemplaza la vista anterior sobre Escuela Bosque
+  // (ortomosaico + polígonos Ley 2173), que queda solo en los demos de los otros aliados.
+  // Todavía no hay contorno del predio ni ficha de restauración para esta zona.
   proyecto: {
     tipo: 'escuela_bosque',
-    nombre: 'Escuela Bosque',
-    ubicacion: 'Piedemonte Andino-Amazónico · Caquetá',
-    descripcion: 'Proyección área de intervención de Tetra Pak bajo la Ley 2173.',
-    predioZipUrl: '/tetrapak/EscuelaBosque_predio.zip',
-    ley2173ZipUrl: '/tetrapak/EscuelaBosque_Ley2173VF.zip',
-    intervenciValue: 'Tetra Pak',
-    ficha: {
-      cobertura: 'Rastrojo bajo (<4 m)',
-      condicion: 'No tiene espacios grandes sin vegetación',
-      tipoRestauracion: 'Activa',
-      estrategia: 'Cercado · Nucleación de especies',
-      gremioEspecies: 'Intermedias / Esciófitas',
-      arbPorHa: 330,
-    },
-    // Valores del brief técnico (pantallazo). El predio completo agrupa los 9
-    // polígonos Ley 2173 (≈4,6 ha); Tetra Pak financia los marcados "Tetra Pak"
-    // en la columna Intervenci (≈0,9 ha).
-    predioTotal: { ha: 4.6, arbPorHa: 330, arboles: 1519 },
-    aliado: { ha: 0.9, arbPorHa: 330, arboles: 284.2 },
+    nombre: 'Ley del Árbol',
+    ubicacion: 'Predio La Guajira · Morelia, Caquetá',
+    descripcion: 'Zona de siembra de Tetra Pak bajo la Ley 2173.',
+    ley2173ZipUrl: '/tetrapak/LaGuajira_LeyDelArbol.zip',
+    intervenciLabel: 'Tetra Pak',
+    // El SIG calculó Shape_Area en hectáreas (MAGNA-SIRGAS 2018 Origen Nacional).
+    areaField: 'Shape_Area',
+    // 278 árboles en 0,1729 ha → 1.608 árb/ha.
+    aliado: { ha: 0.1729, arbPorHa: 1608, arboles: 278 },
     // Pendiente de los primeros monitoreos en campo → se muestran como "--".
     monitoreo: {
       especiesSembradas: null,
       tasaSupervivencia: null,
       fechaMonitoreo: null,
       parcelasMonitoreo: null,
-    },
-    ortho: {
-      url: '/tetrapak/ortho-escuelabosque.webp',
-      bounds: [[1.6246232, -75.5740280], [1.6332985, -75.5680800]],
     },
   },
 }

@@ -29,20 +29,22 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
   const [ley2173, setLey2173] = useState<FeatureCollection | null>(null)
   const map = useMap()
 
-  // Carga perezosa de ambos shapefiles (una sola vez por URL)
+  // Carga perezosa de ambos shapefiles (una sola vez por URL). El predio es opcional:
+  // sin URL queda en null, también si antes se dibujó el de otro proyecto.
   useEffect(() => {
     let alive = true
-    fetchAndParseShapefile(proyecto.predioZipUrl).then(fc => { if (alive && fc) setPredio(fc) })
+    fetchAndParseShapefile(proyecto.predioZipUrl).then(fc => { if (alive) setPredio(fc) })
     fetchAndParseShapefile(proyecto.ley2173ZipUrl).then(fc => { if (alive && fc) setLey2173(fc) })
     return () => { alive = false }
   }, [proyecto.predioZipUrl, proyecto.ley2173ZipUrl])
 
-  // Vuela al conjunto de polígonos cuando terminan de cargar
+  // Vuela al conjunto de polígonos cuando terminan de cargar. Tope en zoom 18: una zona
+  // pequeña (la de Tetra Pak mide ~100 m) se ve bien, y en 19 Esri no tiene imagen en esa zona.
   useEffect(() => {
     if (!flyTo || !ley2173) return
     const bounds = L.geoJSON(ley2173).getBounds()
     if (!bounds.isValid()) return
-    map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 17, duration: 1.4 })
+    map.flyToBounds(bounds, { padding: [60, 60], maxZoom: 18, duration: 1.4 })
     // El ImageOverlay (ortofoto) calcula su tamaño al montarse (mapa aún en zoom
     // lejano) y a veces no recalcula tras el flyTo, quedando en 0×0. Al asentar la
     // vista forzamos un viewreset para que todos los overlays recalculen su tamaño.
@@ -51,8 +53,11 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
     return () => { map.off('moveend', onEnd) }
   }, [ley2173, flyTo, map])
 
+  // Sin `intervenciValue`, todos los polígonos del ZIP son del aliado (no hay "resto del predio").
   const isAliado = (f: Feature | undefined) =>
+    !proyecto.intervenciValue ||
     String(f?.properties?.Intervenci ?? '').trim() === proyecto.intervenciValue
+  const areaField = proyecto.areaField ?? 'area'
 
   return (
     <>
@@ -103,7 +108,7 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
             layer.bindTooltip(
               `<div style="font-family:system-ui;font-size:12px;line-height:1.5">
                 <strong>Predio Escuela Bosque</strong><br/>
-                <span style="color:#9ca3af">${fmtHa(feature.properties?.area)} ha · resto del predio</span>
+                <span style="color:#9ca3af">${fmtHa(feature.properties?.[areaField])} ha · resto del predio</span>
               </div>`,
               { sticky: true, direction: 'top' },
             )
@@ -128,7 +133,7 @@ export default function AliadoPredioLayer({ proyecto, brandColor, flyTo = true }
             layer.bindTooltip(
               `<div style="font-family:system-ui;font-size:12px;line-height:1.55">
                 <strong style="color:${brandColor}">● ${proyecto.intervenciLabel ?? proyecto.intervenciValue}</strong><br/>
-                <span style="color:#e5e7eb">${fmtHa(feature.properties?.area)} ha · restauración activa</span>
+                <span style="color:#e5e7eb">${fmtHa(feature.properties?.[areaField])} ha · restauración activa</span>
               </div>`,
               { sticky: true, direction: 'top' },
             )
