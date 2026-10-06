@@ -1,6 +1,6 @@
 # Pendientes — Geovisor AE
 
-## 🔴 PENDIENTE (2026-07-22) — Filtrar familias sin cesión de derechos de imagen
+## PENDIENTE (2026-07-22) — Filtrar familias sin cesión de derechos de imagen
 
 **Regla legal:** una familia de conservación **solo debe mostrar su información y fotos en el
 geovisor si tiene la cesión de derechos de imagen firmada.** Si no la tiene, no se publica su
@@ -27,7 +27,7 @@ en la intranet ya se hicieron; esta parte del geovisor queda para después.
 ---
 
 
-## ✅ Corregido (2026-07-16) — capa Siembra desconectada del rediseño `core`
+## Corregido (2026-07-16) — capa Siembra desconectada del rediseño `core`
 
 `migration_campo_core.sql` (2026-07-07) había eliminado de `siembra.familias` las columnas
 `nombre_propietario`, `nombre_finca`, `municipio`, `vereda`, `departamento`, `latitud`, `longitud`
@@ -55,7 +55,7 @@ migrar — eso queda fuera de este fix, es un cambio de arquitectura más grande
 
 ---
 
-## Completado ✓
+## Completado
 
 - [x] Jerarquía visual e interactividad de los iconos del sidebar
 - [x] Modo colapsado del sidebar (solo iconos, botón chevron)
